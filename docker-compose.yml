@@ -1,0 +1,77 @@
+# filepath: /Users/phirun/laravel_app_schoolmanagementsystem_01/docker-compose.yaml
+# docker-compose.yaml
+# version: '3.8'
+services:
+  app:
+    build: .
+    image: laravel_app_schoolmanagementsystem
+    restart: always
+    working_dir: /var/www/html
+    tty: true
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laravel
+      - DB_PASSWORD=secret
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  db:
+    image: mysql:8
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laravel
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
+    container_name: school_phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - UPLOAD_LIMIT=100M
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  # ngrok:
+  #   image: ngrok/ngrok:latest
+  #   container_name: school_ngrok
+  #   restart: unless-stopped
+  #   command: http app:80 # Tunnel to the 'app' service on its internal port 80
+  #   environment:
+  #     # Replace YOUR_NGROK_AUTHTOKEN with your actual token
+  #     # Or better: set it as an environment variable on your host machine
+  #     NGROK_AUTHTOKEN: 2vOPFVzoXVjrLFw5Gpke52PxSF6_6MGjqkinLdPdLPmQvn74c
+  #   ports:
+  #     - "4040:4040" # Expose Ngrok's web interface
+  #   depends_on:
+  #     - app
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  db_data:
+
