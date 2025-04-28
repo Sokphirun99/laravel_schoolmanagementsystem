@@ -3,13 +3,14 @@
 # version: '3.8'
 services:
   app:
-    build: .
-    image: laravel_app_schoolmanagementsystem
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     working_dir: /var/www/html
     tty: true
     volumes:
-      - ./:/var/www/html
+      - .:/var/www/html
     ports:
       - "8080:80"
     environment:
