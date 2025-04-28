@@ -195,6 +195,16 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Voyager Service Provider
+         */
+        TCG\Voyager\VoyagerServiceProvider::class,
+
+        /*
+         * Voyager Dummy Service Provider
+         */
+        TCG\Voyager\Providers\VoyagerDummyServiceProvider::class,
+
     ],
 
     /*
