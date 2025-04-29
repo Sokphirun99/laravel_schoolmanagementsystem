@@ -47,24 +47,6 @@ class MenuItemsTableSeeder extends Seeder
             })
             ->delete();
 
-        // Delete Classes menu item
-        MenuItem::where('menu_id', $menu->id)
-            ->where(function($query) {
-                $query->where('title', 'Classes')
-                      ->orWhere('url', '/admin/classes')
-                      ->orWhere('route', 'voyager.classes.index');
-            })
-            ->delete();
-
-        // Delete Parents menu item
-        MenuItem::where('menu_id', $menu->id)
-            ->where(function($query) {
-                $query->where('title', 'Parents')
-                      ->orWhere('url', '/admin/parents')
-                      ->orWhere('route', 'voyager.parents.index');
-            })
-            ->delete();
-
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
             'title'   => __('voyager::seeders.menu_items.dashboard'),
