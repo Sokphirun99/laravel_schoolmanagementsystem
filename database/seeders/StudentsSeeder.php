@@ -64,7 +64,6 @@ class StudentsSeeder extends Seeder
             ['name' => 'student'],
             [
                 'display_name' => 'Student',
-                'description' => 'Student role'
             ]
         );
 
