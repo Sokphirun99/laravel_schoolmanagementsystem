@@ -17,6 +17,54 @@ class MenuItemsTableSeeder extends Seeder
     {
         $menu = Menu::where('name', 'admin')->firstOrFail();
 
+        // Delete Users menu item
+        MenuItem::where('menu_id', $menu->id)
+            ->where('title', __('voyager::seeders.menu_items.users'))
+            ->where('route', 'voyager.users.index')
+            ->delete();
+
+        // Delete Roles menu item
+        MenuItem::where('menu_id', $menu->id)
+            ->where('title', __('voyager::seeders.menu_items.roles'))
+            ->where('route', 'voyager.roles.index')
+            ->delete();
+
+        // Delete Students menu item
+        MenuItem::where('menu_id', $menu->id)
+            ->where(function($query) {
+                $query->where('title', 'Students')
+                      ->orWhere('url', '/admin/students')
+                      ->orWhere('route', 'voyager.students.index');
+            })
+            ->delete();
+
+        // Delete Teachers menu item
+        MenuItem::where('menu_id', $menu->id)
+            ->where(function($query) {
+                $query->where('title', 'Teachers')
+                      ->orWhere('url', '/admin/teachers')
+                      ->orWhere('route', 'voyager.teachers.index');
+            })
+            ->delete();
+
+        // Delete Classes menu item
+        MenuItem::where('menu_id', $menu->id)
+            ->where(function($query) {
+                $query->where('title', 'Classes')
+                      ->orWhere('url', '/admin/classes')
+                      ->orWhere('route', 'voyager.classes.index');
+            })
+            ->delete();
+
+        // Delete Parents menu item
+        MenuItem::where('menu_id', $menu->id)
+            ->where(function($query) {
+                $query->where('title', 'Parents')
+                      ->orWhere('url', '/admin/parents')
+                      ->orWhere('route', 'voyager.parents.index');
+            })
+            ->delete();
+
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
             'title'   => __('voyager::seeders.menu_items.dashboard'),
@@ -46,38 +94,6 @@ class MenuItemsTableSeeder extends Seeder
                 'color'      => null,
                 'parent_id'  => null,
                 'order'      => 5,
-            ])->save();
-        }
-
-        $menuItem = MenuItem::firstOrNew([
-            'menu_id' => $menu->id,
-            'title'   => __('voyager::seeders.menu_items.users'),
-            'url'     => '',
-            'route'   => 'voyager.users.index',
-        ]);
-        if (!$menuItem->exists) {
-            $menuItem->fill([
-                'target'     => '_self',
-                'icon_class' => 'voyager-person',
-                'color'      => null,
-                'parent_id'  => null,
-                'order'      => 3,
-            ])->save();
-        }
-
-        $menuItem = MenuItem::firstOrNew([
-            'menu_id' => $menu->id,
-            'title'   => __('voyager::seeders.menu_items.roles'),
-            'url'     => '',
-            'route'   => 'voyager.roles.index',
-        ]);
-        if (!$menuItem->exists) {
-            $menuItem->fill([
-                'target'     => '_self',
-                'icon_class' => 'voyager-lock',
-                'color'      => null,
-                'parent_id'  => null,
-                'order'      => 2,
             ])->save();
         }
 

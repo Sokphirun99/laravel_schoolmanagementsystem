@@ -146,9 +146,9 @@ return [
         'widgets' => [
             'TCG\\Voyager\\Widgets\\UserDimmer',
             // Comment these out if they're causing issues
-            // 'App\\Widgets\\StudentDimmer',
-            // 'App\\Widgets\\TeacherDimmer',
-            // 'App\\Widgets\\ClassDimmer',
+            'App\\Widgets\\StudentDimmer',
+            'App\\Widgets\\TeacherDimmer',
+            'App\\Widgets\\ClassDimmer',
         ],
 
     ],
