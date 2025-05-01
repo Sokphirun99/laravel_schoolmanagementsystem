@@ -38,7 +38,7 @@ class TeacherDimmer extends BaseDimmer
                 'image' => voyager_asset('images/widget-backgrounds/03.jpg'),
             ]));
         } catch (\Exception $e) {
-            \Log::error('TeacherDimmer error: ' . $e->getMessage());
+            Log::error('TeacherDimmer error: ' . $e->getMessage());
 
             return view('voyager::dimmer', array_merge($this->config, [
                 'icon'   => 'voyager-person',
