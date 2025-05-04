@@ -90,4 +90,9 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->role_id === 4; // Assuming role_id 4 is for parents
     }
+
+    public function getFieldIdAttribute()
+    {
+        return null;
+    }
 }

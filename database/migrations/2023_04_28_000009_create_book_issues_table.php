@@ -20,6 +20,7 @@ class CreateBookIssuesTable extends Migration
             $table->enum('status', ['issued', 'returned', 'overdue', 'lost'])->default('issued');
             $table->text('remarks')->nullable();
             $table->foreignId('issued_by')->constrained('users')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,4 +29,4 @@ class CreateBookIssuesTable extends Migration
     {
         Schema::dropIfExists('book_issues');
     }
-}
+};

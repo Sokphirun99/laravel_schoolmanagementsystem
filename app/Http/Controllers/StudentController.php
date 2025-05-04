@@ -138,7 +138,7 @@ class StudentController extends VoyagerBaseController
 
         // Define showCheckboxColumn
         $showCheckboxColumn = false;
-        if (Auth::check() && Auth::user()->hasPermissionTo('delete', app($dataType->model_name))) {
+        if (Auth::check() && Auth::user()->hasPermissionTo('delete_' . $dataType->name)) {
             $showCheckboxColumn = true;
         } else {
             foreach ($actions as $action) {

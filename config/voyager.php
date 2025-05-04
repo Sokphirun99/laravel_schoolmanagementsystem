@@ -149,6 +149,7 @@ return [
             'App\\Widgets\\StudentDimmer',
             'App\\Widgets\\TeacherDimmer',
             'App\\Widgets\\ClassDimmer',
+            'App\\Widgets\\ParentsDimmer',
         ],
 
     ],

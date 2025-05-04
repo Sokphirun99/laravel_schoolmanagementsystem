@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use TCG\Voyager\Database\Schema\SchemaManager;
 use TCG\Voyager\Events\BreadDataAdded;
 use TCG\Voyager\Events\BreadDataDeleted;
@@ -27,16 +29,21 @@ use Carbon\Carbon;
 
 class TeacherController extends VoyagerBaseController
 {
-    public function dashboard()
+    /**
+     * Display teacher dashboard with relevant information.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function dashboard(): View
     {
         $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
 
-        // Get assigned classes
-        $assignedSections = $teacher->sections;
+        // Get assigned classes with eager loading
+        $assignedSections = $teacher->sections()->with(['className', 'students'])->get();
 
         // Get today's timetable
-        $dayOfWeek = Carbon::now()->dayOfWeek; // 0 (Sunday) to 6 (Saturday)
-        $todayTimetable = Timetable::with('section', 'subject')
+        $dayOfWeek = Carbon::now()->dayOfWeek;
+        $todayTimetable = Timetable::with(['section.className', 'subject'])
             ->where('teacher_id', $teacher->id)
             ->where('day_of_week', $dayOfWeek)
             ->orderBy('start_time')
@@ -48,52 +55,79 @@ class TeacherController extends VoyagerBaseController
                     $q->where('teacher_id', $teacher->id);
                 });
             })
+            ->with(['subject', 'classLevel'])
             ->where('exam_date', '>=', now())
             ->orderBy('exam_date')
             ->limit(5)
             ->get();
 
-        // Count total students
+        // Count total students with optimized query
         $totalStudents = Student::whereHas('section', function($query) use ($teacher) {
-                $query->whereHas('teachers', function($q) use ($teacher) {
-                    $q->where('teacher_id', $teacher->id);
-                });
+                $query->whereIn('id', $teacher->sections->pluck('id'));
             })
             ->count();
+
+        // Get recent attendance records
+        $recentAttendance = Attendance::whereHas('section', function($query) use ($teacher) {
+                $query->whereIn('id', $teacher->sections->pluck('id'));
+            })
+            ->with(['section', 'subject'])
+            ->orderBy('date', 'desc')
+            ->limit(5)
+            ->get();
 
         return view('teacher.dashboard', compact(
             'teacher',
             'assignedSections',
             'todayTimetable',
             'upcomingExams',
-            'totalStudents'
+            'totalStudents',
+            'recentAttendance'
         ));
     }
 
-    public function profile()
+    /**
+     * Display teacher profile.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function profile(): View
     {
-        $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
+        $teacher = Teacher::with('user')
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
         return view('teacher.profile', compact('teacher'));
     }
 
-    public function updateProfile(Request $request)
+    /**
+     * Update teacher profile information.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProfile(Request $request): RedirectResponse
     {
         $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
 
-        $request->validate([
+        $validated = $request->validate([
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'qualification' => 'nullable|string|max:255',
-            'avatar' => 'nullable|image|max:1024',
+            'bio' => 'nullable|string|max:1000',
+            'avatar' => 'nullable|image|max:2048',
         ]);
 
         // Update teacher profile
-        $teacher->phone = $request->phone;
-        $teacher->address = $request->address;
-        $teacher->qualification = $request->qualification;
+        $teacher->fill($validated);
 
         // Update avatar if uploaded
         if ($request->hasFile('avatar')) {
+            // Remove old avatar if exists
+            if ($teacher->avatar && file_exists(storage_path('app/public/' . $teacher->avatar))) {
+                unlink(storage_path('app/public/' . $teacher->avatar));
+            }
+
             $path = $request->file('avatar')->store('teachers/avatars', 'public');
             $teacher->avatar = $path;
         }
@@ -103,9 +137,15 @@ class TeacherController extends VoyagerBaseController
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
-    public function store(Request $request)
+    /**
+     * Create a new teacher with user account.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
     {
-        // Begin transaction to ensure all related records are created together
+        // Begin transaction
         DB::beginTransaction();
 
         try {
@@ -117,10 +157,10 @@ class TeacherController extends VoyagerBaseController
             $user->role_id = 2; // Teacher role ID
             $user->save();
 
-            // Add user_id to the teacher data
+            // Add user_id to the request data
             $request->merge(['user_id' => $user->id]);
 
-            // Continue with the normal BREAD storing process
+            // Continue with the Voyager BREAD storing process
             $slug = $this->getSlug($request);
             $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
@@ -151,7 +191,14 @@ class TeacherController extends VoyagerBaseController
         }
     }
 
-    public function show(Request $request, $id)
+    /**
+     * Display detailed view of a teacher.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function show(Request $request, $id): View
     {
         $slug = $this->getSlug($request);
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -159,10 +206,45 @@ class TeacherController extends VoyagerBaseController
         // Check permission
         $this->authorize('read', app($dataType->model_name));
 
-        $teacher = Teacher::with(['user', 'sections', 'subjects', 'timetables'])->findOrFail($id);
+        // Eager load all relationships for better performance
+        $teacher = Teacher::with([
+            'user',
+            'sections.className',
+            'subjects',
+            'timetables.subject',
+            'timetables.section'
+        ])->findOrFail($id);
+
+        // Get attendance statistics
+        $attendanceStats = Attendance::where('teacher_id', $id)
+            ->selectRaw('COUNT(*) as total, MONTH(date) as month')
+            ->whereYear('date', now()->year)
+            ->groupBy('month')
+            ->get();
 
         $view = 'vendor.voyager.teachers.view';
 
-        return Voyager::view($view, compact('dataType', 'teacher'));
+        return Voyager::view($view, compact('dataType', 'teacher', 'attendanceStats'));
+    }
+
+    /**
+     * Show teacher's timetable.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function timetable(): View
+    {
+        $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
+
+        $timetableByDay = [];
+        for ($day = 0; $day <= 6; $day++) {
+            $timetableByDay[$day] = Timetable::with(['section.className', 'subject'])
+                ->where('teacher_id', $teacher->id)
+                ->where('day_of_week', $day)
+                ->orderBy('start_time')
+                ->get();
+        }
+
+        return view('teacher.timetable', compact('teacher', 'timetableByDay'));
     }
 }

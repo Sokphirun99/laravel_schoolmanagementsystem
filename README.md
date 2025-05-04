@@ -197,3 +197,5 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 docker compose exec app ls -la app/Widgets
 docker compose exec app php artisan config:cleardocker compose exec app php artisan cache:clear
 docker compose exec app php artisan view:clear
+docker compose exec app bash
+php artisan make:migration
