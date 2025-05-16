@@ -5,6 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * UserRole model representing the many-to-many relationship between users and roles.
+ *
+ * IMPORTANT: This model uses a composite primary key (user_id, role_id) in the database,
+ * but since Laravel doesn't fully support composite keys in Eloquent, we've implemented
+ * several workarounds to avoid SQL errors related to ordering and primary keys.
+ *
+ * Updated: May 17, 2025
+ */
 class UserRole extends Model
 {
     /**
@@ -22,8 +31,23 @@ class UserRole extends Model
     public $timestamps = false;
 
     /**
-     * Tell Laravel not to use auto-incrementing for the primary key
-     * since we're using a composite key.
+     * The primary key for the model.
+     * While the actual primary key in the database is composite,
+     * we'll use user_id for Laravel's internal references.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
+     * The type of key for the model.
+     *
+     * @var string
+     */
+    protected $keyType = 'int';
+
+    /**
+     * Tell Laravel not to use auto-incrementing for the primary key.
      *
      * @var bool
      */
@@ -101,9 +125,9 @@ class UserRole extends Model
      */
     public static function hasRole(int $userId, int $roleId): bool
     {
-        return self::where('user_id', $userId)
-            ->where('role_id', $roleId)
-            ->exists();
+        // Use raw query to avoid ordering issues
+        $count = self::whereRaw('user_id = ? AND role_id = ?', [$userId, $roleId])->count();
+        return $count > 0;
     }
 
     /**
@@ -115,7 +139,16 @@ class UserRole extends Model
      */
     public static function assignRole(int $userId, int $roleId): self
     {
-        return self::firstOrCreate([
+        // Use method that won't try ordering by id
+        $existingRole = self::where('user_id', $userId)
+            ->where('role_id', $roleId)
+            ->first();
+
+        if ($existingRole) {
+            return $existingRole;
+        }
+
+        return self::create([
             'user_id' => $userId,
             'role_id' => $roleId
         ]);
@@ -171,5 +204,46 @@ class UserRole extends Model
     {
         // Return a qualified column that definitely exists to avoid SQL errors
         return $this->qualifyColumn('user_id');
+    }
+
+    /**
+     * Get the route key name for Laravel's route model binding.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'user_id';
+    }
+
+    /**
+     * Override the find method to handle composite keys properly.
+     *
+     * @param mixed $id User ID
+     * @param array $columns Columns to select
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public static function findWithRoleId($userId, $roleId, $columns = ['*'])
+    {
+        return static::where('user_id', $userId)
+            ->where('role_id', $roleId)
+            ->first($columns);
+    }
+
+    /**
+     * Cast the model to an array - important for serialization.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        // Ensure the array has a meaningful ID for JSON serialization
+        if (!isset($array['id']) && isset($array['user_id']) && isset($array['role_id'])) {
+            $array['id'] = $array['user_id'] . '_' . $array['role_id'];
+        }
+
+        return $array;
     }
 }

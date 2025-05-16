@@ -135,15 +135,11 @@ class User extends \TCG\Voyager\Models\User
      */
     public function assignRole($roleId)
     {
-        // First check if the user already has this role
-        if (!$this->hasRole($roleId)) {
-            return UserRole::create([
-                'user_id' => $this->id,
-                'role_id' => $roleId
-            ]);
-        }
-
-        return $this->roles()->where('roles.id', $roleId)->first()->pivot;
+        // Use firstOrCreate to avoid duplicate entries and prevent ordering issues
+        return UserRole::firstOrCreate([
+            'user_id' => $this->id,
+            'role_id' => $roleId
+        ]);
     }
 
     /**

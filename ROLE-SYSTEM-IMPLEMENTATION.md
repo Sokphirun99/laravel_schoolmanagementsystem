@@ -114,9 +114,11 @@ We've removed redundant and duplicate code to streamline the role management sys
    - Added cleanup notes to the main README.md
 
 3. **Bug Fixes**:
-   - Fixed SQL error "Column not found: 1054 Unknown column 'id'" by properly configuring the `UserRole` model to use a composite primary key
+   - Fixed SQL error "Column not found: 1054 Unknown column 'id'" by properly configuring the `UserRole` model to use a proper primary key
    - Fixed SQL error "Column not found: 1054 Unknown column '' in 'order clause'" by overriding the query builder's ordering behavior
    - Changed `updateOrCreate()` to `firstOrCreate()` in `UserRolesTrait` to prevent issues with ordering by non-existent columns
+   - Added custom query methods in the `UserRole` class to avoid problematic SQL ordering clauses
+   - Added proper serialization handling for composite primary key models
 
 4. **Current Implementation**:
    - Uses SyncUserRoles2Command for role synchronization
