@@ -25,6 +25,8 @@ use App\Models\Attendance;
 use App\Models\Timetable;
 use App\Models\Exam;
 use App\Models\ExamResult;
+use App\Models\Role;
+use App\Services\UserService;
 use Carbon\Carbon;
 
 class TeacherController extends VoyagerBaseController
@@ -149,16 +151,24 @@ class TeacherController extends VoyagerBaseController
         DB::beginTransaction();
 
         try {
-            // Create user account for teacher
-            $user = new User();
-            $user->name = $request->first_name . ' ' . $request->last_name;
-            $user->email = $request->email;
-            $user->password = bcrypt($request->password ?? 'password123');
-            $user->role_id = 2; // Teacher role ID
-            $user->save();
+            // Use UserService to create teacher user
+            $userService = new UserService();
+            $userData = [
+                'name' => $request->first_name . ' ' . $request->last_name,
+                'email' => $request->email,
+                'password' => $request->password ?? 'password123'
+            ];
+
+            $teacherData = $request->except(['email', 'password']);
+
+            $result = $userService->createTeacherUser($userData, $teacherData);
+
+            if (!$result['success']) {
+                throw new \Exception($result['message']);
+            }
 
             // Add user_id to the request data
-            $request->merge(['user_id' => $user->id]);
+            $request->merge(['user_id' => $result['user']->id]);
 
             // Continue with the Voyager BREAD storing process
             $slug = $this->getSlug($request);

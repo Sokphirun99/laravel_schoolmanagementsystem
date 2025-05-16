@@ -21,6 +21,8 @@ use App\Models\Attendance;
 use App\Models\ExamResult;
 use App\Models\StudentFee;
 use App\Models\Timetable;
+use App\Models\Role;
+use App\Services\UserService;
 class StudentController extends VoyagerBaseController
 {
     public function index(Request $request)
@@ -305,16 +307,24 @@ class StudentController extends VoyagerBaseController
         DB::beginTransaction();
 
         try {
-            // Create user account for student
-            $user = new User();
-            $user->name = $request->first_name . ' ' . $request->last_name;
-            $user->email = $request->email;
-            $user->password = bcrypt($request->password ?? 'password123');
-            $user->role_id = 3; // Student role ID
-            $user->save();
+            // Use UserService to create student user
+            $userService = new UserService();
+            $userData = [
+                'name' => $request->first_name . ' ' . $request->last_name,
+                'email' => $request->email,
+                'password' => $request->password ?? 'password123'
+            ];
 
-            // Add user_id to the student data
-            $request->merge(['user_id' => $user->id]);
+            $studentData = $request->except(['email', 'password']);
+
+            $result = $userService->createStudentUser($userData, $studentData);
+
+            if (!$result['success']) {
+                throw new \Exception($result['message']);
+            }
+
+            // Add user_id to the student data for BREAD process
+            $request->merge(['user_id' => $result['user']->id]);
 
             // Continue with the normal BREAD storing process
             $slug = $this->getSlug($request);

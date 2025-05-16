@@ -7,6 +7,8 @@ A comprehensive school management system built with Laravel and Voyager admin pa
 ## Features
 
 - **User Management**: Administrators, teachers, students, and parents with role-based access
+  - Advanced role system supporting multiple roles per user
+  - Comprehensive role-based access control
 - **Academic Management**: Classes, sections, subjects, and timetables
 - **Student Management**: Enrollment, attendance, and performance tracking
 - **Teacher Management**: Staff profiles, assignments, and schedules
@@ -177,6 +179,21 @@ If you can't login to the admin panel, try:
 docker compose exec app php artisan voyager:admin your@email.com --create
 ```
 
+## Role Management System
+
+The system includes an advanced role management implementation that supports multiple roles per user. For detailed information, see `README-ROLE-SYSTEM.md`.
+
+### Recent Cleanup (May 2025)
+
+We've recently cleaned up the codebase by removing redundant files and streamlining the role management system:
+
+- Removed duplicate migration for `user_roles` table
+- Consolidated multiple role synchronization commands and seeders
+- Updated documentation to reflect the current implementation
+- Ensured backward compatibility with the legacy role system
+
+All removed files have been backed up in their respective `_backup` directories.
+
 ## Support & Contribution
 
 - **Issues**: Submit issues on GitHub
@@ -199,3 +216,8 @@ docker compose exec app php artisan config:cleardocker compose exec app php arti
 docker compose exec app php artisan view:clear
 docker compose exec app bash
 php artisan make:migration
+
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
