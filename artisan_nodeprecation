@@ -1,0 +1,32 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Special version of artisan that suppresses PHP 8.4 deprecation warnings
+ */
+
+// Disable deprecation notices for this script execution
+ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
+
+// Define the application start time
+define('LARAVEL_START', microtime(true));
+
+// Register the Composer autoloader
+require __DIR__.'/vendor/autoload.php';
+
+// Create the application instance
+$app = require_once __DIR__.'/bootstrap/app.php';
+
+// Get the Kernel
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+
+// Run the command with output
+$status = $kernel->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput,
+    new Symfony\Component\Console\Output\ConsoleOutput
+);
+
+// Terminate the application
+$kernel->terminate($input, $status);
+
+exit($status);

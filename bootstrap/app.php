@@ -1,5 +1,8 @@
 <?php
 
+// Include custom error handler to suppress specific deprecation warnings
+require_once __DIR__ . '/suppress_deprecations.php';
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application

@@ -1,5 +1,10 @@
 <?php
 
+// Suppress PHP 8.4 deprecation warnings for Laravel 9.x
+if (file_exists(__DIR__.'/../bootstrap/suppress_deprecations.php')) {
+    require __DIR__.'/../bootstrap/suppress_deprecations.php';
+}
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
