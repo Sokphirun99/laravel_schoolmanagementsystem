@@ -48,6 +48,7 @@ docker compose exec app php artisan key:generate
 
 # Create storage link
 docker compose exec app php artisan storage:link
+docker compose exec app php artisan storage:link --force
 
 # Run migrations and seed the database
 docker compose exec app php artisan migrate --seed
