@@ -35,7 +35,7 @@ class ClassDimmer extends BaseDimmer
                     'text' => __('View all classes'),
                     'link' => route('voyager.classes.index'),
                 ],
-                'image' => voyager_asset('images/widget-backgrounds/04.jpg'),
+                'image' => voyager_asset('images/widget-backgrounds/02.jpg'),
             ]));
         } catch (\Exception $e) {
             Log::error('ClassDimmer error: ' . $e->getMessage());
@@ -48,7 +48,7 @@ class ClassDimmer extends BaseDimmer
                     'text' => __('Check Classes'),
                     'link' => route('voyager.dashboard'),
                 ],
-                'image' => voyager_asset('images/widget-backgrounds/04.jpg'),
+                'image' => voyager_asset('images/widget-backgrounds/02.jpg'),
             ]));
         }
     }

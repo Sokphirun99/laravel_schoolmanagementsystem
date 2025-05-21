@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\UserRole;
+use App\Traits\UserRolesTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Traits\UserRolesTrait;
+use TCG\Voyager\Contracts\User as VoyagerUserContract;
 
-class User extends \TCG\Voyager\Models\User
+class User extends \TCG\Voyager\Models\User implements VoyagerUserContract
 {
     use HasApiTokens, HasFactory, Notifiable, UserRolesTrait;
 
@@ -69,63 +70,8 @@ class User extends \TCG\Voyager\Models\User
         return $this->hasOne(Parents::class);
     }
 
-    /**
-     * Check if user is a student
-     * Uses both the legacy role_id and the new user_roles relationship
-     */
-    public function isStudent()
-    {
-        // Check both the legacy role_id and the roles relationship
-        return $this->role_id === Role::STUDENT ||
-               $this->hasRole(Role::STUDENT) ||
-               $this->student()->exists();
-    }
-
-    /**
-     * Check if user is a teacher
-     * Uses both the legacy role_id and the new user_roles relationship
-     */
-    public function isTeacher()
-    {
-        // Check both the legacy role_id and the roles relationship
-        return $this->role_id === Role::TEACHER ||
-               $this->hasRole(Role::TEACHER) ||
-               $this->teacher()->exists();
-    }
-
-    /**
-     * Check if user is a parent
-     * Uses both the legacy role_id and the new user_roles relationship
-     */
-    public function isParent()
-    {
-        // Check both the legacy role_id and the roles relationship
-        return $this->role_id === Role::PARENT ||
-               $this->hasRole(Role::PARENT) ||
-               $this->parent()->exists();
-    }
-
-    /**
-     * Check if the user has a specific role by ID
-     *
-     * @param int $roleId
-     * @return bool
-     */
-    public function hasRole($roleId)
-    {
-        return $this->roles()->where('roles.id', $roleId)->exists();
-    }
-
-    /**
-     * Check if the user has a specific role by name
-     *
-     * @param string $roleName
-     * @return bool
-     */
-    public function hasRoleName($roleName)
-    {
-        return $this->roles()->where('roles.name', $roleName)->exists();
-    }
+    // The isStudent(), isTeacher(), isParent(), hasRole(), and hasRoleName() methods
+    // have been moved to the UserRolesTrait
 
     /**
      * Assign a role to the user
@@ -156,18 +102,6 @@ class User extends \TCG\Voyager\Models\User
     }
 
     /**
-     * Sync the role_id with user_roles table to ensure consistency
-     *
-     * @return void
-     */
-    public function syncRoleId()
-    {
-        if ($this->role_id) {
-            $this->assignRole($this->role_id);
-        }
-    }
-
-    /**
      * Get field_id attribute - added to resolve Voyager error
      */
     public function getFieldIdAttribute()
@@ -175,13 +109,5 @@ class User extends \TCG\Voyager\Models\User
         return null;
     }
 
-    /**
-     * The roles that belong to the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
-    }
+    // The roles() relationship has been moved to the UserRolesTrait
 }

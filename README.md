@@ -17,6 +17,7 @@ A comprehensive school management system built with Laravel and Voyager admin pa
 - **Attendance Tracking**: Daily attendance records for students and staff
 - **Reports & Analytics**: Academic and administrative reporting tools
 - **School Calendar**: Academic year planning and event management
+- **CI/CD Integration**: Automated build, test, and deployment with Jenkins and Kubernetes
 
 ## System Requirements
 
@@ -200,6 +201,29 @@ All removed files have been backed up in their respective `_backup` directories.
 - **Pull Requests**: Contributions are welcome
 - **Documentation**: More detailed docs in the `/docs` directory
 
+## CI/CD Pipeline
+
+This project includes a complete CI/CD pipeline setup with Jenkins and Kubernetes:
+
+### Jenkins Pipeline
+
+The included Jenkinsfile defines a complete pipeline that:
+- Builds the application
+- Runs automated tests
+- Creates a Docker image
+- Deploys to Kubernetes
+
+### Kubernetes Deployment
+
+The `/kubernetes` directory contains all necessary manifests for deploying to a Kubernetes cluster:
+
+```bash
+# Apply all Kubernetes configurations
+./kubernetes/setup.sh
+```
+
+For detailed instructions on setting up the CI/CD pipeline, see [Jenkins and Kubernetes Setup Guide](docs/jenkins-kubernetes-setup.md).
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
@@ -207,17 +231,3 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 ---
 
 © 2025 School Management System. Built with Laravel, Voyager, and Docker.
-
-
-
-
-docker compose exec app ls -la app/Widgets
-docker compose exec app php artisan config:cleardocker compose exec app php artisan cache:clear
-docker compose exec app php artisan view:clear
-docker compose exec app bash
-php artisan make:migration
-
-php artisan config:clear
-php artisan cache:clear
-php artisan view:clear
-php artisan route:clear

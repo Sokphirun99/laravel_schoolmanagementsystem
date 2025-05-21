@@ -28,7 +28,7 @@ class StudentDimmer extends BaseDimmer
             return view('voyager::dimmer', array_merge($this->config, [
                 'icon'   => 'voyager-person',
                 'title'  => "{$count} {$string}",
-                'text'   => __('You have '.$count.' students in your database.'),
+                'text'   => __('You have '.$count.' in your database. Click on button below to view all students.'),
                 'button' => [
                     'text' => __('View all students'),
                     'link' => route('voyager.students.index'),

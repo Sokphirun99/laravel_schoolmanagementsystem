@@ -11,7 +11,7 @@ class Subject extends Model
     use SoftDeletes, HasFactory;
 
     protected $fillable = [
-        'name', 'code', 'type', 'description', 'credit_hours', 'class_id'
+        'name', 'code', 'type', 'description', 'credit_hours', 'class_id', 'department_id'
     ];
 
     /**
@@ -46,5 +46,13 @@ class Subject extends Model
     public function timetables()
     {
         return $this->hasMany(Timetable::class);
+    }
+
+    /**
+     * Get the department this subject belongs to
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 }

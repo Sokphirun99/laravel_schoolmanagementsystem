@@ -7,6 +7,7 @@ use Database\Seeders\UserManagementMenuItemsSeeder;
 use Database\Seeders\StudentsSeeder;
 use Database\Seeders\ParentsSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
+use Database\Seeders\ClassesBreadSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
             // other seeders
             UserManagementMenuItemsSeeder::class,
             StudentsSeeder::class,
+            ClassesBreadSeeder::class,
         ]);
     }
 }

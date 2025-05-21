@@ -34,7 +34,7 @@ class ParentsDimmer extends BaseDimmer
                 'text' => __('View all parents'),
                 'link' => route('voyager.parents.index'),
             ],
-            'image' => asset('images/widget-backgrounds/parents.jpg'),
+            'image' => voyager_asset('images/widget-backgrounds/01.jpg'),
         ]));
     }
 

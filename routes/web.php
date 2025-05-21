@@ -1,12 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use TCG\Voyager\Facades\Voyager;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ParentsController;
+use App\Http\Controllers\ClassRoomController;
 use App\Http\Controllers\SchoolDashboardController;
 use App\Http\Controllers\SchoolSetupController;
+use App\Http\Controllers\HealthCheckController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +25,9 @@ use App\Http\Controllers\SchoolSetupController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Health check endpoint for Kubernetes
+Route::get('/health', [HealthCheckController::class, 'index']);
 
 // School setup routes
 Route::get('/setup', [SchoolSetupController::class, 'showSetupForm'])->name('school.setup');
@@ -43,8 +49,19 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('teachers/{id}', [TeacherController::class, 'show'])->name('voyager.teachers.show');
     Route::post('teachers', [TeacherController::class, 'store'])->name('voyager.teachers.store');
 
+    Route::get('parents', [ParentsController::class, 'index'])->name('voyager.parents.index');
+    Route::get('parents/create', [ParentsController::class, 'create'])->name('voyager.parents.create');
     Route::get('parents/{id}', [ParentsController::class, 'show'])->name('voyager.parents.show');
     Route::post('parents', [ParentsController::class, 'store'])->name('voyager.parents.store');
+
+    // Classes routes - now using ClassRoomController
+    Route::get('classes', [ClassRoomController::class, 'index'])->name('voyager.classes.index');
+    Route::get('classes/create', [ClassRoomController::class, 'create'])->name('voyager.classes.create');
+    Route::post('classes', [ClassRoomController::class, 'store'])->name('voyager.classes.store');
+    Route::get('classes/{id}', [ClassRoomController::class, 'show'])->name('voyager.classes.show');
+    Route::get('classes/{id}/edit', [ClassRoomController::class, 'edit'])->name('voyager.classes.edit');
+    Route::put('classes/{id}', [ClassRoomController::class, 'update'])->name('voyager.classes.update');
+    Route::delete('classes/{id}', [ClassRoomController::class, 'destroy'])->name('voyager.classes.destroy');
 
     // Role Management routes
     Route::get('manage-roles', [App\Http\Controllers\Admin\RoleManagementController::class, 'index'])->name('admin.manage-roles');

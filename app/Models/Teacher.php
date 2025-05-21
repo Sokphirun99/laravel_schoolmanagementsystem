@@ -12,12 +12,22 @@ class Teacher extends Model
     protected $fillable = [
         'user_id', 'employee_id', 'first_name', 'last_name', 'gender',
         'date_of_birth', 'phone', 'address', 'qualification', 'experience',
-        'join_date', 'designation', 'department', 'salary', 'status'
+        'join_date', 'designation', 'department', 'department_id', 'salary', 'status'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the department that the teacher belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function sections()

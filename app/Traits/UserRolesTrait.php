@@ -220,4 +220,58 @@ trait UserRolesTrait
     {
         return $this->hasRoleName('parent');
     }
+
+    /**
+     * Check if the user has a specific role by name or id
+     *
+     * @param string|int $role The role name or ID to check
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        // Handle both role name and role ID
+        if (is_numeric($role)) {
+            return $this->roles()->where('roles.id', $role)->exists();
+        } else {
+            return $this->hasRoleName($role);
+        }
+    }
+
+    /**
+     * Check if the user has a specific permission
+     *
+     * @param string $permission The permission name to check
+     * @return bool
+     */
+    public function hasPermissionTo($permission)
+    {
+        // For admin users, always grant all permissions
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        // Import Voyager Permission model
+        $permissionModel = app('TCG\\Voyager\\Models\\Permission');
+
+        // Get the role IDs for this user
+        $roleIds = $this->roles()->pluck('roles.id')->toArray();
+
+        // Check if any of the user's roles have this permission
+        return \DB::table('permission_role')
+            ->join('permissions', 'permissions.id', '=', 'permission_role.permission_id')
+            ->whereIn('permission_role.role_id', $roleIds)
+            ->where('permissions.key', $permission)
+            ->exists();
+    }
+
+    /**
+     * Alias for hasPermissionTo to be compatible with Voyager
+     *
+     * @param string $permission The permission name to check
+     * @return bool
+     */
+    public function hasPermission($permission)
+    {
+        return $this->hasPermissionTo($permission);
+    }
 }

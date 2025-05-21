@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: school-management-config
+  namespace: school-management
+data:
+  db_host: "mysql"
+  db_port: "3306"
+  db_database: "laravel_school"
+  redis_host: "redis"
+  app_url: "https://school.example.com"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: school-management-secrets
+  namespace: school-management
+type: Opaque
+data:
+  # These are base64 encoded values - in production, use kubectl create secret command
+  db_username: cm9vdA== # root
+  db_password: cGFzc3dvcmQ= # password
+  app_key: YmFzZTY0OmRHaHBjeXRwY3kxaGJtOTBhR1Z5TFhKaGJtUnZiUzF6ZEhKcGJtYz0= # A Laravel app key

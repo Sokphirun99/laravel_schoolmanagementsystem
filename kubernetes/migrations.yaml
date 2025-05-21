@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: database-migrations
+  namespace: school-management
+spec:
+  schedule: "0 0 * * *" # Run once a day at midnight - this is mostly a template for manual jobs
+  suspend: true # Suspend automatic runs, we'll use this template for manual invocations
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: laravel-migrations
+            image: your-registry.com/laravel-school-management:latest
+            command: ["/bin/sh", "-c"]
+            args:
+            - cd /var/www/html && php artisan migrate --force
+            env:
+            - name: APP_ENV
+              value: "production"
+            - name: DB_CONNECTION
+              value: "mysql"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: school-management-config
+                  key: db_host
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: school-management-config
+                  key: db_port
+            - name: DB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: school-management-config
+                  key: db_database
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: school-management-secrets
+                  key: db_username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: school-management-secrets
+                  key: db_password
+          restartPolicy: OnFailure
