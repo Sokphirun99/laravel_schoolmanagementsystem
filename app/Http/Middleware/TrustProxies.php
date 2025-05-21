@@ -12,7 +12,11 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = [
+        '76.76.21.0/24',  // Vercel proxy addresses
+        '76.76.29.0/24',  // Vercel proxy addresses
+        '127.0.0.1',      // Local development
+    ];
 
     /**
      * The headers that should be used to detect proxies.
