@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "vercel-build": "chmod +x ./vercel-build.sh && ./vercel-build.sh"
     },
     "devDependencies": {
         "axios": "^1.1.2",

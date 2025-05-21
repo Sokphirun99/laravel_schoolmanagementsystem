@@ -1,0 +1,19 @@
+{
+  "runtime": "vercel-php@0.6.0",
+  "handler": "index.php",
+  "config": {
+    "maxDuration": 60,
+    "runtime": {
+      "extensions": [
+        "mbstring",
+        "mysqli",
+        "pdo_mysql",
+        "pdo_sqlite",
+        "openssl",
+        "gd",
+        "exif",
+        "zip"
+      ]
+    }
+  }
+}
