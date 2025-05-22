@@ -26,7 +26,7 @@ A comprehensive school management system built with Laravel and Voyager admin pa
 - 2GB+ RAM
 - 5GB+ disk space
 
-## Quick Installation
+## Complete Installation Guide
 
 ```bash
 # Clone the repository
@@ -76,7 +76,10 @@ docker compose exec app php artisan db:seed --class=StudentsSeeder
 docker compose exec app php artisan db:seed --class=TeachersSeeder
 docker compose exec app php artisan db:seed --class=ClassesSeeder
 ```
-
+# Run your menu cleanup command
+docker compose exec app php artisan voyager:menu:clean
+docker compose exec app php artisan voyager:menu:clean --forces
+,,,
 ### 2. Clear Application Cache
 
 After making configuration changes:

@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // other seeders
             UserManagementMenuItemsSeeder::class,
-            StudentsSeeder::class,
             ClassesBreadSeeder::class,
+            SchoolRolesSeeder::class,
         ]);
     }
 }

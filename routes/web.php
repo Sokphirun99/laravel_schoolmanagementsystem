@@ -38,7 +38,9 @@ Route::get('/setup/migrate', [SchoolSetupController::class, 'runMigrations'])->n
 Route::get('/setup/add-role-management-menu', [App\Http\Controllers\CustomMenuController::class, 'addRoleManagementMenu'])->name('setup.add-role-menu');
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/', [SchoolDashboardController::class, 'index'])->name('voyager.dashboard');
+    // Use Voyager's default dashboard controller
+    // Commenting out custom dashboard for now
+    // Route::get('/', [SchoolDashboardController::class, 'index'])->name('voyager.dashboard');
 
     // Add these BEFORE Voyager::routes()
     Route::get('students', [StudentController::class, 'index'])->name('voyager.students.index');
