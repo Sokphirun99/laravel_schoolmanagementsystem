@@ -4,6 +4,10 @@ A comprehensive school management system built with Laravel and Voyager admin pa
 
 ![School Management System](https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg)
 
+## Installation & Setup Guide
+
+This guide provides step-by-step instructions for setting up, running, and troubleshooting the School Management System.
+
 ## Features
 
 - **User Management**: Administrators, teachers, students, and parents with role-based access
@@ -26,7 +30,7 @@ A comprehensive school management system built with Laravel and Voyager admin pa
 - 2GB+ RAM
 - 5GB+ disk space
 
-## Complete Installation Guide
+## Quick Installation
 
 ```bash
 # Clone the repository
@@ -35,6 +39,12 @@ cd laravel_schoolmanagementsystem
 
 # Start Docker containers
 docker compose up -d
+
+# Create environment file from example
+cp .env.example .env
+
+# Update database connection in .env file (make sure DB_HOST=db)
+sed -i '' 's/DB_HOST=127.0.0.1/DB_HOST=db/' .env
 
 # Install Laravel dependencies
 docker compose exec app composer install
@@ -47,7 +57,6 @@ docker compose exec app chown -R www-data:www-data storage bootstrap/cache
 docker compose exec app php artisan key:generate
 
 # Create storage link
-docker compose exec app php artisan storage:link
 docker compose exec app php artisan storage:link --force
 
 # Run migrations and seed the database
@@ -55,6 +64,9 @@ docker compose exec app php artisan migrate --seed
 
 # Install Voyager with sample data
 docker compose exec app php artisan voyager:install --with-dummy
+
+# Run menu cleanup command
+docker compose exec app php artisan menu:cleanup
 ```
 
 ## Complete Setup Guide
@@ -64,13 +76,10 @@ docker compose exec app php artisan voyager:install --with-dummy
 After installing with the quick instructions above, you can:
 
 ```bash
-# Run database migrations
+# Run database migrations if needed
 docker compose exec app php artisan migrate
 
-# Seed the database with initial data
-docker compose exec app php artisan db:seed
-
-# Seed specific data sets
+# Seed the database with specific data sets if needed
 docker compose exec app php artisan db:seed --class=SchoolRolesSeeder
 docker compose exec app php artisan db:seed --class=StudentsSeeder
 docker compose exec app php artisan db:seed --class=TeachersSeeder
@@ -88,6 +97,7 @@ After making configuration changes:
 docker compose exec app php artisan config:clear
 docker compose exec app php artisan cache:clear
 docker compose exec app php artisan view:clear
+docker compose exec app php artisan route:clear
 ```
 
 ## Accessing the Application
@@ -156,6 +166,14 @@ Modify docker-compose.yml for container configurations.
 If you encounter "Connection refused" or "Name or service not known" errors:
 
 ```bash
+# Check if your .env file has the correct database settings
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laravel
+DB_PASSWORD=secret
+
 # Clear config cache
 docker compose exec app php artisan config:clear
 
@@ -164,6 +182,28 @@ docker compose logs db
 
 # Check if containers are running
 docker ps
+
+# If DB container is restarting constantly, try removing volumes and starting fresh
+docker compose down -v
+docker compose up -d
+```
+
+### MySQL 8 Version Compatibility Issues
+
+If you see errors about MySQL version incompatibility in the logs:
+
+```bash
+# Remove all containers and volumes
+docker compose down -v
+
+# Start the containers again
+docker compose up -d
+
+# Follow the setup process from the beginning
+cp .env.example .env
+sed -i '' 's/DB_HOST=127.0.0.1/DB_HOST=db/' .env
+docker compose exec app composer install
+# ...and so on
 ```
 
 ### File Permission Issues
@@ -181,7 +221,38 @@ If you can't login to the admin panel, try:
 
 ```bash
 # Reset password for admin user
-docker compose exec app php artisan voyager:admin your@email.com --create
+docker compose exec app php artisan voyager:admin admin@admin.com --create
+
+# Or manually reset the password via Tinker
+docker compose exec app php artisan tinker
+> DB::table('users')->where('id', 1)->update(['password' => bcrypt('password')]);
+> exit
+
+# Make sure the admin user has the admin role
+docker compose exec app php artisan tinker
+> DB::table('user_roles')->insert(['user_id' => 1, 'role_id' => 4]);
+> exit
+```
+
+### Dashboard Not Showing After Login
+
+If you can log in but don't see the dashboard:
+
+```bash
+# Check route configuration
+docker compose exec app php artisan route:list | grep dashboard
+
+# Temporarily comment out custom dashboard routes in routes/web.php
+# Replace:
+# Route::get('/', [SchoolDashboardController::class, 'index'])->name('voyager.dashboard');
+# With:
+# // Route::get('/', [SchoolDashboardController::class, 'index'])->name('voyager.dashboard');
+
+# Clear all caches
+docker compose exec app php artisan cache:clear
+docker compose exec app php artisan config:clear
+docker compose exec app php artisan view:clear
+docker compose exec app php artisan route:clear
 ```
 
 ## Role Management System
