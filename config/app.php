@@ -194,8 +194,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\RoleExampleRouteServiceProvider::class,
-        App\Providers\DatabaseConfigProvider::class, // Auto-detect if using Docker or local
+
 
         /*
          * Voyager Service Provider

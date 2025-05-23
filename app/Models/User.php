@@ -3,17 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\UserRole;
-use App\Traits\UserRolesTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use TCG\Voyager\Contracts\User as VoyagerUserContract;
 
-class User extends \TCG\Voyager\Models\User implements VoyagerUserContract
+class User extends \TCG\Voyager\Models\User
 {
-    use HasApiTokens, HasFactory, Notifiable, UserRolesTrait;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +21,6 @@ class User extends \TCG\Voyager\Models\User implements VoyagerUserContract
         'name',
         'email',
         'password',
-        'role_id',
     ];
 
     /**
@@ -45,69 +41,4 @@ class User extends \TCG\Voyager\Models\User implements VoyagerUserContract
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * Get the student record associated with the user.
-     */
-    public function student()
-    {
-        return $this->hasOne(Student::class);
-    }
-
-    /**
-     * Get the teacher record associated with the user.
-     */
-    public function teacher()
-    {
-        return $this->hasOne(Teacher::class);
-    }
-
-    /**
-     * Get the parent record associated with the user.
-     */
-    public function parent()
-    {
-        return $this->hasOne(Parents::class);
-    }
-
-    // The isStudent(), isTeacher(), isParent(), hasRole(), and hasRoleName() methods
-    // have been moved to the UserRolesTrait
-
-    /**
-     * Assign a role to the user
-     *
-     * @param int $roleId
-     * @return \App\Models\UserRole
-     */
-    public function assignRole($roleId)
-    {
-        // Use firstOrCreate to avoid duplicate entries and prevent ordering issues
-        return UserRole::firstOrCreate([
-            'user_id' => $this->id,
-            'role_id' => $roleId
-        ]);
-    }
-
-    /**
-     * Remove a role from the user
-     *
-     * @param int $roleId
-     * @return bool
-     */
-    public function removeRole($roleId)
-    {
-        return UserRole::where('user_id', $this->id)
-            ->where('role_id', $roleId)
-            ->delete();
-    }
-
-    /**
-     * Get field_id attribute - added to resolve Voyager error
-     */
-    public function getFieldIdAttribute()
-    {
-        return null;
-    }
-
-    // The roles() relationship has been moved to the UserRolesTrait
 }

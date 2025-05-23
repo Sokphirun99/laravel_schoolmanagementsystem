@@ -1,13 +1,5 @@
 <?php
 
-// Include custom error handler to suppress specific deprecation warnings
-require_once __DIR__ . '/suppress_deprecations.php';
-
-// Include Vercel configuration if it exists
-if (file_exists(__DIR__ . '/vercel.php')) {
-    require_once __DIR__ . '/vercel.php';
-}
-
 /*
 |--------------------------------------------------------------------------
 | Create The Application

@@ -23,12 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Fix for avatars and other assets in Docker environment
-        $appUrl = config('app.url');
-        
-        // Ensure we have a properly formatted APP_URL for assets
-        if (!str_starts_with($appUrl, 'http://') && !str_starts_with($appUrl, 'https://')) {
-            config(['app.url' => url('/')]);
-        }
+        //
     }
 }
