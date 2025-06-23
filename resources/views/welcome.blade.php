@@ -1,782 +1,826 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="description" content="School Management System - A comprehensive solution for educational institutions">
-        <meta name="keywords" content="school, management, education, students, teachers, admin">
-        
-        <!-- Open Graph / Social Media Meta Tags -->
-        <meta property="og:title" content="{{ config('app.name', 'School Management System') }}">
-        <meta property="og:description" content="A comprehensive solution for educational institutions to manage administrative tasks and student records">
-        <meta property="og:image" content="{{ asset('images/school-logo.png') }}">
-        <meta property="og:url" content="{{ url('/') }}">
-        <meta property="og:type" content="website">
-        <meta name="twitter:card" content="summary_large_image">
-        
-        <title>{{ config('app.name', 'School Management System') }}</title>
-        
-        <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System - Voyager Style</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
+    
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
-        <!-- Fonts -->
-        <link rel="dns-prefetch" href="//fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('voyager-assets/css/app.css') }}" rel="stylesheet">
+    
+    <style>
+        :root {
+            --voyager-primary: #22A7F0;
+            --voyager-secondary: #2B3D51;
+            --voyager-dark: #1A2226;
+            --voyager-bg: #F9FAFC;
+            --voyager-bg-darker: #EEF3F7;
+            --voyager-text: #333;
+            --voyager-text-light: #fff;
+            --voyager-accent: #62A8EA;
+            --voyager-border: #E4EAEC;
+            --voyager-sidebar: #2A3F54;
+            --voyager-success: #4CAF50;
+            --voyager-warning: #FF9800;
+            --voyager-danger: #F44336;
+        }
 
-        <!-- Styles -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="{{ asset('voyager-assets/css/app.css') }}" rel="stylesheet">
-        
-        <style>
-            :root {
-                /* Voyager exact color palette */
-                --voyager-primary: #22A7F0;
-                --voyager-secondary: #2B3D51;
-                --voyager-bg: #F9FAFC;
-                --voyager-bg-darker: #EEF3F7;
-                --voyager-text: #333;
-                --voyager-text-light: #fff;
-                --voyager-accent: #62A8EA;
-                --voyager-border: #E4EAEC;
-                --voyager-sidebar: #2A3F54;
-                --voyager-dark: #1A2226;
-            }
-            
-            body {
-                font-family: 'Open Sans', sans-serif;
-                background-color: var(--voyager-bg);
-                color: var(--voyager-text);
-                overflow-x: hidden;
-            }
-            
-            .welcome-header {
-                background-color: var(--voyager-sidebar);
-                padding: 3rem 0;
-                border-bottom: 3px solid var(--voyager-primary);
-                position: relative;
-                color: var(--voyager-text-light);
-            }
-            
-            .welcome-header::after {
-                content: '';
-                position: absolute;
-                bottom: -20px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 40px;
-                height: 40px;
-                background-color: var(--voyager-secondary);
-                transform: rotate(45deg);
-                border-bottom: 3px solid var(--voyager-primary);
-                border-right: 3px solid var(--voyager-primary);
-                z-index: 1;
-            }
-            
-            .school-logo {
-                max-width: 150px;
-                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
-                animation: float 6s ease-in-out infinite;
-            }
-            
-            @keyframes float {
-                0% { transform: translateY(0px); }
-                50% { transform: translateY(-10px); }
-                100% { transform: translateY(0px); }
-            }
-            
-            .navbar {
-                background-color: var(--voyager-sidebar);
-                border-bottom: 3px solid var(--voyager-primary);
-                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-                padding: 0.75rem 0;
-            }
-            
-            .navbar-brand {
-                font-weight: 700;
-                font-size: 1.5rem;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                color: white !important;
-            }
-            
-            .nav-link {
-                color: rgba(255, 255, 255, 0.8) !important;
-                font-weight: 600;
-                text-transform: uppercase;
-                font-size: 0.8rem;
-                letter-spacing: 0.5px;
-            }
-            
-            .nav-link.active, .nav-link:hover {
-                color: white !important;
-            }
-            
-            .card {
-                background-color: white;
-                border: 1px solid var(--voyager-border);
-                border-radius: 3px;
-                overflow: hidden;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                margin-bottom: 30px;
-                transition: all 0.3s ease;
-                height: 100%;
-            }
-            
-            .card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-                border-color: var(--voyager-primary);
-            }
-            
-            .card-header {
-                background: var(--voyager-primary);
-                color: white;
-                font-weight: bold;
-                border: none;
-                padding: 10px 15px;
-                font-size: 1rem;
-                position: relative;
-                overflow: hidden;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-            
-            .card-header h4, .card-header h5 {
-                margin-bottom: 0;
-                font-size: 1rem;
-                font-weight: 600;
-            }
-            
-            .card-body {
-                padding: 1.25rem;
-                color: #76838f;
-            }
-            
-            .btn-voyager {
-                background-color: var(--voyager-primary);
-                border: none;
-                color: white;
-                font-weight: 600;
-                text-transform: uppercase;
-                font-size: 0.8rem;
-                letter-spacing: 0.5px;
-                padding: 8px 15px;
-                transition: all 0.2s ease;
-            }
-            
-            .btn-voyager:hover {
-                color: white;
-                background-color: #1e96d9;
-                box-shadow: 0 2px 5px rgba(34, 167, 240, 0.3);
-            }
-            
-            .btn-outline-light {
-                font-weight: 600;
-                text-transform: uppercase;
-                font-size: 0.8rem;
-                letter-spacing: 0.5px;
-                padding: 8px 15px;
-            }
-            
-            .login-section {
-                display: flex;
-                align-items: center;
-            }
-            
-            .features-icon {
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--voyager-bg);
+            color: var(--voyager-text);
+            overflow-x: hidden;
+        }
+
+        .voyager-navbar {
+            background: var(--voyager-sidebar);
+            border-bottom: 3px solid var(--voyager-primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 0;
+        }
+
+        .voyager-navbar .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white !important;
+        }
+
+        .voyager-navbar .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem !important;
+        }
+
+        .voyager-navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--voyager-primary);
+            transition: width 0.3s ease;
+        }
+
+        .voyager-navbar .nav-link:hover, 
+        .voyager-navbar .nav-link.active {
+            color: white !important;
+        }
+
+        .voyager-navbar .nav-link:hover::after,
+        .voyager-navbar .nav-link.active::after {
+            width: 100%;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--voyager-sidebar), var(--voyager-dark));
+            padding: 4rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322A7F0' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .school-logo {
+            max-width: 120px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            opacity: 0.9;
+        }
+
+        .feature-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 0.5rem 1.25rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 0 0.5rem 0.5rem 0;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-voyager {
+            background-color: var(--voyager-primary);
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(34, 167, 240, 0.2);
+        }
+
+        .btn-voyager:hover {
+            background-color: #1e96d9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(34, 167, 240, 0.3);
+            color: white;
+        }
+
+        .btn-voyager-outline {
+            background: transparent;
+            border: 2px solid var(--voyager-primary);
+            color: var(--voyager-primary);
+        }
+
+        .btn-voyager-outline:hover {
+            background: rgba(34, 167, 240, 0.1);
+            color: var(--voyager-primary);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+            color: var(--voyager-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.8rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--voyager-primary);
+        }
+
+        .card-voyager {
+            background: white;
+            border: 1px solid var(--voyager-border);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+        }
+
+        .card-voyager:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--voyager-primary);
+        }
+
+        .card-voyager-header {
+            background: var(--voyager-primary);
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-voyager-body {
+            padding: 25px;
+            color: #76838f;
+        }
+
+        .features-icon {
+            font-size: 2.5rem;
+            color: var(--voyager-primary);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card-voyager:hover .features-icon {
+            color: var(--voyager-accent);
+            transform: scale(1.1);
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            color: #76838f;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 2rem;
+        }
+
+        .module-item {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--voyager-primary);
+        }
+
+        .module-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--voyager-accent);
+        }
+
+        .module-icon {
+            font-size: 2.2rem;
+            color: var(--voyager-primary);
+            margin-bottom: 1rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--voyager-sidebar), var(--voyager-dark));
+            padding: 5rem 0;
+            color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322A7F0' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 1;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .voyager-footer {
+            background: var(--voyager-sidebar);
+            padding: 4rem 0 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voyager-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322A7F0' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-logo {
+            max-width: 150px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--voyager-primary);
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            margin-right: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--voyager-primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 3rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
                 font-size: 2.5rem;
-                color: var(--voyager-primary);
-                margin-bottom: 1rem;
-                transition: all 0.3s ease;
             }
             
-            .card:hover .features-icon {
-                color: var(--voyager-accent);
-            }
-            
-            .footer {
-                background-color: var(--voyager-sidebar);
-                padding: 1.5rem 0;
-                margin-top: 3rem;
-                border-top: 3px solid var(--voyager-primary);
-                position: relative;
-                color: var(--voyager-text-light);
+            .hero-subtitle {
+                font-size: 1.2rem;
             }
             
             .section-title {
-                position: relative;
-                display: inline-block;
-                margin-bottom: 2rem;
-                color: #505050;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 1px;
                 font-size: 1.5rem;
             }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark voyager-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <img src="{{ asset('images/school-logo.png') }}" height="40" class="d-inline-block align-top" alt="School Logo">
+                <span>{{ config('app.name', 'School Management System') }}</span>
+            </a>
             
-            .section-title::after {
-                content: '';
-                position: absolute;
-                bottom: -10px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 60px;
-                height: 3px;
-                background: var(--voyager-primary);
-            }
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             
-            .page-title {
-                color: #505050;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
-            
-            .panel {
-                background-color: #fff;
-                border: 0 solid transparent;
-                border-radius: 3px;
-                box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-            }
-            
-            .voyager-bg-pattern {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                opacity: 0.03;
-                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-                z-index: 0;
-            }
-            
-            .list-unstyled li {
-                margin-bottom: 0.5rem;
-                position: relative;
-                padding-left: 5px;
-                transition: all 0.2s ease;
-            }
-            
-            .list-unstyled li:hover {
-                color: var(--voyager-primary);
-            }
-            
-            /* Voyager specific styles */
-            .page-content {
-                background: #F9FAFC;
-                border-radius: 3px;
-                padding: 15px;
-            }
-            
-            .panel-bordered {
-                border: 1px solid #E4EAEC;
-            }
-            
-            .voyager-breadcrumbs {
-                display: flex;
-                list-style: none;
-                padding: 0;
-                margin-bottom: 20px;
-            }
-            
-            .voyager-breadcrumbs li {
-                display: inline-flex;
-                align-items: center;
-            }
-            
-            .voyager-breadcrumbs li:not(:last-child):after {
-                content: '/';
-                margin: 0 5px;
-                color: #ccc;
-            }
-            
-            .text-primary {
-                color: var(--voyager-primary) !important;
-            }
-            
-            /* Responsive adjustments */
-            @media (max-width: 767px) {
-                .login-section {
-                    position: static;
-                    margin-top: 1rem;
-                    display: flex;
-                    justify-content: center;
-                    width: 100%;
-                }
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#modules">Modules</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#stats">Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://voyager-docs.devdojo.com/" target="_blank">Documentation</a>
+                    </li>
+                </ul>
                 
-                .navbar > .container {
-                    flex-direction: column;
-                }
-                
-                .welcome-header::after {
-                    display: none;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('images/school-logo.png') }}" height="40" class="d-inline-block align-top" alt="School Logo">
-                    <span>{{ config('app.name', 'School Management System') }}</span>
-                </a>
-                
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#features">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#modules">Modules</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="https://voyager-docs.devdojo.com/" target="_blank">Documentation</a>
-                        </li>
-                    </ul>
-                    
-                    <div class="login-section">                    <a href="{{ url('/admin/login') }}" class="btn btn-voyager">
+                <div class="d-flex gap-2">
+                    <a href="{{ url('/admin/login') }}" class="btn btn-voyager btn-sm">
                         <i class="fas fa-sign-in-alt me-1"></i> Admin Login
                     </a>
-                    <a href="{{ route('portal.login') }}" class="btn btn-outline-light ms-2">
-                        <i class="fas fa-user-graduate me-1"></i> Portal Login
-                    </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Welcome Header -->
-        <header class="welcome-header text-center py-5 position-relative">
-            <div class="voyager-bg-pattern"></div>
-            <div class="container position-relative" style="z-index: 1;">
-                <img src="{{ asset('images/school-logo.png') }}" alt="School Logo" class="school-logo mb-4">
-                <h1 class="display-4 fw-bold" style="text-transform: uppercase; letter-spacing: 1px;">School Management System</h1>
-                <p class="lead mb-4">Built with Laravel and Voyager Admin</p>
-                <div class="mb-4">
-                    <span class="badge bg-primary me-2 p-2">Students</span>
-                    <span class="badge bg-success me-2 p-2">Teachers</span>
-                    <span class="badge bg-info me-2 p-2">Parents</span>
-                    <span class="badge bg-warning me-2 p-2">Administrators</span>
-                </div>
-                <div class="d-flex justify-content-center gap-3">
-                    <a href="{{ url('/admin/login') }}" class="btn btn-voyager">
-                        <i class="fas fa-tachometer-alt me-2"></i> Admin Panel
-                    </a>
-                    <a href="{{ route('portal.login') }}" class="btn btn-outline-light">
-                        <i class="fas fa-user-graduate me-2"></i> User Portal
-                    </a>
-                    <a href="#features" class="btn btn-outline-light">
-                        <i class="fas fa-info-circle me-2"></i> Learn More
+                    <a href="{{ route('portal.login') }}" class="btn btn-voyager-outline btn-sm">
+                        <i class="fas fa-user-graduate me-1"></i> Student Portal
                     </a>
                 </div>
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <div class="container py-5">
-            <!-- Features Section -->
-            <section id="features" class="py-5">
-                <div class="row mb-5">
-                    <div class="col-12 text-center mb-5">
-                        <h2 class="section-title">Key Features</h2>
-                        <p class="text-muted">Discover the powerful tools that make our school management system stand out</p>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-6 text-center mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h4>Admin Panel</h4>
-                            </div>
-                            <div class="card-body d-flex flex-column">
-                                <div class="features-icon">
-                                    <i class="fas fa-user-shield"></i>
-                                </div>
-                                <p>Comprehensive admin dashboard powered by Voyager, giving you full control over all aspects of the school management system.</p>
-                                <div class="mt-auto">
-                                    <a href="{{ url('/admin') }}" class="btn btn-voyager">
-                                        <i class="fas fa-external-link-alt me-2"></i>Access Admin
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-6 text-center mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h4>Student Portal</h4>
-                            </div>
-                            <div class="card-body d-flex flex-column">
-                                <div class="features-icon">
-                                    <i class="fas fa-user-graduate"></i>
-                                </div>
-                                <p>Students can access their grades, assignments, attendance records, and communicate with teachers all in one place.</p>
-                                <div class="mt-auto">
-                                    <a href="{{ route('portal.login') }}" class="btn btn-voyager">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Student Login
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-6 text-center mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h4>Parent Portal</h4>
-                            </div>
-                            <div class="card-body d-flex flex-column">
-                                <div class="features-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <p>Parents can track their children's progress, communicate with teachers, and stay updated with announcements and events.</p>
-                                <div class="mt-auto">
-                                    <a href="{{ route('portal.login') }}" class="btn btn-voyager">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Parent Login
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Additional Features -->
-                <div class="row mt-5">
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <div class="features-icon" style="font-size: 2rem;">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>Mobile Responsive</h5>
-                                <p class="text-muted">Access the system from any device, anywhere, anytime.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <div class="features-icon" style="font-size: 2rem;">
-                                    <i class="fas fa-lock"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>Secure Access</h5>
-                                <p class="text-muted">Role-based permission system ensures data security.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <div class="features-icon" style="font-size: 2rem;">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>Detailed Analytics</h5>
-                                <p class="text-muted">Track performance with powerful reporting tools.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <div class="features-icon" style="font-size: 2rem;">
-                                    <i class="fas fa-bell"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>Real-time Notifications</h5>
-                                <p class="text-muted">Stay updated with instant alerts and reminders.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- System Modules -->
-            <section id="modules" class="py-5">
-                <div class="row">
-                    <div class="col-12 text-center mb-5">
-                        <h2 class="section-title">System Modules</h2>
-                        <p class="text-muted">Explore the comprehensive modules designed to streamline school administration</p>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 text-center mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5>Academic Management</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="features-icon">
-                                    <i class="fas fa-book"></i>
-                                </div>
-                                <ul class="list-unstyled text-start">
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Course Management</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Class Scheduling</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Assignments & Grading</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Exams & Results</li>
-                                </ul>
-                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 text-center mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5>Student Management</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="features-icon">
-                                    <i class="fas fa-user-graduate"></i>
-                                </div>
-                                <ul class="list-unstyled text-start">
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Student Registration</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Attendance Tracking</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Performance Reports</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Student Portfolios</li>
-                                </ul>
-                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 text-center mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5>Financial Management</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="features-icon">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                </div>
-                                <ul class="list-unstyled text-start">
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Fee Collection</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Payment Tracking</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Expense Management</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Financial Reports</li>
-                                </ul>
-                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 text-center mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5>Communication</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="features-icon">
-                                    <i class="fas fa-comments"></i>
-                                </div>
-                                <ul class="list-unstyled text-start">
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Announcements</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Teacher-Parent Chat</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Newsletters</li>
-                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Event Calendar</li>
-                                </ul>
-                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Stats Section -->
-                <div class="row mt-5">
-                    <div class="col-12 mb-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <h5 class="page-title mb-0">SYSTEM STATISTICS</h5>
-                            <div class="ms-auto">
-                                <span class="badge bg-primary"><i class="fas fa-chart-line me-1"></i> Live Data</span>
-                            </div>
-                        </div>
-                        <div class="panel panel-bordered">
-                            <div class="panel-body py-4">
-                                <div class="row text-center">
-                                    <div class="col-md-3 col-6 mb-3 mb-md-0">
-                                        <h2 class="display-5 fw-bold text-primary mb-0">20+</h2>
-                                        <p class="text-muted mb-0">Admin Features</p>
-                                        <div class="progress mt-2" style="height: 5px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-6 mb-3 mb-md-0">
-                                        <h2 class="display-5 fw-bold text-success mb-0">10+</h2>
-                                        <p class="text-muted mb-0">Student Tools</p>
-                                        <div class="progress mt-2" style="height: 5px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-6">
-                                        <h2 class="display-5 fw-bold text-info mb-0">8+</h2>
-                                        <p class="text-muted mb-0">Parent Features</p>
-                                        <div class="progress mt-2" style="height: 5px;">
-                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-6">
-                                        <h2 class="display-5 fw-bold text-warning mb-0">24/7</h2>
-                                        <p class="text-muted mb-0">System Availability</p>
-                                        <div class="progress mt-2" style="height: 5px;">
-                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-                
-            <!-- Call to Action -->
-            <section class="py-5">
-                <div class="row">
-                    <div class="col-12 mb-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <h5 class="page-title mb-0">GET STARTED</h5>
-                            <div class="ms-auto">
-                                <span class="badge bg-success"><i class="fas fa-check me-1"></i> Ready to Deploy</span>
-                            </div>
-                        </div>
-                        <div class="panel panel-bordered" style="background-color: var(--voyager-sidebar); color: white;">
-                            <div class="voyager-bg-pattern"></div>
-                            <div class="p-4 position-relative">
-                                <div class="row align-items-center">
-                                    <div class="col-lg-8 mb-4 mb-lg-0">
-                                        <h5 style="text-transform: uppercase; letter-spacing: 1px;">Ready to transform your school management?</h5>
-                                        <p class="mb-0">Get started with our comprehensive school management system and streamline your administrative processes.</p>
-                                        <ul class="voyager-breadcrumbs mt-3 mb-0">
-                                            <li><span><i class="fas fa-check-circle text-success me-1"></i> Easy Setup</span></li>
-                                            <li><span><i class="fas fa-check-circle text-success me-1"></i> User Friendly</span></li>
-                                            <li><span><i class="fas fa-check-circle text-success me-1"></i> Full Support</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-4 text-lg-end">
-                                        <a href="{{ url('/admin/login') }}" class="btn btn-voyager me-2">
-                                            <i class="fas fa-tachometer-alt me-2"></i> Admin Panel
-                                        </a>
-                                        <a href="{{ route('portal.login') }}" class="btn btn-outline-light">
-                                            <i class="fas fa-user me-2"></i> User Portal
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </div>
-        
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="voyager-bg-pattern"></div>
-            <div class="container position-relative" style="z-index: 1;">
-                <div class="row py-4">
-                    <div class="col-lg-4 mb-4 mb-lg-0">
-                        <h5 class="text-uppercase mb-3">School Management System</h5>
-                        <p class="mb-3">A comprehensive solution for educational institutions to manage administrative tasks, student records, and facilitate communication between teachers, students, and parents.</p>
-                        <div class="d-flex gap-3">
-                            <a href="#" class="text-light"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="text-light"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="hero-title">Transform Education with <span style="color: var(--voyager-primary);">Voyager</span></h1>
+                    <p class="hero-subtitle">A comprehensive school management solution built with Laravel and Voyager Admin</p>
+                    
+                    <div class="mb-4">
+                        <span class="feature-badge"><i class="fas fa-check-circle me-2"></i> Student Management</span>
+                        <span class="feature-badge"><i class="fas fa-check-circle me-2"></i> Academic Tracking</span>
+                        <span class="feature-badge"><i class="fas fa-check-circle me-2"></i> Parent Portal</span>
+                        <span class="feature-badge"><i class="fas fa-check-circle me-2"></i> Financial System</span>
                     </div>
-                    <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                        <h6 class="text-uppercase mb-3">Quick Links</h6>
-                        <ul class="list-unstyled mb-0">
-                            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Home</a></li>
-                            <li class="mb-2"><a href="#features" class="text-light text-decoration-none">Features</a></li>
-                            <li class="mb-2"><a href="#modules" class="text-light text-decoration-none">Modules</a></li>
-                            <li class="mb-2"><a href="{{ url('/admin/login') }}" class="text-light text-decoration-none">Admin Login</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                        <h6 class="text-uppercase mb-3">Portals</h6>
-                        <ul class="list-unstyled mb-0">
-                            <li class="mb-2"><a href="{{ route('portal.login') }}" class="text-light text-decoration-none">Student Portal</a></li>
-                            <li class="mb-2"><a href="{{ route('portal.login') }}" class="text-light text-decoration-none">Parent Portal</a></li>
-                            <li class="mb-2"><a href="{{ route('portal.login') }}" class="text-light text-decoration-none">Teacher Portal</a></li>
-                            <li class="mb-2"><a href="{{ url('/admin') }}" class="text-light text-decoration-none">Admin Panel</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-4">
-                        <h6 class="text-uppercase mb-3">Contact</h6>
-                        <ul class="list-unstyled mb-0">
-                            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 School Street, Education City</li>
-                            <li class="mb-2"><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
-                            <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@schoolsystem.com</li>
-                        </ul>
+                    
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{{ url('/admin/login') }}" class="btn btn-voyager">
+                            <i class="fas fa-tachometer-alt me-2"></i> Admin Panel
+                        </a>
+                        <a href="{{ route('portal.login') }}" class="btn btn-voyager-outline">
+                            <i class="fas fa-user-graduate me-2"></i> User Portal
+                        </a>
                     </div>
                 </div>
-                <hr class="my-2 border-top border-secondary">
-                <div class="row py-2">
-                    <div class="col-md-6 text-center text-md-start">
-                        <p class="mb-0 small">© {{ date('Y') }} School Management System. All rights reserved.</p>
+                <div class="col-lg-6 d-none d-lg-block text-center">
+                    <img src="{{ asset('images/school-logo.png') }}" alt="School Management" class="img-fluid rounded shadow" style="max-width: 90%; border: 5px solid rgba(255,255,255,0.1);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-lg-6">
+                    <h2 class="section-title">Key Features</h2>
+                    <p class="text-muted">Our school management system offers a comprehensive suite of tools designed to streamline administrative tasks and enhance educational outcomes.</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h4 class="mb-3">Student Management</h4>
+                            <p class="mb-0">Comprehensive student profiles, attendance tracking, and performance analytics.</p>
+                        </div>
                     </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <p class="mb-0 small">
-                            Powered by Laravel v{{ Illuminate\Foundation\Application::VERSION }} | 
-                            PHP v{{ PHP_VERSION }} |
-                            <a href="https://voyager.devdojo.com/" class="text-light" target="_blank">Voyager Admin</a>
-                        </p>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h4 class="mb-3">Teacher Portal</h4>
+                            <p class="mb-0">Tools for attendance management, grade submission, and communication with students and parents.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4 class="mb-3">Parent Access</h4>
+                            <p class="mb-0">Real-time access to student grades, attendance, and direct communication with teachers.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4 class="mb-3">Analytics</h4>
+                            <p class="mb-0">Detailed reports and insights on student performance, attendance, and institutional metrics.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h4 class="mb-3">Course Management</h4>
+                            <p class="mb-0">Easily create, manage, and schedule courses with integrated curriculum planning.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h4 class="mb-3">Scheduling</h4>
+                            <p class="mb-0">Automated timetable generation and calendar management for classes and events.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <h4 class="mb-3">Fee Management</h4>
+                            <p class="mb-0">Streamlined billing, payment tracking, and financial reporting for school finances.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-voyager h-100">
+                        <div class="card-voyager-body text-center">
+                            <div class="features-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <h4 class="mb-3">Announcements</h4>
+                            <p class="mb-0">Broadcast important information to specific groups or the entire school community.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </footer>
+        </div>
+    </section>
 
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Smooth scrolling for anchor links
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        
-                        document.querySelector(this.getAttribute('href')).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    });
-                });
+    <!-- Modules Section -->
+    <section id="modules" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-lg-6">
+                    <h2 class="section-title">System Modules</h2>
+                    <p class="text-muted">Our modular system is designed to address every aspect of school management.</p>
+                </div>
+            </div>
+            
+            <div class="module-grid">
+                <div class="module-item">
+                    <div class="module-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h4 class="mb-2">Administration</h4>
+                    <p class="mb-0">Complete administrative control with role-based access and permissions.</p>
+                </div>
                 
-                // Add active class to navbar items on scroll
-                window.addEventListener('scroll', function() {
-                    let scrollPosition = window.scrollY;
+                <div class="module-item">
+                    <div class="module-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h4 class="mb-2">Student Affairs</h4>
+                    <p class="mb-0">Manage student records, discipline, and extracurricular activities.</p>
+                </div>
+                
+                <div class="module-item">
+                    <div class="module-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h4 class="mb-2">Academics</h4>
+                    <p class="mb-0">Course planning, curriculum management, and student grading system.</p>
+                </div>
+                
+                <div class="module-item">
+                    <div class="module-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h4 class="mb-2">Attendance</h4>
+                    <p class="mb-0">Track student and staff attendance with automated reporting.</p>
+                </div>
+                
+                <div class="module-item">
+                    <div class="module-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4 class="mb-2">Examinations</h4>
+                    <p class="mb-0">Schedule exams, record results, and generate performance reports.</p>
+                </div>
+                
+                <div class="module-item">
+                    <div class="module-icon">
+                        <i class="fas fa-comment"></i>
+                    </div>
+                    <h4 class="mb-2">Communication</h4>
+                    <p class="mb-0">Messaging system for students, parents, teachers, and administrators.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="py-5">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h2 class="section-title">System Statistics</h2>
+                    <p class="text-muted">A growing ecosystem supporting educational institutions worldwide</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number text-primary">1000+</div>
+                        <div class="stats-label">Students</div>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" style="color: var(--voyager-success);">100+</div>
+                        <div class="stats-label">Teachers</div>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" style="color: var(--voyager-warning);">50+</div>
+                        <div class="stats-label">Courses</div>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" style="color: var(--voyager-accent);">24/7</div>
+                        <div class="stats-label">Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="cta-section">
+                <div class="container cta-content text-center">
+                    <h2 class="cta-title">Ready to Transform Your School Management?</h2>
+                    <p class="mb-4">Get started today and experience the difference our system can make for your institution.</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{{ url('/admin/login') }}" class="btn btn-voyager">
+                            <i class="fas fa-rocket me-2"></i> Get Started
+                        </a>
+                        <a href="https://voyager-docs.devdojo.com/" target="_blank" class="btn btn-light">
+                            <i class="fas fa-book me-2"></i> Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="voyager-footer">
+        <div class="container footer-content">
+            <div class="row mb-5">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <img src="{{ asset('images/school-logo.png') }}" alt="School Logo" class="footer-logo">
+                    <p>A comprehensive school management system built with Laravel and Voyager Admin, designed to streamline educational administration and enhance learning outcomes.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#modules">Modules</a></li>
+                        <li><a href="#stats">Statistics</a></li>
+                        <li><a href="{{ url('/admin/login') }}">Admin Login</a></li>
+                        <li><a href="{{ route('portal.login') }}">Portal Login</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Resources</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="https://voyager-docs.devdojo.com/" target="_blank">Documentation</a></li>
+                        <li><a href="https://laracasts.com" target="_blank">Tutorials</a></li>
+                        <li><a href="https://laravel.com" target="_blank">Laravel</a></li>
+                        <li><a href="https://github.com/the-control-group/voyager" target="_blank">Voyager GitHub</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3">
+                    <h5 class="footer-title">Contact Us</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Education Ave., Campus Way</li>
+                        <li><i class="fas fa-phone me-2"></i> (123) 456-7890</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@schoolsystem.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright text-center">
+                <p>&copy; {{ date('Y') }} {{ config('app.name', 'School Management System') }}. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
                     
-                    document.querySelectorAll('section').forEach(section => {
-                        const sectionTop = section.offsetTop - 100;
-                        const sectionHeight = section.offsetHeight;
-                        const sectionId = section.getAttribute('id');
-                        
-                        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                            document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
-                                link.classList.remove('active');
-                                if (link.getAttribute('href') === '#' + sectionId) {
-                                    link.classList.add('active');
-                                }
-                            });
-                        }
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
                     });
                 });
             });
-        </script>
-    </body>
+            
+            // Add active class to navbar items on scroll
+            window.addEventListener('scroll', function() {
+                let scrollPosition = window.scrollY;
+                
+                document.querySelectorAll('section').forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + sectionId) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
 </html>
