@@ -121,7 +121,6 @@ docker compose exec app php artisan db:seed --class=ClassesSeeder
 # Run your menu setup command to ensure proper navigation
 docker compose exec app php artisan voyager:install
 ```
-
 ### 2. Clear Application Cache
 
 After making configuration changes:

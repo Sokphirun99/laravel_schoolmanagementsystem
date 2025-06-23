@@ -48,150 +48,129 @@
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
+        
+        /* Additional Voyager UI Styles */
+        .analytics-sparkle,
+        .analytics-sparkle-2 {
+            position: absolute;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle 6s linear infinite;
+        }
+        
+        .analytics-sparkle {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            right: 15%;
+            animation-delay: 0s;
+        }
+        
+        .analytics-sparkle-2 {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            right: 30%;
+            animation-delay: 3s;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { 
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1) rotate(180deg);
+            }
+        }
+        
+        .panel.widget.center.bgimage {
+            border-radius: 8px;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .panel.widget.center.bgimage:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .panel.widget.center.bgimage .dimmer {
+            position: absolute;
+            top: 0;
             left: 0;
-            z-index: 1000;
-            width: 250px;
-            transition: all 0.3s ease;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+            z-index: 1;
         }
-
-        .voyager-sidebar .sidebar-header {
-            padding: 20px 15px;
-            background: rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .voyager-sidebar .sidebar-header h4 {
-            color: var(--voyager-primary);
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .voyager-sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 12px 20px;
-            border-radius: 0;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .voyager-sidebar .nav-link:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-            border-left: 3px solid var(--voyager-primary);
-        }
-
-        .voyager-sidebar .nav-link.active {
-            background: rgba(34, 167, 240, 0.2);
-            color: #fff;
-            border-left: 3px solid var(--voyager-primary);
-        }
-
-        .voyager-sidebar .nav-link i {
-            margin-right: 10px;
-            width: 20px;
+        
+        .panel.widget.center.bgimage .panel-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
             text-align: center;
         }
-
-        .main-content {
-            margin-left: 250px;
-            min-height: 100vh;
-            background: var(--voyager-bg);
-            transition: all 0.3s ease;
+        
+        .avatar.border-grey {
+            border: 3px solid rgba(255,255,255,0.8);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-
-        .voyager-header {
-            background: #fff;
-            padding: 15px 30px;
-            border-bottom: 1px solid var(--voyager-border);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .voyager-breadcrumbs {
-            background: transparent;
-            padding: 0;
-            margin: 0;
-        }
-
-        .voyager-breadcrumbs .breadcrumb-item {
-            color: var(--voyager-text);
-        }
-
-        .voyager-breadcrumbs .breadcrumb-item.active {
-            color: var(--voyager-primary);
-        }
-
-        .voyager-content {
-            padding: 30px;
-        }
-
-        .voyager-card {
-            background: #fff;
-            border: 1px solid var(--voyager-border);
-            border-radius: 6px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .voyager-card-header {
-            background: var(--voyager-primary);
-            color: #fff;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--voyager-border);
-            font-weight: 600;
-        }
-
-        .voyager-card-body {
-            padding: 20px;
-        }
-
-        .btn-voyager {
-            background-color: var(--voyager-primary);
-            border-color: var(--voyager-primary);
-            color: #fff;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-voyager:hover {
-            background-color: #1e96d9;
-            border-color: #1e96d9;
-            color: #fff;
-            transform: translateY(-1px);
-        }
-
-        .table-voyager {
-            margin-bottom: 0;
-        }
-
-        .table-voyager th {
-            background: var(--voyager-bg-darker);
-            color: var(--voyager-text);
-            font-weight: 600;
-            border-bottom: 1px solid var(--voyager-border);
-        }
-
-        .voyager-stats-card {
-            background: linear-gradient(135deg, var(--voyager-primary), var(--voyager-accent));
-            color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(34, 167, 240, 0.3);
-        }
-
-        .voyager-stats-number {
-            font-size: 2rem;
+        
+        .label {
+            display: inline-block;
+            padding: 0.25em 0.6em;
+            font-size: 75%;
             font-weight: 700;
-            margin-bottom: 5px;
+            line-height: 1;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
         }
-
-        .voyager-stats-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        
+        .label-primary { background-color: #007bff; }
+        .label-success { background-color: #28a745; }
+        .label-info { background-color: #17a2b8; }
+        .label-warning { background-color: #ffc107; color: #212529; }
+        .label-danger { background-color: #dc3545; }
+        .label-default { background-color: #6c757d; }
+        
+        .hr-divider {
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin: 10px 0;
+            width: 100%;
         }
-
+        
+        .media {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .media-left {
+            padding-right: 10px;
+        }
+        
+        .media-body {
+            flex: 1;
+        }
+        
+        .media-right {
+            padding-left: 10px;
+        }
+        
+        .page-content {
+            margin-left: 260px;
+            padding: 30px;
+            min-height: 100vh;
+            position: relative;
+        }
+        
         @media (max-width: 768px) {
             .voyager-sidebar {
                 transform: translateX(-100%);
@@ -203,6 +182,11 @@
             
             .main-content {
                 margin-left: 0;
+            }
+            
+            .page-content {
+                margin-left: 0;
+                padding: 15px;
             }
         }
 
