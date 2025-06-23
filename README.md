@@ -149,7 +149,7 @@ docker compose exec app php artisan route:clear
 - **Database Management**: http://localhost:8081
   - Server: `db`
   - Username: `laravel`
-  - Password: `secret`
+  - Password: `laravel`
 
 ## User Account Types
 
@@ -248,6 +248,33 @@ Modify docker-compose.yml for container configurations.
 
 ### Database Connection Issues
 
+If you encounter database connection errors like `getaddrinfo for db failed`, this typically happens when running Laravel locally while Docker containers are running. Here are the solutions:
+
+**For Local Development (using `php artisan serve`):**
+```bash
+# Update your .env file to use localhost instead of 'db'
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laravel
+DB_PASSWORD=secret
+
+# Clear configuration cache
+php artisan config:clear
+```
+
+**For Docker Development:**
+```bash
+# Use the Docker service name
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laravel
+DB_PASSWORD=secret
+```
+
+### Common Issues and Solutions
+
 If you encounter "Connection refused" or "Name or service not known" errors:
 
 ```bash
@@ -273,8 +300,6 @@ docker compose down -v
 docker compose up -d
 ```
 
-### MySQL 8 Version Compatibility Issues
-
 If you see errors about MySQL version incompatibility in the logs:
 
 ```bash
@@ -291,16 +316,12 @@ docker compose exec app composer install
 # ...and so on
 ```
 
-### File Permission Issues
-
 If you encounter file permission errors:
 
 ```bash
 docker compose exec app chmod -R 775 storage bootstrap/cache
 docker compose exec app chown -R www-data:www-data storage bootstrap/cache
 ```
-
-### Login Issues
 
 If you can't login to the admin panel, try:
 
@@ -319,8 +340,6 @@ docker compose exec app php artisan tinker
 > App\Models\PortalUser::create(['name' => 'Parent Name', 'email' => 'parent@school.com', 'password' => bcrypt('password'), 'user_type' => 'parent', 'related_id' => 1, 'status' => true]);
 > exit
 ```
-
-### Dashboard Not Showing After Login
 
 If you can log in but don't see the dashboard:
 
