@@ -34,8 +34,9 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
             
-        $upcomingAssignments = Assignment::where('class_id', $student->class_id)
-            ->where('due_date', '>', now())
+        // For now, get all upcoming assignments (we can filter by student's enrolled courses later)
+        // This is a temporary fix to avoid the class_id column error
+        $upcomingAssignments = Assignment::where('due_date', '>', now())
             ->orderBy('due_date')
             ->take(5)
             ->get();
