@@ -91,11 +91,3 @@
     </div>
 </div>
 @endsection
-                        {{ $attendances->links() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection

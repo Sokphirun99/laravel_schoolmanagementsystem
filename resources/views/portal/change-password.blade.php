@@ -103,35 +103,3 @@
     </div>
 </div>
 @endsection
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3 row">
-                            <label for="password_confirmation" class="col-md-4 col-form-label text-md-end">Confirm Password</label>
-                            <div class="col-md-6">
-                                <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3 row">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Change Password
-                                </button>
-                                <a href="{{ route('portal.profile') }}" class="btn btn-outline-secondary ms-2">
-                                    Cancel
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection

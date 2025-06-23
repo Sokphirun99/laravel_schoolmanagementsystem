@@ -88,11 +88,3 @@
     </div>
 </div>
 @endsection
-                        {{ $fees->links() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
