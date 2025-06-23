@@ -1,8 +1,12 @@
 # School Management System
 
-A comprehensive school management system built with Laravel and Voyager admin panel, containerized with Docker for easy deployment and management.
+A comprehensive school management system built with Laravel and Voyager admin panel, featuring a separate portal for students and parents. The system is containerized with Docker for easy deployment and management.
 
 ![School Management System](https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg)
+
+## Overview
+
+The School Management System provides a complete solution for educational institutions to manage administrative tasks, student records, and facilitate communication between teachers, students, and parents. The system consists of a powerful admin panel for administrators and teachers, and dedicated portals for students and parents.
 
 ## Installation & Setup Guide
 
@@ -10,18 +14,40 @@ This guide provides step-by-step instructions for setting up, running, and troub
 
 ## Features
 
-- **User Management**: Administrators, teachers, students, and parents with role-based access
+- **Dual Interface**:
+  - Powerful Admin Panel powered by Voyager
+  - Dedicated Student and Parent Portal with custom authentication
+
+- **User Management**: 
+  - Administrators, teachers, students, and parents with role-based access
   - Advanced role system supporting multiple roles per user
   - Comprehensive role-based access control
-- **Academic Management**: Classes, sections, subjects, and timetables
-- **Student Management**: Enrollment, attendance, and performance tracking
-- **Teacher Management**: Staff profiles, assignments, and schedules
-- **Examination System**: Exam creation, grading, and result analysis
-- **Financial Management**: Fee structures, invoices, and payment tracking
-- **Attendance Tracking**: Daily attendance records for students and staff
-- **Reports & Analytics**: Academic and administrative reporting tools
-- **School Calendar**: Academic year planning and event management
-- **CI/CD Integration**: Automated build, test, and deployment with Jenkins and Kubernetes
+  
+- **Academic Management**: 
+  - Classes, sections, subjects, and timetables
+  - Assignment management and submission
+  - Course enrollment and tracking
+
+- **Student/Parent Portal**:
+  - Customized dashboards for students and parents
+  - Access to grades, attendance, and announcements
+  - Fee payment and tracking
+  - Communication with teachers
+
+- **Communication System**:
+  - School-wide announcements with audience targeting
+  - Teacher-parent messaging
+  - Event notifications and alerts
+  
+- **Financial Management**: 
+  - Fee structures and categories
+  - Payment tracking and receipts
+  - Due date reminders
+  
+- **Reports & Analytics**: 
+  - Academic performance tracking
+  - Attendance summaries
+  - Administrative dashboards with key metrics
 
 ## System Requirements
 
@@ -34,7 +60,7 @@ This guide provides step-by-step instructions for setting up, running, and troub
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/laravel_schoolmanagementsystem.git
+git clone https://github.com/Sokphirun99/laravel_schoolmanagementsystem.git
 cd laravel_schoolmanagementsystem
 
 # Start Docker containers
@@ -65,8 +91,15 @@ docker compose exec app php artisan migrate --seed
 # Install Voyager with sample data
 docker compose exec app php artisan voyager:install --with-dummy
 
-# Run menu cleanup command
-docker compose exec app php artisan menu:cleanup
+# Run seeders for school management system
+docker compose exec app php artisan db:seed --class=FeesTableSeeder
+docker compose exec app php artisan db:seed --class=ParentsSeeder
+docker compose exec app php artisan db:seed --class=SchoolClassesSeeder
+docker compose exec app php artisan db:seed --class=SectionsSeeder
+docker compose exec app php artisan db:seed --class=StudentsSeeder
+
+# Setup admin user
+docker compose exec app php artisan voyager:admin
 ```
 
 ## Complete Setup Guide
@@ -85,10 +118,10 @@ docker compose exec app php artisan db:seed --class=StudentsSeeder
 docker compose exec app php artisan db:seed --class=TeachersSeeder
 docker compose exec app php artisan db:seed --class=ClassesSeeder
 ```
-# Run your menu cleanup command
-docker compose exec app php artisan voyager:menu:clean
-docker compose exec app php artisan voyager:menu:clean --forces
-,,,
+# Run your menu setup command to ensure proper navigation
+docker compose exec app php artisan voyager:install
+```
+
 ### 2. Clear Application Cache
 
 After making configuration changes:
@@ -105,7 +138,14 @@ docker compose exec app php artisan route:clear
 - **Main Application**: http://localhost:8080
 - **Admin Panel**: http://localhost:8080/admin
   - Default credentials:
-    - Email: `admin@admin.com`
+    - Email: `admin@school.com`
+    - Password: `password`
+- **Student/Parent Portal**: http://localhost:8080/portal/login
+  - Student credentials:
+    - Email: `student@school.com`
+    - Password: `password`
+  - Parent credentials:
+    - Email: `parent@school.com`
     - Password: `password`
 - **Database Management**: http://localhost:8081
   - Server: `db`
@@ -116,26 +156,72 @@ docker compose exec app php artisan route:clear
 
 | Role | Access Level | Default Credentials |
 |------|-------------|---------------------|
-| Administrator | Full system access | Email: admin@admin.com<br>Password: password |
-| Teacher | Class management, attendance, grades | Email: teacher1@school.test<br>Password: password123 |
-| Student | View timetables, exam results, attendance | Email: student1@school.test<br>Password: password123 |
-| Parent | View child information, reports | Generated during setup |
+| Administrator | Full system access | Email: admin@school.com<br>Password: password |
+| Teacher | Class management, attendance, grades | Created through admin panel |
+| Student | View timetables, exam results, attendance | Email: student@school.com<br>Password: password |
+| Parent | View child information, reports | Email: parent@school.com<br>Password: password |
 
 ## Project Structure
 
-- **App Models**: Student, Teacher, Parents, ClassRoom, Section, etc.
-- **Controllers**: Role-specific dashboards and operations
+### Core Models
+- **App Models**: Student, Teacher, ParentModel, SchoolClass, Section, PortalUser, Announcement, Fee, etc.
+- **Controllers**: Admin and Portal controllers for all features
 - **Database Seeders**: Prepopulated data for testing
 - **Views**: Voyager-based admin templates and custom views
-- **Routes**: Web routes for different user types
+- **Routes**: Web routes for admin panel and student/parent portal
+
+### Key Features Implementation
+
+#### Authentication System
+- Separate authentication for admin panel and portals
+- Role-based access control with Voyager
+- Custom middleware for portal access
+
+#### Portal System
+- Student Portal: View grades, fees, announcements, timetables
+- Parent Portal: Monitor children's progress, communications
+- Profile management and password changes
+- Responsive design for mobile access
+
+#### Communication System
+- School-wide announcement system
+- Teacher-parent messaging
+- Event notifications and calendar
+
+#### Financial System
+- Fee management with different fee types
+- Payment tracking and receipts
+- Due date notifications
+- Payment status tracking
+
+#### Academic System
+- Class and section management
+- Subject assignments
+- Student enrollment
+- Grade reporting
 
 ## Docker Configuration
 
-The application runs in Docker containers with the following services:
+The application runs in a containerized environment with the following services:
 
 - **app**: Laravel application running on PHP 8.2 with Apache
 - **db**: MySQL 8 database server
 - **phpmyadmin**: Web interface for MySQL database management
+- **ngrok**: For exposing the application to the internet (development only)
+- **redis**: For caching and session management
+
+### Architecture
+
+The system follows a modular architecture:
+
+1. **Core Layer**: Laravel framework with Voyager admin panel
+2. **Data Layer**: MySQL database with Eloquent ORM
+3. **Presentation Layer**: 
+   - Admin Panel: Voyager-based interface
+   - Student Portal: Custom Bootstrap-based interface
+   - Parent Portal: Custom Bootstrap-based interface
+4. **API Layer**: RESTful endpoints for future mobile app integration
+5. **Background Processing**: Queue-based processing for reports and notifications
 
 ## Customization
 
@@ -221,16 +307,17 @@ If you can't login to the admin panel, try:
 
 ```bash
 # Reset password for admin user
-docker compose exec app php artisan voyager:admin admin@admin.com --create
+docker compose exec app php artisan voyager:admin
 
 # Or manually reset the password via Tinker
 docker compose exec app php artisan tinker
 > DB::table('users')->where('id', 1)->update(['password' => bcrypt('password')]);
 > exit
 
-# Make sure the admin user has the admin role
+# If you need to create a new portal user (student or parent)
 docker compose exec app php artisan tinker
-> DB::table('user_roles')->insert(['user_id' => 1, 'role_id' => 4]);
+> App\Models\PortalUser::create(['name' => 'Student Name', 'email' => 'student@school.com', 'password' => bcrypt('password'), 'user_type' => 'student', 'related_id' => 1, 'status' => true]);
+> App\Models\PortalUser::create(['name' => 'Parent Name', 'email' => 'parent@school.com', 'password' => bcrypt('password'), 'user_type' => 'parent', 'related_id' => 1, 'status' => true]);
 > exit
 ```
 
@@ -259,16 +346,17 @@ docker compose exec app php artisan route:clear
 
 The system includes an advanced role management implementation that supports multiple roles per user. For detailed information, see `README-ROLE-SYSTEM.md`.
 
-### Recent Cleanup (May 2025)
+### Recent Updates (June 2025)
 
-We've recently cleaned up the codebase by removing redundant files and streamlining the role management system:
+We've recently enhanced the school management system with several new features:
 
-- Removed duplicate migration for `user_roles` table
-- Consolidated multiple role synchronization commands and seeders
-- Updated documentation to reflect the current implementation
-- Ensured backward compatibility with the legacy role system
-
-All removed files have been backed up in their respective `_backup` directories.
+- Added comprehensive announcement system for school-wide communications
+- Implemented fee management system with payment tracking
+- Created student and parent portal with custom authentication
+- Redesigned the welcome page to match Voyager admin theme
+- Added database models, migrations, and seeders for all school entities
+- Implemented proper relationships between students, parents, classes, and sections
+- Added dedicated dashboards for students and parents
 
 ## Support & Contribution
 
