@@ -206,6 +206,11 @@ return [
          */
         TCG\Voyager\Providers\VoyagerDummyServiceProvider::class,
 
+        /*
+         * Application Voyager Extension Service Provider
+         */
+        App\Providers\VoyagerExtendServiceProvider::class,
+
     ],
 
     /*
@@ -221,6 +226,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Voyager' => TCG\Voyager\Facades\Voyager::class,
     ])->toArray(),
 
 ];

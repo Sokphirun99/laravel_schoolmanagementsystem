@@ -147,6 +147,10 @@ return [
             'TCG\\Voyager\\Widgets\\UserDimmer',
             'TCG\\Voyager\\Widgets\\PostDimmer',
             'TCG\\Voyager\\Widgets\\PageDimmer',
+            'App\\VoyagerWidgets\\NoticesWidget',
+            'App\\VoyagerWidgets\\StudentsWidget',
+            'App\\VoyagerWidgets\\TeachersWidget',
+            'App\\VoyagerWidgets\\GradeSummaryWidget',
         ],
 
     ],
@@ -207,7 +211,7 @@ return [
 
     // Activate compass when environment is NOT local
     'compass_in_production' => false,
-
+    
     'media' => [
         // The allowed mimetypes to be uploaded through the media-manager.
         // 'allowed_mimetypes' => '*', //All types can be uploaded

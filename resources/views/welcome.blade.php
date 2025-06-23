@@ -3,130 +3,780 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="description" content="School Management System - A comprehensive solution for educational institutions">
+        <meta name="keywords" content="school, management, education, students, teachers, admin">
+        
+        <!-- Open Graph / Social Media Meta Tags -->
+        <meta property="og:title" content="{{ config('app.name', 'School Management System') }}">
+        <meta property="og:description" content="A comprehensive solution for educational institutions to manage administrative tasks and student records">
+        <meta property="og:image" content="{{ asset('images/school-logo.png') }}">
+        <meta property="og:url" content="{{ url('/') }}">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        
+        <title>{{ config('app.name', 'School Management System') }}</title>
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="dns-prefetch" href="//fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
         <!-- Styles -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ asset('voyager-assets/css/app.css') }}" rel="stylesheet">
+        
         <style>
-            /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}a{background-color:transparent}[hidden]{display:none}html{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}a{color:inherit;text-decoration:inherit}svg,video{display:block;vertical-align:middle}video{max-width:100%;height:auto}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.bg-gray-100{--bg-opacity:1;background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity))}.border-gray-200{--border-opacity:1;border-color:#edf2f7;border-color:rgba(237,242,247,var(--border-opacity))}.border-t{border-top-width:1px}.flex{display:flex}.grid{display:grid}.hidden{display:none}.items-center{align-items:center}.justify-center{justify-content:center}.font-semibold{font-weight:600}.h-5{height:1.25rem}.h-8{height:2rem}.h-16{height:4rem}.text-sm{font-size:.875rem}.text-lg{font-size:1.125rem}.leading-7{line-height:1.75rem}.mx-auto{margin-left:auto;margin-right:auto}.ml-1{margin-left:.25rem}.mt-2{margin-top:.5rem}.mr-2{margin-right:.5rem}.ml-2{margin-left:.5rem}.mt-4{margin-top:1rem}.ml-4{margin-left:1rem}.mt-8{margin-top:2rem}.ml-12{margin-left:3rem}.-mt-px{margin-top:-1px}.max-w-6xl{max-width:72rem}.min-h-screen{min-height:100vh}.overflow-hidden{overflow:hidden}.p-6{padding:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pt-8{padding-top:2rem}.fixed{position:fixed}.relative{position:relative}.top-0{top:0}.right-0{right:0}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.text-center{text-align:center}.text-gray-200{--text-opacity:1;color:#edf2f7;color:rgba(237,242,247,var(--text-opacity))}.text-gray-300{--text-opacity:1;color:#e2e8f0;color:rgba(226,232,240,var(--text-opacity))}.text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-gray-700{--text-opacity:1;color:#4a5568;color:rgba(74,85,104,var(--text-opacity))}.text-gray-900{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity))}.underline{text-decoration:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.w-5{width:1.25rem}.w-8{width:2rem}.w-auto{width:auto}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}@media (min-width:640px){.sm\:rounded-lg{border-radius:.5rem}.sm\:block{display:block}.sm\:items-center{align-items:center}.sm\:justify-start{justify-content:flex-start}.sm\:justify-between{justify-content:space-between}.sm\:h-20{height:5rem}.sm\:ml-0{margin-left:0}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pt-0{padding-top:0}.sm\:text-left{text-align:left}.sm\:text-right{text-align:right}}@media (min-width:768px){.md\:border-t-0{border-top-width:0}.md\:border-l{border-left-width:1px}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (prefers-color-scheme:dark){.dark\:bg-gray-800{--bg-opacity:1;background-color:#2d3748;background-color:rgba(45,55,72,var(--bg-opacity))}.dark\:bg-gray-900{--bg-opacity:1;background-color:#1a202c;background-color:rgba(26,32,44,var(--bg-opacity))}.dark\:border-gray-700{--border-opacity:1;border-color:#4a5568;border-color:rgba(74,85,104,var(--border-opacity))}.dark\:text-white{--text-opacity:1;color:#fff;color:rgba(255,255,255,var(--text-opacity))}.dark\:text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.dark\:text-gray-500{--tw-text-opacity:1;color:#6b7280;color:rgba(107,114,128,var(--tw-text-opacity))}}
-        </style>
-
-        <style>
+            :root {
+                /* Voyager exact color palette */
+                --voyager-primary: #22A7F0;
+                --voyager-secondary: #2B3D51;
+                --voyager-bg: #F9FAFC;
+                --voyager-bg-darker: #EEF3F7;
+                --voyager-text: #333;
+                --voyager-text-light: #fff;
+                --voyager-accent: #62A8EA;
+                --voyager-border: #E4EAEC;
+                --voyager-sidebar: #2A3F54;
+                --voyager-dark: #1A2226;
+            }
+            
             body {
-                font-family: 'Nunito', sans-serif;
+                font-family: 'Open Sans', sans-serif;
+                background-color: var(--voyager-bg);
+                color: var(--voyager-text);
+                overflow-x: hidden;
+            }
+            
+            .welcome-header {
+                background-color: var(--voyager-sidebar);
+                padding: 3rem 0;
+                border-bottom: 3px solid var(--voyager-primary);
+                position: relative;
+                color: var(--voyager-text-light);
+            }
+            
+            .welcome-header::after {
+                content: '';
+                position: absolute;
+                bottom: -20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 40px;
+                background-color: var(--voyager-secondary);
+                transform: rotate(45deg);
+                border-bottom: 3px solid var(--voyager-primary);
+                border-right: 3px solid var(--voyager-primary);
+                z-index: 1;
+            }
+            
+            .school-logo {
+                max-width: 150px;
+                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+                animation: float 6s ease-in-out infinite;
+            }
+            
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+                100% { transform: translateY(0px); }
+            }
+            
+            .navbar {
+                background-color: var(--voyager-sidebar);
+                border-bottom: 3px solid var(--voyager-primary);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                padding: 0.75rem 0;
+            }
+            
+            .navbar-brand {
+                font-weight: 700;
+                font-size: 1.5rem;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: white !important;
+            }
+            
+            .nav-link {
+                color: rgba(255, 255, 255, 0.8) !important;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                letter-spacing: 0.5px;
+            }
+            
+            .nav-link.active, .nav-link:hover {
+                color: white !important;
+            }
+            
+            .card {
+                background-color: white;
+                border: 1px solid var(--voyager-border);
+                border-radius: 3px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                margin-bottom: 30px;
+                transition: all 0.3s ease;
+                height: 100%;
+            }
+            
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+                border-color: var(--voyager-primary);
+            }
+            
+            .card-header {
+                background: var(--voyager-primary);
+                color: white;
+                font-weight: bold;
+                border: none;
+                padding: 10px 15px;
+                font-size: 1rem;
+                position: relative;
+                overflow: hidden;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .card-header h4, .card-header h5 {
+                margin-bottom: 0;
+                font-size: 1rem;
+                font-weight: 600;
+            }
+            
+            .card-body {
+                padding: 1.25rem;
+                color: #76838f;
+            }
+            
+            .btn-voyager {
+                background-color: var(--voyager-primary);
+                border: none;
+                color: white;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                letter-spacing: 0.5px;
+                padding: 8px 15px;
+                transition: all 0.2s ease;
+            }
+            
+            .btn-voyager:hover {
+                color: white;
+                background-color: #1e96d9;
+                box-shadow: 0 2px 5px rgba(34, 167, 240, 0.3);
+            }
+            
+            .btn-outline-light {
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                letter-spacing: 0.5px;
+                padding: 8px 15px;
+            }
+            
+            .login-section {
+                display: flex;
+                align-items: center;
+            }
+            
+            .features-icon {
+                font-size: 2.5rem;
+                color: var(--voyager-primary);
+                margin-bottom: 1rem;
+                transition: all 0.3s ease;
+            }
+            
+            .card:hover .features-icon {
+                color: var(--voyager-accent);
+            }
+            
+            .footer {
+                background-color: var(--voyager-sidebar);
+                padding: 1.5rem 0;
+                margin-top: 3rem;
+                border-top: 3px solid var(--voyager-primary);
+                position: relative;
+                color: var(--voyager-text-light);
+            }
+            
+            .section-title {
+                position: relative;
+                display: inline-block;
+                margin-bottom: 2rem;
+                color: #505050;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-size: 1.5rem;
+            }
+            
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 3px;
+                background: var(--voyager-primary);
+            }
+            
+            .page-title {
+                color: #505050;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+            
+            .panel {
+                background-color: #fff;
+                border: 0 solid transparent;
+                border-radius: 3px;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+            }
+            
+            .voyager-bg-pattern {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0.03;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                z-index: 0;
+            }
+            
+            .list-unstyled li {
+                margin-bottom: 0.5rem;
+                position: relative;
+                padding-left: 5px;
+                transition: all 0.2s ease;
+            }
+            
+            .list-unstyled li:hover {
+                color: var(--voyager-primary);
+            }
+            
+            /* Voyager specific styles */
+            .page-content {
+                background: #F9FAFC;
+                border-radius: 3px;
+                padding: 15px;
+            }
+            
+            .panel-bordered {
+                border: 1px solid #E4EAEC;
+            }
+            
+            .voyager-breadcrumbs {
+                display: flex;
+                list-style: none;
+                padding: 0;
+                margin-bottom: 20px;
+            }
+            
+            .voyager-breadcrumbs li {
+                display: inline-flex;
+                align-items: center;
+            }
+            
+            .voyager-breadcrumbs li:not(:last-child):after {
+                content: '/';
+                margin: 0 5px;
+                color: #ccc;
+            }
+            
+            .text-primary {
+                color: var(--voyager-primary) !important;
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 767px) {
+                .login-section {
+                    position: static;
+                    margin-top: 1rem;
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                }
+                
+                .navbar > .container {
+                    flex-direction: column;
+                }
+                
+                .welcome-header::after {
+                    display: none;
+                }
             }
         </style>
     </head>
-    <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                    <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto text-gray-700 sm:h-20">
-                        <g clip-path="url(#clip0)" fill="#EF3B2D">
-                            <path d="M248.032 44.676h-16.466v100.23h47.394v-14.748h-30.928V44.676zM337.091 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.431 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162-.001 2.863-.479 5.584-1.432 8.161zM463.954 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.432 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162 0 2.863-.479 5.584-1.432 8.161zM650.772 44.676h-15.606v100.23h15.606V44.676zM365.013 144.906h15.607V93.538h26.776V78.182h-42.383v66.724zM542.133 78.182l-19.616 51.096-19.616-51.096h-15.808l25.617 66.724h19.614l25.617-66.724h-15.808zM591.98 76.466c-19.112 0-34.239 15.706-34.239 35.079 0 21.416 14.641 35.079 36.239 35.079 12.088 0 19.806-4.622 29.234-14.688l-10.544-8.158c-.006.008-7.958 10.449-19.832 10.449-13.802 0-19.612-11.127-19.612-16.884h51.777c2.72-22.043-11.772-40.877-33.023-40.877zm-18.713 29.28c.12-1.284 1.917-16.884 18.589-16.884 16.671 0 18.697 15.598 18.813 16.884h-37.402zM184.068 43.892c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002-35.648-20.524a2.971 2.971 0 00-2.964 0l-35.647 20.522-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v38.979l-29.706 17.103V24.493a3 3 0 00-.103-.776c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002L40.098 1.396a2.971 2.971 0 00-2.964 0L1.487 21.919l-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v122.09c0 1.063.568 2.044 1.489 2.575l71.293 41.045c.156.089.324.143.49.202.078.028.15.074.23.095a2.98 2.98 0 001.524 0c.069-.018.132-.059.2-.083.176-.061.354-.119.519-.214l71.293-41.045a2.971 2.971 0 001.489-2.575v-38.979l34.158-19.666a2.971 2.971 0 001.489-2.575V44.666a3.075 3.075 0 00-.106-.774zM74.255 143.167l-29.648-16.779 31.136-17.926.001-.001 34.164-19.669 29.674 17.084-21.772 12.428-43.555 24.863zm68.329-76.259v33.841l-12.475-7.182-17.231-9.92V49.806l12.475 7.182 17.231 9.92zm2.97-39.335l29.693 17.095-29.693 17.095-29.693-17.095 29.693-17.095zM54.06 114.089l-12.475 7.182V46.733l17.231-9.92 12.475-7.182v74.537l-17.231 9.921zM38.614 7.398l29.693 17.095-29.693 17.095L8.921 24.493 38.614 7.398zM5.938 29.632l12.475 7.182 17.231 9.92v79.676l.001.005-.001.006c0 .114.032.221.045.333.017.146.021.294.059.434l.002.007c.032.117.094.222.14.334.051.124.088.255.156.371a.036.036 0 00.004.009c.061.105.149.191.222.288.081.105.149.22.244.314l.008.01c.084.083.19.142.284.215.106.083.202.178.32.247l.013.005.011.008 34.139 19.321v34.175L5.939 144.867V29.632h-.001zm136.646 115.235l-65.352 37.625V148.31l48.399-27.628 16.953-9.677v33.862zm35.646-61.22l-29.706 17.102V66.908l17.231-9.92 12.475-7.182v33.841z"/>
-                        </g>
-                    </svg>
-                </div>
-
-                <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                    <div class="grid grid-cols-1 md:grid-cols-2">
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel.com/docs" class="underline text-gray-900 dark:text-white">Documentation</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel has wonderful, thorough documentation covering every aspect of the framework. Whether you are new to the framework or have previous experience with Laravel, we recommend reading all of the documentation from beginning to end.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laracasts.com" class="underline text-gray-900 dark:text-white">Laracasts</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel-news.com/" class="underline text-gray-900 dark:text-white">Laravel News</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white">Vibrant Ecosystem</div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="underline">Forge</a>, <a href="https://vapor.laravel.com" class="underline">Vapor</a>, <a href="https://nova.laravel.com" class="underline">Nova</a>, and <a href="https://envoyer.io" class="underline">Envoyer</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="underline">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="underline">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="underline">Echo</a>, <a href="https://laravel.com/docs/horizon" class="underline">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="underline">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="underline">Telescope</a>, and more.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
-                    <div class="text-center text-sm text-gray-500 sm:text-left">
-                        <div class="flex items-center">
-                            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" class="-mt-px w-5 h-5 text-gray-400">
-                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-
-                            <a href="https://laravel.bigcartel.com" class="ml-1 underline">
-                                Shop
-                            </a>
-
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="ml-4 -mt-px w-5 h-5 text-gray-400">
-                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-
-                            <a href="https://github.com/sponsors/taylorotwell" class="ml-1 underline">
-                                Sponsor
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    <img src="{{ asset('images/school-logo.png') }}" height="40" class="d-inline-block align-top" alt="School Logo">
+                    <span>{{ config('app.name', 'School Management System') }}</span>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#modules">Modules</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://voyager-docs.devdojo.com/" target="_blank">Documentation</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="login-section">                    <a href="{{ url('/admin/login') }}" class="btn btn-voyager">
+                        <i class="fas fa-sign-in-alt me-1"></i> Admin Login
+                    </a>
+                    <a href="{{ route('portal.login') }}" class="btn btn-outline-light ms-2">
+                        <i class="fas fa-user-graduate me-1"></i> Portal Login
+                    </a>
                     </div>
                 </div>
             </div>
+        </nav>
+
+        <!-- Welcome Header -->
+        <header class="welcome-header text-center py-5 position-relative">
+            <div class="voyager-bg-pattern"></div>
+            <div class="container position-relative" style="z-index: 1;">
+                <img src="{{ asset('images/school-logo.png') }}" alt="School Logo" class="school-logo mb-4">
+                <h1 class="display-4 fw-bold" style="text-transform: uppercase; letter-spacing: 1px;">School Management System</h1>
+                <p class="lead mb-4">Built with Laravel and Voyager Admin</p>
+                <div class="mb-4">
+                    <span class="badge bg-primary me-2 p-2">Students</span>
+                    <span class="badge bg-success me-2 p-2">Teachers</span>
+                    <span class="badge bg-info me-2 p-2">Parents</span>
+                    <span class="badge bg-warning me-2 p-2">Administrators</span>
+                </div>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url('/admin/login') }}" class="btn btn-voyager">
+                        <i class="fas fa-tachometer-alt me-2"></i> Admin Panel
+                    </a>
+                    <a href="{{ route('portal.login') }}" class="btn btn-outline-light">
+                        <i class="fas fa-user-graduate me-2"></i> User Portal
+                    </a>
+                    <a href="#features" class="btn btn-outline-light">
+                        <i class="fas fa-info-circle me-2"></i> Learn More
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container py-5">
+            <!-- Features Section -->
+            <section id="features" class="py-5">
+                <div class="row mb-5">
+                    <div class="col-12 text-center mb-5">
+                        <h2 class="section-title">Key Features</h2>
+                        <p class="text-muted">Discover the powerful tools that make our school management system stand out</p>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 text-center mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h4>Admin Panel</h4>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <div class="features-icon">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <p>Comprehensive admin dashboard powered by Voyager, giving you full control over all aspects of the school management system.</p>
+                                <div class="mt-auto">
+                                    <a href="{{ url('/admin') }}" class="btn btn-voyager">
+                                        <i class="fas fa-external-link-alt me-2"></i>Access Admin
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 text-center mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h4>Student Portal</h4>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <div class="features-icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <p>Students can access their grades, assignments, attendance records, and communicate with teachers all in one place.</p>
+                                <div class="mt-auto">
+                                    <a href="{{ route('portal.login') }}" class="btn btn-voyager">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Student Login
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 text-center mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h4>Parent Portal</h4>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <div class="features-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <p>Parents can track their children's progress, communicate with teachers, and stay updated with announcements and events.</p>
+                                <div class="mt-auto">
+                                    <a href="{{ route('portal.login') }}" class="btn btn-voyager">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Parent Login
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Features -->
+                <div class="row mt-5">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="features-icon" style="font-size: 2rem;">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Mobile Responsive</h5>
+                                <p class="text-muted">Access the system from any device, anywhere, anytime.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="features-icon" style="font-size: 2rem;">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Secure Access</h5>
+                                <p class="text-muted">Role-based permission system ensures data security.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="features-icon" style="font-size: 2rem;">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Detailed Analytics</h5>
+                                <p class="text-muted">Track performance with powerful reporting tools.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="features-icon" style="font-size: 2rem;">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Real-time Notifications</h5>
+                                <p class="text-muted">Stay updated with instant alerts and reminders.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- System Modules -->
+            <section id="modules" class="py-5">
+                <div class="row">
+                    <div class="col-12 text-center mb-5">
+                        <h2 class="section-title">System Modules</h2>
+                        <p class="text-muted">Explore the comprehensive modules designed to streamline school administration</p>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 text-center mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5>Academic Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="features-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <ul class="list-unstyled text-start">
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Course Management</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Class Scheduling</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Assignments & Grading</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Exams & Results</li>
+                                </ul>
+                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 text-center mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5>Student Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="features-icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <ul class="list-unstyled text-start">
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Student Registration</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Attendance Tracking</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Performance Reports</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Student Portfolios</li>
+                                </ul>
+                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 text-center mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5>Financial Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="features-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <ul class="list-unstyled text-start">
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Fee Collection</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Payment Tracking</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Expense Management</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Financial Reports</li>
+                                </ul>
+                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 text-center mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5>Communication</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="features-icon">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <ul class="list-unstyled text-start">
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Announcements</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Teacher-Parent Chat</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Newsletters</li>
+                                    <li><i class="fas fa-check-circle me-2 text-success"></i>Event Calendar</li>
+                                </ul>
+                                <a href="{{ url('/admin') }}" class="btn btn-sm btn-outline-light mt-3">Explore Module</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Section -->
+                <div class="row mt-5">
+                    <div class="col-12 mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <h5 class="page-title mb-0">SYSTEM STATISTICS</h5>
+                            <div class="ms-auto">
+                                <span class="badge bg-primary"><i class="fas fa-chart-line me-1"></i> Live Data</span>
+                            </div>
+                        </div>
+                        <div class="panel panel-bordered">
+                            <div class="panel-body py-4">
+                                <div class="row text-center">
+                                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                                        <h2 class="display-5 fw-bold text-primary mb-0">20+</h2>
+                                        <p class="text-muted mb-0">Admin Features</p>
+                                        <div class="progress mt-2" style="height: 5px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                                        <h2 class="display-5 fw-bold text-success mb-0">10+</h2>
+                                        <p class="text-muted mb-0">Student Tools</p>
+                                        <div class="progress mt-2" style="height: 5px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <h2 class="display-5 fw-bold text-info mb-0">8+</h2>
+                                        <p class="text-muted mb-0">Parent Features</p>
+                                        <div class="progress mt-2" style="height: 5px;">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <h2 class="display-5 fw-bold text-warning mb-0">24/7</h2>
+                                        <p class="text-muted mb-0">System Availability</p>
+                                        <div class="progress mt-2" style="height: 5px;">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+                
+            <!-- Call to Action -->
+            <section class="py-5">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <h5 class="page-title mb-0">GET STARTED</h5>
+                            <div class="ms-auto">
+                                <span class="badge bg-success"><i class="fas fa-check me-1"></i> Ready to Deploy</span>
+                            </div>
+                        </div>
+                        <div class="panel panel-bordered" style="background-color: var(--voyager-sidebar); color: white;">
+                            <div class="voyager-bg-pattern"></div>
+                            <div class="p-4 position-relative">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-8 mb-4 mb-lg-0">
+                                        <h5 style="text-transform: uppercase; letter-spacing: 1px;">Ready to transform your school management?</h5>
+                                        <p class="mb-0">Get started with our comprehensive school management system and streamline your administrative processes.</p>
+                                        <ul class="voyager-breadcrumbs mt-3 mb-0">
+                                            <li><span><i class="fas fa-check-circle text-success me-1"></i> Easy Setup</span></li>
+                                            <li><span><i class="fas fa-check-circle text-success me-1"></i> User Friendly</span></li>
+                                            <li><span><i class="fas fa-check-circle text-success me-1"></i> Full Support</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4 text-lg-end">
+                                        <a href="{{ url('/admin/login') }}" class="btn btn-voyager me-2">
+                                            <i class="fas fa-tachometer-alt me-2"></i> Admin Panel
+                                        </a>
+                                        <a href="{{ route('portal.login') }}" class="btn btn-outline-light">
+                                            <i class="fas fa-user me-2"></i> User Portal
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="voyager-bg-pattern"></div>
+            <div class="container position-relative" style="z-index: 1;">
+                <div class="row py-4">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <h5 class="text-uppercase mb-3">School Management System</h5>
+                        <p class="mb-3">A comprehensive solution for educational institutions to manage administrative tasks, student records, and facilitate communication between teachers, students, and parents.</p>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="text-light"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                        <h6 class="text-uppercase mb-3">Quick Links</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Home</a></li>
+                            <li class="mb-2"><a href="#features" class="text-light text-decoration-none">Features</a></li>
+                            <li class="mb-2"><a href="#modules" class="text-light text-decoration-none">Modules</a></li>
+                            <li class="mb-2"><a href="{{ url('/admin/login') }}" class="text-light text-decoration-none">Admin Login</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                        <h6 class="text-uppercase mb-3">Portals</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><a href="{{ route('portal.login') }}" class="text-light text-decoration-none">Student Portal</a></li>
+                            <li class="mb-2"><a href="{{ route('portal.login') }}" class="text-light text-decoration-none">Parent Portal</a></li>
+                            <li class="mb-2"><a href="{{ route('portal.login') }}" class="text-light text-decoration-none">Teacher Portal</a></li>
+                            <li class="mb-2"><a href="{{ url('/admin') }}" class="text-light text-decoration-none">Admin Panel</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 class="text-uppercase mb-3">Contact</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 School Street, Education City</li>
+                            <li class="mb-2"><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
+                            <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@schoolsystem.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-2 border-top border-secondary">
+                <div class="row py-2">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0 small">© {{ date('Y') }} School Management System. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <p class="mb-0 small">
+                            Powered by Laravel v{{ Illuminate\Foundation\Application::VERSION }} | 
+                            PHP v{{ PHP_VERSION }} |
+                            <a href="https://voyager.devdojo.com/" class="text-light" target="_blank">Voyager Admin</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Smooth scrolling for anchor links
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    });
+                });
+                
+                // Add active class to navbar items on scroll
+                window.addEventListener('scroll', function() {
+                    let scrollPosition = window.scrollY;
+                    
+                    document.querySelectorAll('section').forEach(section => {
+                        const sectionTop = section.offsetTop - 100;
+                        const sectionHeight = section.offsetHeight;
+                        const sectionId = section.getAttribute('id');
+                        
+                        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                            document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+                                link.classList.remove('active');
+                                if (link.getAttribute('href') === '#' + sectionId) {
+                                    link.classList.add('active');
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

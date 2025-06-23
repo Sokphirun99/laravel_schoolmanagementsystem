@@ -1,16 +1,17 @@
-# filepath: /Users/phirun/laravel_app_schoolmanagementsystem_01/docker-compose.yaml
-# docker-compose.yaml
-# version: '3.8'
+version: '3.8'
+# School Management System Docker Configuration
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: school_app
     restart: always
     working_dir: /var/www/html
     tty: true
     volumes:
       - .:/var/www/html
+      - ./storage:/var/www/html/storage
     ports:
       - "8080:80"
     environment:
@@ -26,10 +27,12 @@ services:
       - app_network
 
   db:
-    image: mysql:8
+    image: mysql:8.0
+    container_name: school_db
     restart: always
     ports:
       - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       - MYSQL_DATABASE=laravel
       - MYSQL_USER=laravel
@@ -55,19 +58,28 @@ services:
     networks:
       - app_network
 
-  # ngrok:
-  #   image: ngrok/ngrok:latest
-  #   container_name: school_ngrok
-  #   restart: unless-stopped
-  #   command: http app:80 # Tunnel to the 'app' service on its internal port 80
-  #   environment:
-  #     # Replace YOUR_NGROK_AUTHTOKEN with your actual token
-  #     # Or better: set it as an environment variable on your host machine
-  #     NGROK_AUTHTOKEN: 2vOPFVzoXVjrLFw5Gpke52PxSF6_6MGjqkinLdPdLPmQvn74c
-  #   ports:
-  #     - "4040:4040" # Expose Ngrok's web interface
-  #   depends_on:
-  #     - app
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: school_ngrok
+    restart: unless-stopped
+    command: http app:80 # Tunnel to the 'app' service on its internal port 80
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN:-2vOPFVzoXVjrLFw5Gpke52PxSF6_6MGjqkinLdPdLPmQvn74c}
+    ports:
+      - "4040:4040" # Expose Ngrok's web interface
+    depends_on:
+      - app
+      
+  redis:
+    image: redis:alpine
+    container_name: school_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_network
 
 networks:
   app_network:
@@ -75,4 +87,5 @@ networks:
 
 volumes:
   db_data:
+  redis_data:
 
