@@ -4,50 +4,97 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-user me-2"></i>{{ __('My Profile') }}</h5>
+            <div class="card" style="box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; border: none;">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--voyager-primary, #22A7F0), #1989d8); color: white; padding: 15px 20px; position: relative; border-bottom: none;">
+                    <h5 class="mb-0" style="font-weight: 600; display: flex; align-items: center;">
+                        <i class="fas fa-user me-2" style="background: rgba(255,255,255,0.2); width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin-right: 10px;"></i>
+                        {{ __('My Profile') }}
+                    </h5>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body" style="padding: 25px 20px;">
                     <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
                         <div class="row mb-4">
                             <div class="col-md-4 text-center">
-                                <div class="mb-3">
-                                    @if ($user->avatar)
-                                        <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                                    @else
-                                        <img src="{{ asset('storage/users/default.png') }}" alt="{{ $user->name }}" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                                    @endif
+                                <div class="mb-3" style="position: relative;">
+                                    <div class="avatar-container" style="position: relative; width: 150px; height: 150px; margin: 0 auto; border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; border: 3px solid var(--voyager-primary, #22A7F0);">
+                                        @if ($user->avatar)
+                                            <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            <img src="{{ asset('storage/users/default.png') }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @endif
+                                        <div class="avatar-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(34, 167, 240, 0.7); color: white; font-size: 0.8em; text-align: center; padding: 4px 0; transform: translateY(100%); transition: all 0.3s ease;">
+                                            <i class="fas fa-camera"></i> Change
+                                        </div>
+                                    </div>
+                                    <script>
+                                        document.querySelector('.avatar-container').addEventListener('mouseenter', function() {
+                                            this.querySelector('.avatar-overlay').style.transform = 'translateY(0)';
+                                        });
+                                        document.querySelector('.avatar-container').addEventListener('mouseleave', function() {
+                                            this.querySelector('.avatar-overlay').style.transform = 'translateY(100%)';
+                                        });
+                                    </script>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="avatar" class="form-label">{{ __('Change Profile Picture') }}</label>
-                                    <input type="file" class="form-control @error('avatar') is-invalid @enderror" id="avatar" name="avatar">
+                                    <label for="avatar" class="form-label" style="color: var(--voyager-primary, #22A7F0); font-weight: 600; display: block; text-align: center; margin-top: 10px;">
+                                        <i class="fas fa-image" style="margin-right: 5px;"></i>{{ __('Change Profile Picture') }}
+                                    </label>
+                                    <input type="file" class="form-control @error('avatar') is-invalid @enderror" id="avatar" name="avatar" style="display: none;">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-sm" style="background-color: #f8f9fa; border: 2px solid #e9ecef; color: #6c757d; border-radius: 20px; padding: 5px 15px; font-size: 0.85em; cursor: pointer;" onclick="document.getElementById('avatar').click()">
+                                            <i class="fas fa-upload me-1"></i> Select New Image
+                                        </button>
+                                    </div>
+                                    <div id="selected-file" class="small text-center mt-2" style="color: #6c757d;"></div>
                                     @error('avatar')
-                                        <span class="invalid-feedback" role="alert">
+                                        <div class="text-danger small text-center mt-2">
+                                            <i class="fas fa-exclamation-circle me-1"></i>
                                             <strong>{{ $message }}</strong>
-                                        </span>
+                                        </div>
                                     @enderror
+                                    <script>
+                                        document.getElementById('avatar').addEventListener('change', function(e) {
+                                            const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
+                                            document.getElementById('selected-file').textContent = fileName;
+                                        });
+                                    </script>
                                 </div>
                             </div>
 
                             <div class="col-md-8">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">{{ __('Name') }}</label>
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $user->name) }}" required autocomplete="name">
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                <div class="mb-4">
+                                    <label for="name" class="form-label" style="color: var(--voyager-primary, #22A7F0); font-weight: 600; margin-bottom: 10px; display: block;">
+                                        <i class="fas fa-user" style="background: rgba(34, 167, 240, 0.1); width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin-right: 8px;"></i>
+                                        {{ __('Full Name') }}
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" style="background: #f8f9fa; border: 2px solid #e9ecef; border-right: none; color: var(--voyager-primary, #22A7F0);">
+                                            <i class="fas fa-id-card"></i>
                                         </span>
+                                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $user->name) }}" required autocomplete="name" style="border: 2px solid #e9ecef; border-left: none; border-radius: 0 8px 8px 0; padding: 10px 15px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                    </div>
+                                    @error('name')
+                                        <div class="text-danger mt-2" style="font-size: 0.9em;">
+                                            <i class="fas fa-exclamation-circle" style="margin-right: 5px;"></i>
+                                            <strong>{{ $message }}</strong>
+                                        </div>
                                     @enderror
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">{{ __('Email Address') }}</label>
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $user->email) }}" required autocomplete="email">
+                                <div class="mb-4">
+                                    <label for="email" class="form-label" style="color: var(--voyager-primary, #22A7F0); font-weight: 600; margin-bottom: 10px; display: block;">
+                                        <i class="fas fa-envelope" style="background: rgba(34, 167, 240, 0.1); width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin-right: 8px;"></i>
+                                        {{ __('Email Address') }}
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" style="background: #f8f9fa; border: 2px solid #e9ecef; border-right: none; color: var(--voyager-primary, #22A7F0);">
+                                            <i class="fas fa-at"></i>
+                                        </span>
+                                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $user->email) }}" required autocomplete="email" style="border: 2px solid #e9ecef; border-left: none; border-radius: 0 8px 8px 0; padding: 10px 15px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

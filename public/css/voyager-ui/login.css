@@ -1,0 +1,465 @@
+:root {
+    --voyager-primary: #22A7F0;
+    --voyager-secondary: #2B3D51;
+    --voyager-dark: #1A2226;
+    --voyager-bg: #F9FAFC;
+    --voyager-sidebar: #2A3F54;
+    --voyager-accent: #62a8ea;
+}
+
+/* Animated Background */
+body.voyager-login {
+    font-family: 'Open Sans', sans-serif;
+    background: linear-gradient(135deg, var(--voyager-sidebar), var(--voyager-dark));
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+body.voyager-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.2;
+    z-index: 1;
+}
+
+/* Login Card */
+.voyager-login-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.voyager-login-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    max-width: 1000px;
+    margin: 0 auto;
+    transform: translateY(0);
+    transition: all 0.5s ease;
+}
+
+.voyager-login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Left Panel */
+.voyager-login-left {
+    background: linear-gradient(135deg, var(--voyager-primary), var(--voyager-sidebar));
+    color: white;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.voyager-login-left::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322A7F0' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: 1;
+}
+
+/* Logo */
+.voyager-logo-container {
+    margin-bottom: 2rem;
+}
+
+.voyager-logo-container img {
+    max-width: 120px;
+    height: auto;
+    filter: brightness(0) invert(1);
+    margin-bottom: 1rem;
+}
+
+/* Welcome Text */
+.voyager-welcome-text h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.voyager-welcome-text p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Features List */
+.voyager-features-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+    position: relative;
+}
+
+.voyager-features-list li {
+    padding: 0.7rem 0;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+    opacity: 0.9;
+}
+
+.voyager-features-list li:hover {
+    transform: translateX(5px);
+    opacity: 1;
+}
+
+.voyager-features-list li i {
+    margin-right: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Right Panel */
+.voyager-login-right {
+    padding: 3rem;
+    background: white;
+}
+
+/* Form Styles */
+.voyager-login-form h3 {
+    color: var(--voyager-secondary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.voyager-login-form h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--voyager-primary);
+    border-radius: 2px;
+}
+
+.voyager-login-form .subtitle {
+    color: #6c757d;
+    margin-bottom: 2rem;
+}
+
+.voyager-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.voyager-form-label {
+    font-weight: 600;
+    color: var(--voyager-secondary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.voyager-form-label::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--voyager-primary);
+    border-radius: 50%;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
+.voyager-form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.voyager-form-control:focus {
+    border-color: var(--voyager-primary);
+    box-shadow: 0 0 0 0.2rem rgba(34, 167, 240, 0.25);
+    transform: translateY(-1px);
+}
+
+.voyager-input-group-text {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-right: none;
+    color: var(--voyager-primary);
+    transition: all 0.3s ease;
+}
+
+.voyager-input-group:focus-within .voyager-input-group-text {
+    border-color: var(--voyager-primary);
+    background: rgba(34, 167, 240, 0.05);
+}
+
+.voyager-input-group .voyager-form-control {
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+}
+
+.voyager-input-group:focus-within .voyager-form-control {
+    border-color: var(--voyager-primary);
+}
+
+/* Button Styles */
+.voyager-btn {
+    background: var(--voyager-primary);
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    z-index: 1;
+}
+
+.voyager-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    z-index: -1;
+    transition: all 0.6s ease;
+}
+
+.voyager-btn:hover {
+    background: #1e96d9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(34, 167, 240, 0.4);
+    color: white;
+}
+
+.voyager-btn:hover::before {
+    left: 100%;
+}
+
+/* Links */
+.voyager-link {
+    color: var(--voyager-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.voyager-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--voyager-primary);
+    transition: all 0.3s ease;
+}
+
+.voyager-link:hover {
+    color: #1e96d9;
+}
+
+.voyager-link:hover::after {
+    width: 100%;
+}
+
+/* Divider */
+.voyager-divider {
+    text-align: center;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.voyager-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.voyager-divider span {
+    background: white;
+    padding: 0 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Quick Access Button */
+.voyager-quick-access {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.voyager-quick-access-btn {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-decoration: none;
+    color: var(--voyager-secondary);
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.voyager-quick-access-btn::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--voyager-primary);
+    transition: all 0.3s ease;
+    z-index: -1;
+    border-radius: 8px;
+}
+
+.voyager-quick-access-btn:hover {
+    color: white;
+    border-color: var(--voyager-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.voyager-quick-access-btn:hover::before {
+    top: 0;
+}
+
+.voyager-quick-access-btn i {
+    transition: all 0.3s ease;
+}
+
+.voyager-quick-access-btn:hover i {
+    transform: scale(1.2);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .voyager-login-left {
+        display: none;
+    }
+    
+    .voyager-login-right {
+        padding: 2rem 1.5rem;
+    }
+    
+    .voyager-quick-access {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animated Entrance */
+.fade-in-up {
+    animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Additional Components */
+.voyager-panel {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+    border-radius: 10px; 
+    overflow: hidden; 
+    border: none;
+}
+
+.voyager-panel-heading {
+    background: linear-gradient(135deg, var(--voyager-primary), #1989d8); 
+    color: white; 
+    padding: 15px 20px; 
+    position: relative;
+}
+
+.voyager-panel-title {
+    font-weight: 600; 
+    display: flex; 
+    align-items: center;
+}
+
+.voyager-panel-title i {
+    margin-right: 10px; 
+    font-size: 1.2em;
+}
+
+.voyager-panel-body {
+    padding: 25px;
+}
+
+.voyager-icon-circle {
+    background: rgba(34, 167, 240, 0.1); 
+    width: 28px; 
+    height: 28px; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 50%; 
+    margin-right: 8px;
+}

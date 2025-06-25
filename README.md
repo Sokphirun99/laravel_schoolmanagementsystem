@@ -17,6 +17,8 @@ This guide provides step-by-step instructions for setting up, running, and troub
 - **Dual Interface**:
   - Powerful Admin Panel powered by Voyager
   - Dedicated Student and Parent Portal with custom authentication
+  - Modern UI components with consistent design language ([See Voyager UI Components Guide](README-VOYAGER-UI.md))
+  - Migration issues fixed ([See Migration Fix](MIGRATION-FIX.md))
 
 - **User Management**: 
   - Administrators, teachers, students, and parents with role-based access
@@ -101,6 +103,8 @@ docker compose exec app php artisan db:seed --class=StudentsSeeder
 # Setup admin user
 docker compose exec app php artisan voyager:admin
 ```
+
+> **Note:** If you encounter migration errors related to foreign key constraints, please refer to [Migration Fix Documentation](MIGRATION-FIX.md) for solutions.
 
 ## Complete Setup Guide
 
