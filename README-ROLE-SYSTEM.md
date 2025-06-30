@@ -2,53 +2,42 @@
 
 ## Overview
 
-This enhancement provides a flexible role management system for the Laravel School Management System. It enables users to have multiple roles, improves role checking methods, and implements role-based access control.
+The School Management System uses Voyager's standard role management system, which provides a simple and effective way to assign roles to users and control access to various parts of the application.
 
 ## Current Status
 
-All core functionality has been implemented and tested:
-- ✅ Users can have multiple roles
+The role system is fully implemented using Voyager's built-in functionality:
+- ✅ Users have a single primary role (admin, teacher, student, parent, or staff)
 - ✅ Role-checking methods are working properly
-- ✅ Legacy compatibility is maintained
-- ✅ Role synchronization is working between old and new systems
-- ✅ Test users with various role combinations have been created
+- ✅ Role-based access control is implemented
+- ✅ Test users with various roles have been created
 
 You can access the demo at `/admin/role-demo` (after logging in as an admin).
 
 ## Features Implemented
 
-1. **Many-to-Many Relationship**: Users can now have multiple roles, stored in the `user_roles` table.
-2. **Backward Compatibility**: Maintains compatibility with the legacy `role_id` column.
-3. **Role Management UI**: Admin interface for assigning and managing user roles.
-4. **Role-Based Middleware**: Protects routes based on user roles.
-5. **Role Management Traits**: Common functionality shared across models.
-6. **Service Layer**: Handles user creation and updates with proper role assignment.
-7. **Database Migration**: Syncs existing roles to the new system.
-8. **CLI Command**: Command to synchronize roles between systems.
-9. **Tests**: Feature tests for the role management system.
+1. **Role Assignment**: Each user is assigned one primary role
+2. **Role Management UI**: Admin interface for assigning roles to users via Voyager
+3. **Role-Based Middleware**: Protects routes based on user roles
+4. **Role-Based Permission**: Controls access to features based on user roles
+5. **Role Methods**: Helper methods to check user roles (isAdmin, isTeacher, etc.)
+6. **User Scopes**: Query scopes to filter users by role (admins(), teachers(), etc.)
+7. **Role Labels**: Human-readable role labels for display purposes
+8. **Dashboard Redirects**: Role-specific dashboards and redirects
 
 ## Implementation Details
 
 ### Models
 
-- **UserRole**: Represents the many-to-many relationship between users and roles.
 - **User**: Enhanced with role checking and assignment methods.
 
 ### Traits
 
 - **UserRolesTrait**: Contains shared methods for role management.
 
-### Services
-
-- **UserService**: Handles user creation and updates with role assignment.
-
 ### Middleware
 
 - **CheckUserRole**: Protects routes based on user roles.
-
-### Commands
-
-- **SyncUserRoles2Command**: Synchronizes roles between the legacy system and the new one.
 
 ### UI Components
 
@@ -117,14 +106,12 @@ if ($user->hasAnyRole([$adminRoleId, $teacherRoleId])) {
 ```php
 $user = User::find($id);
 
-// Assign a role
-$user->assignRole($roleId);
+// Assign a role directly
+$user->role = 'admin'; // or 'teacher', 'student', 'parent', 'staff'
+$user->save();
 
-// Remove a role
-$user->removeRole($roleId);
-
-// Keep legacy role_id in sync
-$user->syncRoleId();
+// Or using Voyager's admin panel:
+// Navigate to Users -> Edit User -> Select Role from dropdown
 ```
 
 ## Example Routes

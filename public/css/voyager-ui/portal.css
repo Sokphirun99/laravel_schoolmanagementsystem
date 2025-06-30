@@ -1,0 +1,1220 @@
+/* Import Inter font - primary font used in Genesis */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Genesis color palette based on the latest design */
+    --voyager-primary: #3f51b5;
+    --voyager-primary-light: rgba(63, 81, 181, 0.1);
+    --voyager-secondary: #7986cb;
+    --voyager-dark: #1a237e;
+    --voyager-dark-lighter: #252d47;
+    
+    /* Genesis neutral colors */
+    --voyager-bg: #fafafa;
+    --voyager-bg-darker: #f5f5f5;
+    --voyager-border: #e0e0e0;
+    
+    /* Genesis text colors */
+    --voyager-text: #1e293b;  /* Genesis uses a deep blue-gray for text */
+    --voyager-text-light: #fff;
+    --voyager-text-muted: #64748b; /* Secondary text color */
+    
+    /* Genesis accent colors */
+    --voyager-accent: #FF750F; /* Genesis orange accent from SVG icons */
+    --voyager-accent-alt: #00bcd4;
+    
+    /* Genesis sidebar colors */
+    --voyager-sidebar: #1e1e2d; /* Darker sidebar like Genesis dark theme */
+    --voyager-sidebar-active: rgba(255, 255, 255, 0.15);
+    
+    /* Genesis status colors */
+    --voyager-success: #4caf50;
+    --voyager-success-light: rgba(76, 175, 80, 0.1);
+    --voyager-warning: #ff9800;
+    --voyager-warning-light: rgba(255, 152, 0, 0.1);
+    --voyager-danger: #f44336;
+    --voyager-danger-light: rgba(244, 67, 54, 0.1);
+    --voyager-info: #03a9f4;
+    --voyager-info-light: rgba(3, 169, 244, 0.1);
+    
+    /* Genesis visual design variables */
+    --voyager-card-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    --voyager-transition: all 0.2s ease;
+    --voyager-font-family: 'Inter', 'Open Sans', sans-serif;
+    --voyager-header-height: 60px;
+    --voyager-radius: 8px;
+    --voyager-radius-lg: 12px;
+    --voyager-radius-sm: 4px;
+    
+    /* Genesis dark mode shadows */
+    --voyager-shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Loader */
+#voyager-loader {
+    background: linear-gradient(135deg, var(--voyager-sidebar), var(--voyager-dark));
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#voyager-loader img {
+    width: 60px;
+    height: 60px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* Genesis Login Page Styling */
+.genesis-login-container {
+    max-width: 450px;
+    padding: 30px 40px;
+    border-radius: var(--voyager-radius-lg);
+    box-shadow: var(--voyager-card-shadow);
+    background-color: white;
+    border: 1px solid var(--voyager-border);
+}
+
+.genesis-login-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.genesis-login-header h1 {
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--voyager-text);
+}
+
+.genesis-login-header p {
+    color: var(--voyager-text-muted);
+    font-size: 15px;
+    margin: 0;
+}
+
+.genesis-login-form {
+    margin-bottom: 24px;
+}
+
+.genesis-form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 5px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+.form-check-label {
+    font-size: 14px;
+    color: var(--voyager-text-muted);
+    margin-bottom: 0;
+}
+
+.forgot-link {
+    font-size: 14px;
+    color: var(--voyager-primary);
+    text-decoration: none;
+    transition: var(--voyager-transition);
+}
+
+.forgot-link:hover {
+    color: var(--voyager-dark);
+    text-decoration: underline;
+}
+
+.genesis-login-button {
+    padding: 12px 16px;
+    border-radius: var(--voyager-radius);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
+    background: var(--voyager-primary);
+    border-color: var(--voyager-primary);
+    position: relative;
+}
+
+.genesis-login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(63, 81, 181, 0.25);
+    background: var(--voyager-dark);
+    border-color: var(--voyager-dark);
+}
+
+.genesis-features {
+    border-top: 1px solid var(--voyager-border);
+    padding-top: 24px;
+    margin-top: 24px;
+}
+
+.genesis-features h5 {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--voyager-text);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--voyager-bg);
+    border-radius: var(--voyager-radius);
+    transition: var(--voyager-transition);
+}
+
+.feature-item:hover {
+    background-color: var(--voyager-bg-darker);
+}
+
+.feature-item i {
+    font-size: 18px;
+    margin-right: 12px;
+    color: var(--voyager-primary);
+}
+
+.feature-item span {
+    font-size: 13px;
+    color: var(--voyager-text-muted);
+}
+
+/* Dark mode login page */
+.dark .genesis-login-container {
+    background-color: #1e293b;
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark .genesis-login-header h1,
+.dark .genesis-features h5 {
+    color: rgba(255,255,255,0.9);
+}
+
+.dark .genesis-login-header p,
+.dark .form-check-label,
+.dark .feature-item span {
+    color: rgba(255,255,255,0.6);
+}
+
+.dark .feature-item {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.dark .feature-item:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.dark .genesis-features {
+    border-color: rgba(255,255,255,0.1);
+}
+
+/* Portal specific overrides to match Genesis styles */
+body.portal .navbar-default {
+    background: var(--voyager-sidebar);
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: var(--voyager-header-height);
+}
+
+body.portal .navbar-default .navbar-nav > li > a {
+    color: var(--voyager-text-light);
+    font-weight: 500;
+    padding: 20px 15px;
+    transition: var(--voyager-transition);
+}
+
+body.portal .navbar-default .navbar-nav > li > a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.portal .side-menu.sidebar-inverse {
+    background: var(--voyager-sidebar);
+    color: var(--voyager-text-light);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+body.portal .side-menu .navbar-header {
+    background: var(--voyager-dark);
+    border-color: transparent;
+    padding: 15px 0;
+}
+
+body.portal .panel-default {
+    border-color: var(--voyager-border);
+    border-radius: var(--voyager-radius);
+    box-shadow: var(--voyager-card-shadow);
+    overflow: hidden;
+}
+
+body.portal .panel-default > .panel-heading {
+    background-color: var(--voyager-bg);
+    border-color: var(--voyager-border);
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+body.portal .dropdown-menu {
+    border: none;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    border-radius: var(--voyager-radius);
+    overflow: hidden;
+    padding: 8px 0;
+}
+
+body.portal .dropdown-menu > li > a {
+    padding: 8px 20px;
+    transition: var(--voyager-transition);
+}
+
+body.portal .dropdown-menu > li > a:hover {
+    background-color: var(--voyager-bg-darker);
+}
+
+body.portal .btn-primary {
+    background-color: var(--voyager-primary);
+    border-color: var(--voyager-primary);
+    border-radius: var(--voyager-radius);
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: var(--voyager-transition);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.portal .btn-primary:hover, body.portal .btn-primary:focus {
+    background-color: var(--voyager-dark);
+    border-color: var(--voyager-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+body.portal .pagination>.active>a, 
+body.portal .pagination>.active>a:focus, 
+body.portal .pagination>.active>a:hover, 
+body.portal .pagination>.active>span, 
+body.portal .pagination>.active>span:focus, 
+body.portal .pagination>.active>span:hover {
+    background-color: var(--voyager-primary);
+    border-color: var(--voyager-primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabs styling */
+body.portal .nav-tabs {
+    border-bottom: 1px solid var(--voyager-border);
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+body.portal .nav-tabs > li {
+    margin-bottom: -1px;
+}
+
+body.portal .nav-tabs > li > a {
+    border-radius: var(--voyager-radius) var(--voyager-radius) 0 0;
+    font-weight: 500;
+    padding: 12px 20px;
+    transition: var(--voyager-transition);
+}
+
+body.portal .nav-tabs > li.active > a, 
+body.portal .nav-tabs > li.active > a:focus, 
+body.portal .nav-tabs > li.active > a:hover {
+    color: var(--voyager-primary) !important;
+    border-bottom: 2px solid var(--voyager-primary);
+}
+
+/* Table styling */
+body.portal .table-bordered {
+    border: 1px solid var(--voyager-border);
+    border-radius: var(--voyager-radius);
+    overflow: hidden;
+    box-shadow: var(--voyager-card-shadow);
+}
+
+body.portal .table-bordered > thead > tr > th {
+    background-color: var(--voyager-bg-darker);
+    border-bottom: 2px solid var(--voyager-primary);
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+body.portal .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: var(--voyager-bg);
+}
+
+/* Side menu navigation */
+body.portal .side-menu .navbar-header .navbar-brand {
+    color: var(--voyager-text-light);
+    height: var(--voyager-header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+body.portal .side-menu .navbar-header .navbar-brand img {
+    max-height: 32px;
+    margin-right: 10px;
+}
+
+body.portal .side-menu.sidebar-inverse .navbar {
+    padding: 10px 0;
+}
+
+body.portal .side-menu.sidebar-inverse .navbar li.dropdown .panel-body {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: var(--voyager-radius);
+    margin: 0 15px;
+}
+
+body.portal .side-menu.sidebar-inverse .navbar li > a {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px 20px;
+    border-radius: var(--voyager-radius);
+    margin: 2px 15px;
+    transition: var(--voyager-transition);
+}
+
+body.portal .side-menu.sidebar-inverse .navbar li > a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--voyager-text-light);
+}
+
+body.portal .side-menu.sidebar-inverse .navbar li.active > a {
+    color: var(--voyager-text-light);
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Form styling */
+body.portal .form-control {
+    border: 1px solid var(--voyager-border);
+    border-radius: var(--voyager-radius);
+    padding: 10px 15px;
+    height: auto;
+    font-size: 14px;
+    box-shadow: none;
+    transition: var(--voyager-transition);
+}
+
+body.portal .form-control:focus {
+    border-color: var(--voyager-primary);
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+    outline: none;
+}
+
+body.portal label {
+    font-weight: 500;
+    color: var(--voyager-text);
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+body.portal .form-group {
+    margin-bottom: 20px;
+}
+
+/* Genesis Form Group Special Styles */
+body.portal .form-group-default {
+    background-color: white;
+    border-radius: var(--voyager-radius);
+    border: 1px solid var(--voyager-border);
+    padding: 8px 12px;
+    position: relative;
+    transition: var(--voyager-transition);
+}
+
+body.portal .form-group-default label {
+    opacity: 0.8;
+    margin: 0;
+    font-size: 12px;
+}
+
+body.portal .form-group-default .form-control {
+    border: none;
+    height: 30px;
+    padding: 0;
+    background: transparent;
+}
+
+body.portal .form-group-default.focused {
+    border-color: var(--voyager-primary);
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+}
+
+/* Alert styling */
+body.portal .alert {
+    border-radius: var(--voyager-radius);
+    padding: 15px 20px;
+    border: none;
+    box-shadow: var(--voyager-card-shadow);
+    position: relative;
+    margin-bottom: 20px;
+}
+
+body.portal .alert-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-left: 4px solid var(--voyager-success);
+    color: #2e7d32;
+}
+
+body.portal .alert-danger {
+    background-color: rgba(244, 67, 54, 0.1);
+    border-left: 4px solid var(--voyager-danger);
+    color: #c62828;
+}
+
+body.portal .alert-warning {
+    background-color: rgba(255, 152, 0, 0.1);
+    border-left: 4px solid var(--voyager-warning);
+    color: #ef6c00;
+}
+
+body.portal .alert-info {
+    background-color: rgba(0, 188, 212, 0.1);
+    border-left: 4px solid var(--voyager-accent);
+    color: #00838f;
+}
+
+/* Genesis Cards */
+.genesis-card {
+    background-color: white;
+    border-radius: var(--voyager-radius);
+    box-shadow: var(--voyager-card-shadow);
+    overflow: hidden;
+    transition: var(--voyager-transition);
+    margin-bottom: 24px;
+    border: 1px solid var(--voyager-border);
+}
+
+.genesis-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.genesis-card-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--voyager-border);
+    background-color: var(--voyager-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.genesis-card-title {
+    margin: 0;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--voyager-text);
+}
+
+.genesis-card-body {
+    padding: 20px;
+}
+
+.genesis-card-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--voyager-border);
+    background-color: var(--voyager-bg);
+}
+
+/* Genesis Badges */
+.genesis-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.genesis-badge-primary {
+    background-color: var(--voyager-primary);
+    color: white;
+}
+
+.genesis-badge-secondary {
+    background-color: var(--voyager-secondary);
+    color: white;
+}
+
+.genesis-badge-success {
+    background-color: var(--voyager-success);
+    color: white;
+}
+
+.genesis-badge-danger {
+    background-color: var(--voyager-danger);
+    color: white;
+}
+
+.genesis-badge-warning {
+    background-color: var(--voyager-warning);
+    color: white;
+}
+
+/* Genesis Avatar */
+.genesis-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--voyager-primary);
+    color: white;
+    font-weight: 600;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.genesis-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.genesis-avatar-sm {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+}
+
+.genesis-avatar-lg {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+}
+
+/* Genesis Dashboard Stats */
+.genesis-stat-card {
+    background: white;
+    border-radius: var(--voyager-radius);
+    padding: 20px;
+    box-shadow: var(--voyager-card-shadow);
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: var(--voyager-transition);
+}
+
+.genesis-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.genesis-stat-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(63, 81, 181, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    font-size: 24px;
+    color: var(--voyager-primary);
+}
+
+.genesis-stat-info h4 {
+    margin: 0 0 5px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.genesis-stat-info p {
+    margin: 0;
+    color: #78909c;
+    font-size: 14px;
+}
+
+/* Genesis utilities */
+.genesis-p-0 { padding: 0 !important; }
+.genesis-p-1 { padding: 0.25rem !important; }
+.genesis-p-2 { padding: 0.5rem !important; }
+.genesis-p-3 { padding: 1rem !important; }
+.genesis-p-4 { padding: 1.5rem !important; }
+.genesis-p-5 { padding: 3rem !important; }
+
+.genesis-m-0 { margin: 0 !important; }
+.genesis-m-1 { margin: 0.25rem !important; }
+.genesis-m-2 { margin: 0.5rem !important; }
+.genesis-m-3 { margin: 1rem !important; }
+.genesis-m-4 { margin: 1.5rem !important; }
+.genesis-m-5 { margin: 3rem !important; }
+
+.genesis-mb-3 { margin-bottom: 1rem !important; }
+.genesis-mt-3 { margin-top: 1rem !important; }
+
+.genesis-shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important; }
+.genesis-shadow { box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important; }
+.genesis-shadow-lg { box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important; }
+
+.genesis-text-primary { color: var(--voyager-primary) !important; }
+.genesis-text-secondary { color: var(--voyager-secondary) !important; }
+.genesis-text-success { color: var(--voyager-success) !important; }
+.genesis-text-danger { color: var(--voyager-danger) !important; }
+.genesis-text-warning { color: var(--voyager-warning) !important; }
+
+/* Genesis animations */
+@keyframes genesis-fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.genesis-fadeIn {
+    animation: genesis-fadeIn 0.5s ease forwards;
+}
+
+/* Genesis sidebar component */
+.genesis-sidebar {
+    width: 260px;
+    background-color: var(--voyager-sidebar);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    overflow-y: auto;
+    transition: var(--voyager-transition);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.genesis-sidebar-header {
+    height: var(--voyager-header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.genesis-logo {
+    display: flex;
+    align-items: center;
+    color: var(--voyager-text-light);
+}
+
+.genesis-logo i {
+    font-size: 24px;
+    margin-right: 10px;
+    color: var(--voyager-primary);
+}
+
+.genesis-logo h4 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.genesis-user-dropdown {
+    margin: 15px;
+    padding: 10px;
+    border-radius: var(--voyager-radius);
+    background: rgba(255, 255, 255, 0.1);
+    position: absolute;
+    bottom: 20px;
+    width: calc(100% - 30px);
+}
+
+.genesis-user-toggle {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: var(--voyager-radius);
+    color: var(--voyager-text-light);
+    text-decoration: none;
+    transition: var(--voyager-transition);
+}
+
+.genesis-user-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--voyager-text-light);
+}
+
+.genesis-user-info {
+    margin-left: 10px;
+    flex: 1;
+}
+
+.genesis-user-name {
+    display: block;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.genesis-user-info small {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.genesis-dropdown-icon {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.genesis-dropdown-menu {
+    background: var(--voyager-dark-lighter);
+    border: none;
+    border-radius: var(--voyager-radius);
+    box-shadow: var(--voyager-shadow-dark);
+    padding: 8px 0;
+    margin-top: 5px;
+    min-width: 100%;
+}
+
+.genesis-dropdown-item {
+    color: var(--voyager-text-light);
+    padding: 8px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    transition: var(--voyager-transition);
+}
+
+.genesis-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--voyager-text-light);
+}
+
+.genesis-dropdown-danger {
+    color: var(--voyager-danger) !important;
+}
+
+.genesis-dropdown-danger:hover {
+    background: rgba(244, 67, 54, 0.2) !important;
+}
+
+.genesis-dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+    margin: 8px 0;
+}
+
+/* Genesis main content */
+.genesis-main-content {
+    margin-left: 260px;
+    min-height: 100vh;
+    background-color: var(--voyager-bg);
+    transition: var(--voyager-transition);
+}
+
+.genesis-header {
+    height: var(--voyager-header-height);
+    background-color: white;
+    border-bottom: 1px solid var(--voyager-border);
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.genesis-header-container {
+    height: 100%;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.genesis-page-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--voyager-text);
+    margin: 0;
+}
+
+.genesis-breadcrumbs {
+    margin-top: 5px;
+}
+
+.genesis-breadcrumbs .breadcrumb {
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    font-size: 13px;
+}
+
+.genesis-menu-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: var(--voyager-bg);
+    color: var(--voyager-text);
+    cursor: pointer;
+    transition: var(--voyager-transition);
+}
+
+.genesis-menu-toggle:hover {
+    background-color: var(--voyager-bg-darker);
+}
+
+.genesis-content {
+    padding: 25px;
+}
+
+.genesis-notifications {
+    margin-bottom: 25px;
+}
+
+.genesis-alert {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: var(--voyager-radius);
+    margin-bottom: 15px;
+    animation: genesis-fadeIn 0.3s ease forwards;
+    position: relative;
+}
+
+.genesis-alert-success {
+    background-color: var(--voyager-success-light);
+    border-left: 4px solid var(--voyager-success);
+}
+
+.genesis-alert-danger {
+    background-color: var(--voyager-danger-light);
+    border-left: 4px solid var(--voyager-danger);
+}
+
+.genesis-alert-warning {
+    background-color: var(--voyager-warning-light);
+    border-left: 4px solid var(--voyager-warning);
+}
+
+.genesis-alert-info {
+    background-color: var(--voyager-info-light);
+    border-left: 4px solid var(--voyager-info);
+}
+
+.genesis-alert-icon {
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.genesis-alert-success .genesis-alert-icon {
+    color: var(--voyager-success);
+}
+
+.genesis-alert-danger .genesis-alert-icon {
+    color: var(--voyager-danger);
+}
+
+.genesis-alert-warning .genesis-alert-icon {
+    color: var(--voyager-warning);
+}
+
+.genesis-alert-info .genesis-alert-icon {
+    color: var(--voyager-info);
+}
+
+.genesis-alert-content {
+    flex: 1;
+}
+
+.genesis-alert-content p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.genesis-alert-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: var(--voyager-transition);
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.genesis-alert-close:hover {
+    opacity: 1;
+}
+
+.genesis-alert-dismissing {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: var(--voyager-transition);
+}
+
+.genesis-page-content {
+    background-color: white;
+    border-radius: var(--voyager-radius);
+    box-shadow: var(--voyager-card-shadow);
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid var(--voyager-border);
+}
+
+/* Dark mode additional styles */
+.dark .genesis-header {
+    background-color: #1e293b;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .genesis-page-title {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .genesis-breadcrumbs .breadcrumb-item {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.dark .genesis-breadcrumbs .breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.dark .genesis-menu-toggle {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .genesis-menu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .genesis-page-content {
+    background-color: #1e293b;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Genesis Layout Improvements */
+.app-container {
+    font-family: var(--voyager-font-family);
+}
+
+body.portal {
+    font-family: var(--voyager-font-family);
+    background-color: var(--voyager-bg);
+    color: var(--voyager-text);
+}
+
+/* Enhanced bread styling */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.breadcrumb > li + li:before {
+    content: "/\00a0";
+    color: #b0bec5;
+}
+
+/* Genesis Theme Toggle */
+.genesis-theme-toggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+}
+
+.theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid var(--voyager-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: var(--voyager-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle-light, .theme-toggle-dark {
+    position: absolute;
+    transition: var(--voyager-transition);
+}
+
+.theme-toggle-light {
+    color: #f59e0b;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.theme-toggle-dark {
+    color: #6366f1;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.theme-toggle-btn.dark-active .theme-toggle-light {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.theme-toggle-btn.dark-active .theme-toggle-dark {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dark Mode Styles */
+.dark .theme-toggle-btn {
+    background: #1e293b;
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark .genesis-card {
+    background-color: #1e293b;
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark .genesis-card-header,
+.dark .genesis-card-footer {
+    background-color: #0f172a;
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark .genesis-card-title {
+    color: rgba(255,255,255,0.9);
+}
+
+.dark .table {
+    color: rgba(255,255,255,0.8);
+}
+
+.dark .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.dark .table-bordered {
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark .form-control {
+    background-color: #1e293b;
+    border-color: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+    .genesis-stat-card {
+        padding: 15px;
+    }
+    
+    .genesis-stat-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    
+    .genesis-stat-info h4 {
+        font-size: 18px;
+    }
+    
+    .genesis-sidebar {
+        width: 250px;
+        transform: translateX(-100%);
+        z-index: 1030;
+    }
+    
+    .genesis-sidebar.show-mobile {
+        transform: translateX(0);
+        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .genesis-main-content {
+        margin-left: 0;
+    }
+    
+    .genesis-header-container {
+        padding: 0 15px;
+    }
+    
+    .genesis-content {
+        padding: 15px;
+    }
+    
+    .genesis-page-content {
+        padding: 15px;
+    }
+    
+    .genesis-theme-toggle {
+        top: 10px;
+        right: 70px;
+    }
+    
+    .genesis-login-container {
+        margin: 0 15px;
+        padding: 20px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .genesis-card-body {
+        padding: 15px;
+    }
+    
+    /* Add overlay when mobile menu is active */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1020;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--voyager-transition);
+    }
+    
+    body.sidebar-open::after {
+        opacity: 1;
+        visibility: visible;
+    }
+}

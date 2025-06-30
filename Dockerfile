@@ -29,9 +29,8 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Set initial permissions
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Configure Apache
 RUN sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/public/g' /etc/apache2/sites-available/000-default.conf
@@ -48,8 +47,12 @@ RUN { \
     echo 'max_input_time=300'; \
 } > /usr/local/etc/php/conf.d/uploads.ini
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Expose port 80
 EXPOSE 80
 
-# Start Apache directly
-CMD ["apache2-foreground"]
+# Use entrypoint script
+ENTRYPOINT ["docker-entrypoint.sh"]

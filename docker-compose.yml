@@ -11,7 +11,7 @@ services:
     tty: true
     volumes:
       - .:/var/www/html
-      - ./storage:/var/www/html/storage
+      - storage_data:/var/www/html/storage
     ports:
       - "8080:80"
     environment:
@@ -88,4 +88,5 @@ networks:
 volumes:
   db_data:
   redis_data:
+  storage_data:
 

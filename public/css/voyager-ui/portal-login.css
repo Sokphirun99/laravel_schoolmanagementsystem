@@ -1,0 +1,271 @@
+/* Portal Login Styling - Matches Voyager Admin with Genesis theme */
+:root {
+    --voyager-primary-rgb: 34, 167, 240; /* Voyager blue */
+    --voyager-primary: #22A7F0; /* Voyager blue */
+    --voyager-dark: #1989d8; /* Darker Voyager blue */
+}
+
+.login-container {
+    padding: 30px;
+}
+
+/* Style the heading */
+.portal-heading {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 25px;
+    color: #3c4858;
+    text-align: center;
+}
+
+/* Dark mode for heading */
+.dark .portal-heading {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.voyager-logo {
+    max-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.login-text {
+    font-weight: 400;
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #3c4858;
+}
+
+.form-group-default {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group-default label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 2px;
+    font-weight: 400;
+}
+
+.form-group-default .controls {
+    margin-top: 2px;
+}
+
+.form-group-default .form-control {
+    border: none;
+    padding: 0;
+    height: auto;
+    background: transparent;
+    box-shadow: none;
+}
+
+.form-group-default.focused {
+    border-color: #22A7F0; /* Voyager blue */
+    background-color: white;
+}
+
+#rememberMeGroup {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#rememberMeGroup .controls {
+    display: flex;
+    align-items: center;
+}
+
+#remember {
+    margin-right: 8px;
+}
+
+.remember-me-text {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.login-button {
+    background: #22A7F0; /* Voyager blue */
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.login-button:hover,
+.login-button:focus {
+    background: #1989d8; /* Darker Voyager blue */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.login-button:active {
+    transform: translateY(0px);
+}
+
+/* Voyager-specific spinner */
+.login-button .signingin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-button .voyager-refresh {
+    display: inline-block;
+    margin-right: 8px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.alert-red {
+    background-color: #f44336;
+    color: white;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Portal features section */
+
+/* Dark mode support */
+.dark .login-box {
+    background: #1e293b;
+    border-color: var(--voyager-primary);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.dark .login-text {
+    color: rgba(255,255,255,0.8);
+}
+
+.dark .form-group-default {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark .form-group-default label {
+    color: rgba(255,255,255,0.5);
+}
+
+.dark .form-group-default .form-control {
+    color: rgba(255,255,255,0.8);
+}
+
+.dark .form-group-default.focused {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.dark .remember-me-text {
+    color: rgba(255,255,255,0.7);
+}
+
+.dark .portal-features {
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark .feature-item {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .feature-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .feature-item i {
+    background: rgba(255, 255, 255, 0.1);
+    color: #22A7F0; /* Voyager blue */
+}
+
+/* Features specific styles for the new layout */
+.portal-features {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.features-title {
+    margin-bottom: 15px;
+}
+
+.features-title p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.feature-item i {
+    margin-right: 8px;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #22A7F0; /* Voyager blue */
+}
+
+/* Ensure the login page is responsive */
+@media (max-width: 767px) {
+    .login-container {
+        padding: 15px;
+    }
+    
+    .features-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .feature-item {
+        padding: 6px 10px;
+    }
+}

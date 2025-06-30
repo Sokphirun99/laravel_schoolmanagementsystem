@@ -1,47 +1,11 @@
-<!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="robots" content="none" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'School Management System') }} - Student & Parent Portal</title>
-    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Styles -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('voyager-assets/css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/voyager-ui/login.css') }}">
-    
-    <style>
+@extends('voyager::auth.master')
 
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background: linear-gradient(135deg, var(--voyager-sidebar), var(--voyager-dark));
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow-x: hidden;
-            animation: gradientShift 15s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+@section('content')
+<style>
+    .login-container {
+        border-top: 5px solid {{ config('voyager.primary_color', '#22A7F0') }};
+    }
+</style>
 
         body::before {
             content: '';

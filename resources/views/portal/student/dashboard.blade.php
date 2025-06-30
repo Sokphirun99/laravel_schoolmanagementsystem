@@ -1,68 +1,101 @@
 @extends('portal.layouts.app')
 
 @section('content')
-<!-- Welcome Section -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="voyager-card">
-            <div class="voyager-card-body">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h2 class="mb-2">Welcome back, {{ $student->first_name }}!</h2>
-                        <p class="text-muted mb-0">Here's what's happening in your academic journey today.</p>
+<div class="page-content">
+    <div class="analytics-sparkle"></div>
+    <div class="analytics-sparkle-2"></div>
+    
+    <div class="container-fluid">
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="voyager-card">
+                    <div class="voyager-card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h4 class="voyager-card-title mb-0">
+                            <i class="voyager-dashboard"></i> Student Dashboard
+                        </h4>
+                        <div>
+                            <span class="badge badge-primary">{{ now()->format('F d, Y') }}</span>
+                        </div>
                     </div>
-                    <div class="col-md-4 text-end">
-                        <div class="d-flex align-items-center justify-content-end">
-                            @if($student->photo)
-                                <img src="{{ Voyager::image($student->photo) }}" 
-                                     class="rounded-circle me-3" 
-                                     width="60" 
-                                     height="60"
-                                     alt="Student Photo">
-                            @else
-                                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
-                                    <span class="text-white fs-4">{{ substr($student->first_name, 0, 1) }}</span>
+                    <div class="voyager-card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="mb-2">Welcome back, {{ $student->first_name }}!</h2>
+                                <p class="text-muted mb-0">Here's what's happening in your academic journey today.</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    @if($student->photo)
+                                        <img src="{{ asset('storage/' . $student->photo) }}" 
+                                             class="rounded-circle me-3" 
+                                             width="60" 
+                                             height="60"
+                                             alt="Student Photo">
+                                    @else
+                                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                            <span class="text-white fs-4">{{ substr($student->first_name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <div class="fw-bold">{{ $student->first_name }} {{ $student->last_name }}</div>
+                                        <small class="text-muted">{{ $student->schoolClass->name ?? 'No Class Assigned' }}</small>
+                                    </div>
                                 </div>
-                            @endif
-                            <div>
-                                <div class="fw-bold">{{ $student->full_name }}</div>
-                                <small class="text-muted">{{ $student->schoolClass->name ?? 'No Class Assigned' }}</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Stats Cards -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="voyager-stats-card" style="background: linear-gradient(135deg, var(--voyager-success), #66BB6A);">
-            <div class="voyager-stats-number">{{ $recentGrades->count() }}</div>
-            <div class="voyager-stats-label">Recent Grades</div>
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-success-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-study"></i>
+                        </div>
+                        <div class="voyager-stats-number">{{ $recentGrades->count() }}</div>
+                        <div class="voyager-stats-label">Recent Grades</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-warning-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-book"></i>
+                        </div>
+                        <div class="voyager-stats-number">{{ $upcomingAssignments->count() }}</div>
+                        <div class="voyager-stats-label">Assignments Due</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-info-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-calendar"></i>
+                        </div>
+                        <div class="voyager-stats-number">{{ $events->count() }}</div>
+                        <div class="voyager-stats-label">Upcoming Events</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-purple-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-megaphone"></i>
+                        </div>
+                        <div class="voyager-stats-number">{{ $recentAnnouncements->count() }}</div>
+                        <div class="voyager-stats-label">Announcements</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="voyager-stats-card" style="background: linear-gradient(135deg, var(--voyager-warning), #FFA726);">
-            <div class="voyager-stats-number">{{ $upcomingAssignments->count() }}</div>
-            <div class="voyager-stats-label">Assignments Due</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="voyager-stats-card" style="background: linear-gradient(135deg, var(--voyager-accent), #42A5F5);">
-            <div class="voyager-stats-number">{{ $events->count() }}</div>
-            <div class="voyager-stats-label">Upcoming Events</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="voyager-stats-card" style="background: linear-gradient(135deg, #9C27B0, #BA68C8);">
-            <div class="voyager-stats-number">{{ $recentAnnouncements->count() }}</div>
-            <div class="voyager-stats-label">Announcements</div>
-        </div>
-    </div>
-</div>
 
 <!-- Main Content Grid -->
 <div class="row">
@@ -70,13 +103,15 @@
     <div class="col-lg-8">
         <!-- Recent Grades -->
         <div class="voyager-card mb-4">
-            <div class="voyager-card-header">
-                <i class="fas fa-star me-2"></i>Recent Grades
+            <div class="voyager-card-header border-bottom">
+                <h4 class="voyager-card-title mb-0">
+                    <i class="voyager-study"></i> Recent Grades
+                </h4>
             </div>
             <div class="voyager-card-body">
                 @if($recentGrades->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-voyager">
+                        <table class="table voyager-table table-hover">
                             <thead>
                                 <tr>
                                     <th>Assignment</th>
@@ -105,14 +140,14 @@
                         </table>
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('portal.grades.report') }}" class="btn btn-voyager">
-                            <i class="fas fa-chart-line me-2"></i>View All Grades
+                        <a href="{{ route('portal.grades.report') }}" class="btn btn-primary">
+                            <i class="voyager-bar-chart"></i> View All Grades
                         </a>
                     </div>
                 @else
-                    <div class="text-center py-4">
-                        <i class="fas fa-graduation-cap text-muted" style="font-size: 3rem;"></i>
-                        <h5 class="mt-3 text-muted">No Recent Grades</h5>
+                    <div class="alert alert-light text-center">
+                        <i class="voyager-study text-muted mb-2 d-block" style="font-size: 2.5rem;"></i>
+                        <p class="mb-0">No recent grades to display.</p>
                         <p class="text-muted">Your grades will appear here once assignments are graded.</p>
                     </div>
                 @endif
@@ -121,35 +156,45 @@
 
         <!-- Upcoming Assignments -->
         <div class="voyager-card mb-4">
-            <div class="voyager-card-header">
-                <i class="fas fa-tasks me-2"></i>Upcoming Assignments
+            <div class="voyager-card-header border-bottom">
+                <h4 class="voyager-card-title mb-0">
+                    <i class="voyager-book"></i> Upcoming Assignments
+                </h4>
             </div>
             <div class="voyager-card-body">
                 @if($upcomingAssignments->count() > 0)
-                    <div class="list-group list-group-flush">
+                    <div class="assignment-list">
                         @foreach($upcomingAssignments as $assignment)
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="assignment-item d-flex py-2 border-bottom">
+                            <div class="assignment-icon me-3">
+                                <span class="assignment-indicator bg-warning rounded-circle d-inline-block" style="width: 10px; height: 10px;"></span>
+                            </div>
                             <div class="flex-grow-1">
                                 <h6 class="mb-1">{{ $assignment->title }}</h6>
-                                <p class="mb-1 text-muted">{{ $assignment->description ?? 'No description' }}</p>
-                                <small class="text-muted">{{ $assignment->course->name ?? 'N/A' }}</small>
-                            </div>
-                            <div class="text-end">
-                                <span class="badge bg-warning text-dark">
-                                    Due {{ $assignment->due_date->format('M d') }}
-                                </span>
-                                <div class="mt-1">
-                                    <small class="text-muted">{{ $assignment->due_date->diffForHumans() }}</small>
+                                <p class="mb-1 small text-muted">{{ Str::limit($assignment->description, 60) ?? 'No description' }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ $assignment->course->name ?? 'N/A' }}</small>
+                                    <span class="badge bg-warning text-dark">
+                                        @if($assignment->due_date)
+                                            Due {{ $assignment->due_date }}
+                                        @else
+                                            Due Soon
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         @endforeach
                     </div>
+                    <div class="text-center mt-3">
+                        <a href="#" class="btn btn-sm btn-warning">
+                            <i class="voyager-list"></i> View All Assignments
+                        </a>
+                    </div>
                 @else
-                    <div class="text-center py-4">
-                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
-                        <h5 class="mt-3 text-muted">All Caught Up!</h5>
-                        <p class="text-muted">No upcoming assignments at the moment.</p>
+                    <div class="alert alert-light text-center">
+                        <i class="voyager-check text-success mb-2 d-block" style="font-size: 2.5rem;"></i>
+                        <p class="mb-0">All caught up! No upcoming assignments at the moment.</p>
                     </div>
                 @endif
             </div>
@@ -160,84 +205,100 @@
     <div class="col-lg-4">
         <!-- Student Information -->
         <div class="voyager-card mb-4">
-            <div class="voyager-card-header">
-                <i class="fas fa-user me-2"></i>Student Information
+            <div class="voyager-card-header border-bottom">
+                <h4 class="voyager-card-title mb-0">
+                    <i class="voyager-person"></i> Student Profile
+                </h4>
             </div>
             <div class="voyager-card-body text-center">
                 @if($student->photo)
-                    <img src="{{ Voyager::image($student->photo) }}" 
-                         class="rounded-circle mb-3 border border-3 border-primary" 
-                         width="120" 
-                         height="120"
+                    <img src="{{ asset('storage/' . $student->photo) }}" 
+                         class="rounded-circle mb-3 border border-3 border-light shadow-sm" 
+                         width="100" 
+                         height="100"
                          alt="Student Photo">
                 @else
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3 border border-3 border-white" style="width: 120px; height: 120px;">
-                        <span class="text-white" style="font-size: 48px;">{{ substr($student->first_name, 0, 1) }}</span>
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3 border border-3 border-light shadow-sm" style="width: 100px; height: 100px;">
+                        <span class="text-white" style="font-size: 40px;">{{ substr($student->first_name, 0, 1) }}</span>
                     </div>
                 @endif
-                <h4 class="mb-2">{{ $student->full_name }}</h4>
+                <h5 class="mb-2">{{ $student->first_name }} {{ $student->last_name }}</h5>
                 <div class="mb-3">
-                    <span class="badge bg-primary fs-6">{{ $student->schoolClass->name ?? 'No Class Assigned' }}</span>
+                    <span class="badge bg-primary">{{ $student->schoolClass->name ?? 'No Class Assigned' }}</span>
                 </div>
-                <div class="text-start">
-                    <div class="row mb-2">
-                        <div class="col-5"><strong>Student ID:</strong></div>
-                        <div class="col-7">{{ $student->student_id ?? $student->id }}</div>
+                <div class="student-details">
+                    <div class="student-detail-item border-bottom py-2">
+                        <div class="row">
+                            <div class="col-5 text-muted text-start">Student ID:</div>
+                            <div class="col-7 text-end fw-bold">{{ $student->admission_no ?? $student->id }}</div>
+                        </div>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-5"><strong>Email:</strong></div>
-                        <div class="col-7">{{ $student->email ?? 'N/A' }}</div>
+                    <div class="student-detail-item border-bottom py-2">
+                        <div class="row">
+                            <div class="col-5 text-muted text-start">Email:</div>
+                            <div class="col-7 text-end">{{ $student->email ?? 'N/A' }}</div>
+                        </div>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-5"><strong>Class:</strong></div>
-                        <div class="col-7">{{ $student->schoolClass->name ?? 'N/A' }}</div>
+                    <div class="student-detail-item border-bottom py-2">
+                        <div class="row">
+                            <div class="col-5 text-muted text-start">Class:</div>
+                            <div class="col-7 text-end">{{ $student->schoolClass->name ?? 'N/A' }}</div>
+                        </div>
                     </div>
                     @if($student->section)
-                    <div class="row mb-2">
-                        <div class="col-5"><strong>Section:</strong></div>
-                        <div class="col-7">{{ $student->section->name }}</div>
+                    <div class="student-detail-item border-bottom py-2">
+                        <div class="row">
+                            <div class="col-5 text-muted text-start">Section:</div>
+                            <div class="col-7 text-end">{{ $student->section->name }}</div>
+                        </div>
                     </div>
                     @endif
                 </div>
+                <a href="{{ route('portal.profile') }}" class="btn btn-sm btn-primary mt-3">
+                    <i class="voyager-edit"></i> Edit Profile
+                </a>
             </div>
         </div>
 
         <!-- Events -->
         <div class="voyager-card mb-4">
-            <div class="voyager-card-header">
-                <i class="fas fa-calendar-alt me-2"></i>Upcoming Events
+            <div class="voyager-card-header border-bottom">
+                <h4 class="voyager-card-title mb-0">
+                    <i class="voyager-calendar"></i> Upcoming Events
+                </h4>
             </div>
             <div class="voyager-card-body">
                 @if($events->count() > 0)
-                    <div class="list-group list-group-flush">
+                    <div class="event-list">
                         @foreach($events as $event)
-                        <div class="list-group-item px-0">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h6 class="mb-1">{{ $event->title }}</h6>
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar me-1"></i>{{ $event->date->format('M d, Y') }}
-                                        @if($event->location)
-                                            <br><i class="fas fa-map-marker-alt me-1"></i>{{ $event->location }}
-                                        @endif
-                                    </small>
+                        <div class="event-item mb-3">
+                            <div class="d-flex">
+                                <div class="event-date me-3">
+                                    <span class="date-badge bg-primary text-white px-2 py-1 rounded">
+                                        {{ $event->date ?? 'TBD' }}
+                                    </span>
                                 </div>
-                                <span class="badge bg-info">
-                                    {{ $event->date->diffForHumans() }}
-                                </span>
+                                <div class="event-details">
+                                    <h6 class="mb-1">{{ $event->title }}</h6>
+                                    <div class="text-muted small d-flex align-items-center mb-1">
+                                        <i class="voyager-location me-1"></i>
+                                        <span>{{ $event->location ?? 'School' }}</span>
+                                    </div>
+                                    <span class="badge bg-info">Coming up</span>
+                                </div>
                             </div>
                         </div>
                         @endforeach
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('portal.events') }}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-calendar me-1"></i>View All Events
+                        <a href="{{ route('portal.events') }}" class="btn btn-sm btn-info">
+                            <i class="voyager-calendar"></i> View Calendar
                         </a>
                     </div>
                 @else
-                    <div class="text-center py-3">
-                        <i class="fas fa-calendar-times text-muted" style="font-size: 2rem;"></i>
-                        <p class="mt-2 text-muted mb-0">No upcoming events</p>
+                    <div class="alert alert-light text-center">
+                        <i class="voyager-calendar text-muted mb-2 d-block" style="font-size: 2rem;"></i>
+                        <p class="mb-0">No upcoming events scheduled.</p>
                     </div>
                 @endif
             </div>
@@ -245,31 +306,40 @@
 
         <!-- Recent Announcements -->
         <div class="voyager-card">
-            <div class="voyager-card-header">
-                <i class="fas fa-bullhorn me-2"></i>Recent Announcements
+            <div class="voyager-card-header border-bottom">
+                <h4 class="voyager-card-title mb-0">
+                    <i class="voyager-megaphone"></i> Recent Announcements
+                </h4>
             </div>
             <div class="voyager-card-body">
                 @if($recentAnnouncements->count() > 0)
-                    <div class="list-group list-group-flush">
+                    <div class="announcement-list">
                         @foreach($recentAnnouncements as $announcement)
-                        <div class="list-group-item px-0">
-                            <h6 class="mb-1">{{ $announcement->title }}</h6>
-                            <p class="mb-1 text-muted">{{ Str::limit($announcement->content, 100) }}</p>
-                            <small class="text-muted">
-                                <i class="fas fa-clock me-1"></i>{{ $announcement->created_at->diffForHumans() }}
-                            </small>
+                        <div class="d-flex mb-3 align-items-start announcement-item">
+                            <div class="announcement-icon me-3">
+                                <span class="icon-badge bg-success text-white p-2 rounded-circle">
+                                    <i class="voyager-megaphone"></i>
+                                </span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">{{ $announcement->title }}</h6>
+                                <p class="mb-1 text-muted">{{ Str::limit($announcement->content, 100) }}</p>
+                                <small class="text-muted">
+                                    <i class="voyager-alarm-clock me-1"></i>{{ $announcement->created_at->diffForHumans() }}
+                                </small>
+                            </div>
                         </div>
                         @endforeach
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('portal.announcements.index') }}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-bullhorn me-1"></i>View All Announcements
+                        <a href="{{ route('portal.announcements.index') }}" class="btn btn-sm btn-primary">
+                            <i class="voyager-megaphone"></i> View All Announcements
                         </a>
                     </div>
                 @else
-                    <div class="text-center py-3">
-                        <i class="fas fa-bullhorn text-muted" style="font-size: 2rem;"></i>
-                        <p class="mt-2 text-muted mb-0">No recent announcements</p>
+                    <div class="alert alert-light text-center">
+                        <i class="voyager-megaphone text-muted mb-2 d-block" style="font-size: 2rem;"></i>
+                        <p class="mb-0">No recent announcements at this time.</p>
                     </div>
                 @endif
             </div>

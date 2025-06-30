@@ -20,7 +20,7 @@ class PortalLoginController extends Controller
 
     public function showLoginForm()
     {
-        return view('portal.auth.login');
+        return view('portal.auth.login2');
     }
 
     protected function guard()

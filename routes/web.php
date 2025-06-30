@@ -95,4 +95,52 @@ Route::prefix('portal')->name('portal.')->group(function () {
 });
 
 
-// This is already defined above, removing duplicate route definition
+// Role-based example routes for documentation
+Route::prefix('role-demo')->name('role-demo.')->middleware(['auth'])->group(function() {
+    // Accessible to all authenticated users
+    Route::get('/', function() {
+        return view('welcome', ['title' => 'Role Demo']);
+    })->name('index');
+    
+    // Admin-only routes
+    Route::middleware(['check.role:admin'])->group(function() {
+        Route::get('/admin-only', function() {
+            return view('welcome', ['title' => 'Admin Only Area']);
+        })->name('admin');
+    });
+    
+    // Teacher-only routes
+    Route::middleware(['check.role:teacher'])->group(function() {
+        Route::get('/teacher-only', function() {
+            return view('welcome', ['title' => 'Teacher Only Area']);
+        })->name('teacher');
+    });
+    
+    // Student-only routes
+    Route::middleware(['check.role:student'])->group(function() {
+        Route::get('/student-only', function() {
+            return view('welcome', ['title' => 'Student Only Area']);
+        })->name('student');
+    });
+    
+    // Parent-only routes
+    Route::middleware(['check.role:parent'])->group(function() {
+        Route::get('/parent-only', function() {
+            return view('welcome', ['title' => 'Parent Only Area']);
+        })->name('parent');
+    });
+    
+    // Routes for teachers OR admins
+    Route::middleware(['check.role:teacher,admin'])->group(function() {
+        Route::get('/teacher-admin', function() {
+            return view('welcome', ['title' => 'Teacher or Admin Area']);
+        })->name('teacher-admin');
+    });
+    
+    // Routes for students OR teachers
+    Route::middleware(['check.role:student,teacher'])->group(function() {
+        Route::get('/student-teacher', function() {
+            return view('welcome', ['title' => 'Student or Teacher Area']);
+        })->name('student-teacher');
+    });
+});
