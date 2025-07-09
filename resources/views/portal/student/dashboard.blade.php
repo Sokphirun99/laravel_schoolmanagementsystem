@@ -1,15 +1,20 @@
 @extends('portal.layouts.app')
 
+@section('head')
+    <link href="{{ asset('css/voyager-ui/portal-updated.css') }}" rel="stylesheet">
+@endsection
+
+@section('javascript')
+    <script src="{{ asset('js/portal-enhanced.js') }}"></script>
+@endsection
+
 @section('content')
 <div class="page-content">
-    <div class="analytics-sparkle"></div>
-    <div class="analytics-sparkle-2"></div>
-    
     <div class="container-fluid">
         <!-- Welcome Section -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="voyager-card">
+                <div class="voyager-card welcome-card">
                     <div class="voyager-card-header border-bottom d-flex justify-content-between align-items-center">
                         <h4 class="voyager-card-title mb-0">
                             <i class="voyager-dashboard"></i> Student Dashboard
@@ -21,19 +26,19 @@
                     <div class="voyager-card-body">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h2 class="mb-2">Welcome back, {{ $student->first_name }}!</h2>
+                                <h2 class="mb-2 text-primary">Welcome back, {{ $student->first_name }}!</h2>
                                 <p class="text-muted mb-0">Here's what's happening in your academic journey today.</p>
                             </div>
                             <div class="col-md-4 text-end">
                                 <div class="d-flex align-items-center justify-content-end">
                                     @if($student->photo)
                                         <img src="{{ asset('storage/' . $student->photo) }}" 
-                                             class="rounded-circle me-3" 
+                                             class="rounded-circle me-3 shadow-sm" 
                                              width="60" 
                                              height="60"
                                              alt="Student Photo">
                                     @else
-                                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 60px; height: 60px;">
                                             <span class="text-white fs-4">{{ substr($student->first_name, 0, 1) }}</span>
                                         </div>
                                     @endif
@@ -51,46 +56,46 @@
 
         <!-- Stats Cards -->
         <div class="row mb-4">
-            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-                <div class="voyager-card voyager-stats-card bg-success-gradient h-100">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="voyager-card voyager-stats-card bg-gradient-success h-100">
                     <div class="voyager-card-body p-3 text-center text-white">
                         <div class="voyager-stats-icon mb-2">
                             <i class="voyager-study"></i>
                         </div>
-                        <div class="voyager-stats-number">{{ $recentGrades->count() }}</div>
+                        <div class="voyager-stats-number display-4 fw-bold">{{ $recentGrades->count() }}</div>
                         <div class="voyager-stats-label">Recent Grades</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-                <div class="voyager-card voyager-stats-card bg-warning-gradient h-100">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="voyager-card voyager-stats-card bg-gradient-warning h-100">
                     <div class="voyager-card-body p-3 text-center text-white">
                         <div class="voyager-stats-icon mb-2">
                             <i class="voyager-book"></i>
                         </div>
-                        <div class="voyager-stats-number">{{ $upcomingAssignments->count() }}</div>
+                        <div class="voyager-stats-number display-4 fw-bold">{{ $upcomingAssignments->count() }}</div>
                         <div class="voyager-stats-label">Assignments Due</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-                <div class="voyager-card voyager-stats-card bg-info-gradient h-100">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="voyager-card voyager-stats-card bg-gradient-info h-100">
                     <div class="voyager-card-body p-3 text-center text-white">
                         <div class="voyager-stats-icon mb-2">
                             <i class="voyager-calendar"></i>
                         </div>
-                        <div class="voyager-stats-number">{{ $events->count() }}</div>
+                        <div class="voyager-stats-number display-4 fw-bold">{{ $events->count() }}</div>
                         <div class="voyager-stats-label">Upcoming Events</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-                <div class="voyager-card voyager-stats-card bg-purple-gradient h-100">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="voyager-card voyager-stats-card bg-gradient-secondary h-100">
                     <div class="voyager-card-body p-3 text-center text-white">
                         <div class="voyager-stats-icon mb-2">
                             <i class="voyager-megaphone"></i>
                         </div>
-                        <div class="voyager-stats-number">{{ $recentAnnouncements->count() }}</div>
+                        <div class="voyager-stats-number display-4 fw-bold">{{ $recentAnnouncements->count() }}</div>
                         <div class="voyager-stats-label">Announcements</div>
                     </div>
                 </div>

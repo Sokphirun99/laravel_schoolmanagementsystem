@@ -1,15 +1,20 @@
 @extends('portal.layouts.app')
 
+@section('head')
+    <link href="{{ asset('css/voyager-ui/portal-updated.css') }}" rel="stylesheet">
+@endsection
+
+@section('javascript')
+    <script src="{{ asset('js/portal-enhanced.js') }}"></script>
+@endsection
+
 @section('content')
 <div class="page-content">
-    <div class="analytics-sparkle"></div>
-    <div class="analytics-sparkle-2"></div>
-    
     <div class="container-fluid">
         <!-- Welcome Section -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="voyager-card">
+                <div class="voyager-card welcome-card">
                     <div class="voyager-card-header border-bottom d-flex justify-content-between align-items-center">
                         <h4 class="voyager-card-title mb-0">
                             <i class="voyager-dashboard"></i> Parent Dashboard
@@ -19,7 +24,7 @@
                         </div>
                     </div>
                     <div class="voyager-card-body">
-                        <h2>Welcome to the School Portal!</h2>
+                        <h2 class="text-primary">Welcome to the School Portal!</h2>
                         <p class="text-muted">Here you can monitor your children's academic progress, attendance, and communicate with teachers.</p>
                     </div>
                 </div>
