@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -19,6 +20,15 @@ class User extends \TCG\Voyager\Models\User
     const ROLE_STUDENT = 'student';
     const ROLE_PARENT = 'parent';
     const ROLE_STAFF = 'staff';
+    
+    // Role hierarchy levels for permission checking
+    const ROLE_LEVELS = [
+        'admin' => 100,
+        'staff' => 80,
+        'teacher' => 60,
+        'parent' => 40,
+        'student' => 20,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -34,7 +44,9 @@ class User extends \TCG\Voyager\Models\User
         'status',
         'phone',
         'last_login_at',
-        'last_login_ip'
+        'last_login_ip',
+        'email_verified_at',
+        'remember_token'
     ];
 
     /**
@@ -141,6 +153,38 @@ class User extends \TCG\Voyager\Models\User
     public function isStaff()
     {
         return $this->role === self::ROLE_STAFF;
+    }
+    
+    /**
+     * Check if user has permission based on role hierarchy
+     */
+    public function hasRoleLevel($requiredLevel)
+    {
+        $userLevel = self::ROLE_LEVELS[$this->role] ?? 0;
+        return $userLevel >= $requiredLevel;
+    }
+    
+    /**
+     * Check if user can manage another user based on role hierarchy
+     */
+    public function canManage(User $user)
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+        
+        $thisLevel = self::ROLE_LEVELS[$this->role] ?? 0;
+        $targetLevel = self::ROLE_LEVELS[$user->role] ?? 0;
+        
+        return $thisLevel > $targetLevel;
+    }
+    
+    /**
+     * Get user's role priority/level
+     */
+    public function getRoleLevel()
+    {
+        return self::ROLE_LEVELS[$this->role] ?? 0;
     }
 
     /**
