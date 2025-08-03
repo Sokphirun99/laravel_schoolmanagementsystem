@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\Role;
+use Illuminate\Support\Facades\Cache;
+
 trait UserRolesTrait
 {
     /**
@@ -11,7 +14,9 @@ trait UserRolesTrait
      */
     public static function availableRoles()
     {
-        return [
+        return Cache::remember('available_roles', 3600, function () {
+            return Role::pluck('display_name', 'name')->toArray();
+        }) ?: [
             'admin' => 'Administrator',
             'teacher' => 'Teacher',
             'student' => 'Student',
@@ -43,6 +48,29 @@ trait UserRolesTrait
     }
     
     /**
+     * Check if user has any of the specified roles
+     *
+     * @param array $roles
+     * @return bool
+     */
+    public function hasAnyRole(array $roles)
+    {
+        return $this->hasRole($roles);
+    }
+    
+    /**
+     * Check if user has all of the specified roles (for multi-role systems)
+     *
+     * @param array $roles
+     * @return bool
+     */
+    public function hasAllRoles(array $roles)
+    {
+        // For single role system, user can only have all roles if there's only one role to check
+        return count($roles) === 1 && $this->hasRole($roles[0]);
+    }
+    
+    /**
      * Check if user has permission to access
      * 
      * @param string $permission
@@ -50,15 +78,29 @@ trait UserRolesTrait
      */
     public function hasPermission($permission)
     {
-        // For simplicity, we'll assume admins have all permissions
+        // Admin has all permissions
         if ($this->isAdmin()) {
             return true;
         }
         
-        // Implement more complex permission logic here as needed
-        // This could check against a permissions table or config
+        // Define role-based permissions
+        $rolePermissions = [
+            'staff' => [
+                'manage_users', 'view_reports', 'manage_students', 'manage_teachers', 'manage_parents'
+            ],
+            'teacher' => [
+                'view_students', 'manage_classes', 'view_grades', 'update_grades', 'view_attendance', 'mark_attendance'
+            ],
+            'parent' => [
+                'view_child_grades', 'view_child_attendance', 'view_child_teachers', 'communicate_teachers'
+            ],
+            'student' => [
+                'view_own_grades', 'view_own_attendance', 'view_schedule', 'view_assignments'
+            ]
+        ];
         
-        return false;
+        $userPermissions = $rolePermissions[$this->role] ?? [];
+        return in_array($permission, $userPermissions);
     }
     
     /**
@@ -68,18 +110,33 @@ trait UserRolesTrait
      */
     public function getDashboardRoute()
     {
-        switch ($this->role) {
-            case 'admin':
-                return 'admin.dashboard';
-            case 'teacher':
-                return 'teacher.dashboard';
-            case 'student':
-                return 'student.dashboard';
-            case 'parent':
-                return 'parent.dashboard';
-            default:
-                return 'home';
-        }
+        $routes = [
+            'admin' => 'admin.dashboard',
+            'staff' => 'staff.dashboard',
+            'teacher' => 'teacher.dashboard',
+            'student' => 'student.dashboard',
+            'parent' => 'parent.dashboard',
+        ];
+        
+        return $routes[$this->role] ?? 'home';
+    }
+    
+    /**
+     * Get the appropriate home URL for the user based on role
+     *
+     * @return string
+     */
+    public function getHomeUrl()
+    {
+        $homeUrls = [
+            'admin' => '/admin',
+            'staff' => '/staff',
+            'teacher' => '/teacher',
+            'student' => '/student',
+            'parent' => '/parent',
+        ];
+        
+        return $homeUrls[$this->role] ?? '/';
     }
     
     /**

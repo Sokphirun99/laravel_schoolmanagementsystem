@@ -15,7 +15,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('voyager-assets/css/app.css') }}" rel="stylesheet">
     
+    <link rel="stylesheet" href="{{ asset('voyager-assets/css/app.css') }}">
     <style>
+        /* Voyager CSS Variables to match admin UI */
         :root {
             --voyager-primary: #22A7F0;
             --voyager-secondary: #2B3D51;
@@ -32,18 +34,20 @@
             --voyager-danger: #F44336;
         }
 
+        /* Add on top of Voyager styles for the welcome page specific styling */
         body {
             font-family: 'Open Sans', sans-serif;
             background-color: var(--voyager-bg);
             color: var(--voyager-text);
-            overflow-x: hidden;
         }
 
+        /* Navbar Voyager Style */
         .voyager-navbar {
             background: var(--voyager-sidebar);
             border-bottom: 3px solid var(--voyager-primary);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             padding: 0.75rem 0;
+            min-height: 60px;
         }
 
         .voyager-navbar .navbar-brand {
@@ -64,62 +68,57 @@
             padding: 0.5rem 1rem !important;
         }
 
-        .voyager-navbar .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--voyager-primary);
-            transition: width 0.3s ease;
-        }
-
         .voyager-navbar .nav-link:hover, 
         .voyager-navbar .nav-link.active {
             color: white !important;
         }
 
-        .voyager-navbar .nav-link:hover::after,
-        .voyager-navbar .nav-link.active::after {
-            width: 100%;
+        /* Voyager Button Styles */
+        .btn-voyager {
+            background-color: var(--voyager-primary);
+            border: 1px solid var(--voyager-primary);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            text-decoration: none;
         }
 
+        .btn-voyager:hover {
+            background-color: #1e96d9;
+            border-color: #1e96d9;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-voyager-outline {
+            background: transparent;
+            border: 1px solid var(--voyager-primary);
+            color: var(--voyager-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .btn-voyager-outline:hover {
+            background: var(--voyager-primary);
+            border-color: var(--voyager-primary);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Hero Section */
         .hero-section {
             background: linear-gradient(135deg, var(--voyager-sidebar), var(--voyager-dark));
             padding: 4rem 0 6rem;
             position: relative;
             overflow: hidden;
             color: white;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322A7F0' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .school-logo {
-            max-width: 120px;
-            margin-bottom: 1.5rem;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
         }
 
         .hero-title {
@@ -150,36 +149,42 @@
             backdrop-filter: blur(10px);
         }
 
-        .btn-voyager {
-            background-color: var(--voyager-primary);
-            border: none;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 0.75rem 1.5rem;
+        /* Cards */
+        .card-voyager {
+            background: white;
+            border: 1px solid var(--voyager-border);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
             transition: all 0.3s ease;
-            border-radius: 4px;
-            box-shadow: 0 4px 6px rgba(34, 167, 240, 0.2);
+            height: 100%;
         }
 
-        .btn-voyager:hover {
-            background-color: #1e96d9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(34, 167, 240, 0.3);
-            color: white;
+        .card-voyager:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--voyager-primary);
         }
 
-        .btn-voyager-outline {
-            background: transparent;
-            border: 2px solid var(--voyager-primary);
+        .card-voyager-body {
+            padding: 25px;
+            color: #76838f;
+        }
+
+        .features-icon {
+            font-size: 2.5rem;
             color: var(--voyager-primary);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
         }
 
-        .btn-voyager-outline:hover {
-            background: rgba(34, 167, 240, 0.1);
-            color: var(--voyager-primary);
+        .card-voyager:hover .features-icon {
+            color: var(--voyager-accent);
+            transform: scale(1.1);
         }
 
+        /* Section Titles */
         .section-title {
             position: relative;
             display: inline-block;
@@ -201,52 +206,7 @@
             background: var(--voyager-primary);
         }
 
-        .card-voyager {
-            background: white;
-            border: 1px solid var(--voyager-border);
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-            height: 100%;
-            position: relative;
-        }
-
-        .card-voyager:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            border-color: var(--voyager-primary);
-        }
-
-        .card-voyager-header {
-            background: var(--voyager-primary);
-            color: white;
-            font-weight: bold;
-            border: none;
-            padding: 15px 20px;
-            font-size: 1.1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-voyager-body {
-            padding: 25px;
-            color: #76838f;
-        }
-
-        .features-icon {
-            font-size: 2.5rem;
-            color: var(--voyager-primary);
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .card-voyager:hover .features-icon {
-            color: var(--voyager-accent);
-            transform: scale(1.1);
-        }
-
+        /* Stats Cards */
         .stats-card {
             background: white;
             border-radius: 8px;
@@ -275,6 +235,7 @@
             font-weight: 600;
         }
 
+        /* Module Grid */
         .module-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -303,6 +264,7 @@
             margin-bottom: 1rem;
         }
 
+        /* CTA Section */
         .cta-section {
             background: linear-gradient(135deg, var(--voyager-sidebar), var(--voyager-dark));
             padding: 5rem 0;
@@ -312,55 +274,19 @@
             position: relative;
         }
 
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322A7F0' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: 1;
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: 2;
-        }
-
         .cta-title {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
         }
 
+        /* Footer */
         .voyager-footer {
             background: var(--voyager-sidebar);
             padding: 4rem 0 2rem;
             color: white;
             position: relative;
             overflow: hidden;
-        }
-
-        .voyager-footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322A7F0' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: 1;
-        }
-
-        .footer-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .footer-logo {
-            max-width: 150px;
-            margin-bottom: 1.5rem;
         }
 
         .footer-title {
@@ -398,6 +324,7 @@
             color: white;
             margin-right: 0.75rem;
             transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .social-icons a:hover {
@@ -413,6 +340,7 @@
             font-size: 0.9rem;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
@@ -425,10 +353,46 @@
             .section-title {
                 font-size: 1.5rem;
             }
+            
+            .navbar-nav {
+                background: var(--voyager-sidebar);
+                border-radius: 8px;
+                padding: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .hero-section {
+                padding: 2rem 0 3rem;
+            }
+            
+            .feature-badge {
+                display: block;
+                margin: 0.5rem 0;
+            }
+            
+            .card-voyager-body {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+            
+            .features-icon {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark voyager-navbar">
         <div class="container">
@@ -470,11 +434,12 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section">
+    <main id="main-content">
+    <section class="hero-section" aria-labelledby="hero-title">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 hero-content">
-                    <h1 class="hero-title">Transform Education with <span style="color: var(--voyager-primary);">Voyager</span></h1>
+                    <h1 id="hero-title" class="hero-title">Transform Education with <span style="color: var(--voyager-primary);">Voyager</span></h1>
                     <p class="hero-subtitle">A comprehensive school management solution built with Laravel and Voyager Admin</p>
                     
                     <div class="mb-4">
@@ -485,27 +450,27 @@
                     </div>
                     
                     <div class="d-flex flex-wrap gap-3">
-                        <a href="{{ url('/admin/login') }}" class="btn btn-voyager">
-                            <i class="fas fa-tachometer-alt me-2"></i> Admin Panel
+                        <a href="{{ url('/admin/login') }}" class="btn btn-voyager" aria-label="Access Admin Panel">
+                            <i class="fas fa-tachometer-alt me-2" aria-hidden="true"></i> Admin Panel
                         </a>
-                        <a href="{{ route('portal.login') }}" class="btn btn-voyager-outline">
-                            <i class="fas fa-user-graduate me-2"></i> User Portal
+                        <a href="{{ route('portal.login') }}" class="btn btn-voyager-outline" aria-label="Access Student and Parent Portal">
+                            <i class="fas fa-user-graduate me-2" aria-hidden="true"></i> User Portal
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-6 d-none d-lg-block text-center">
-                    <img src="{{ asset('images/school-logo.png') }}" alt="School Management" class="img-fluid rounded shadow" style="max-width: 90%; border: 5px solid rgba(255,255,255,0.1);">
+                    <img src="{{ asset('images/school-logo.png') }}" alt="School Management System Dashboard Preview" class="img-fluid rounded shadow school-logo" style="max-width: 90%; border: 5px solid rgba(255,255,255,0.1);" loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-5">
+    <section id="features" class="py-5" aria-labelledby="features-title">
         <div class="container">
             <div class="row mb-4">
                 <div class="col-lg-6">
-                    <h2 class="section-title">Key Features</h2>
+                    <h2 id="features-title" class="section-title">Key Features</h2>
                     <p class="text-muted">Our school management system offers a comprehensive suite of tools designed to streamline administrative tasks and enhance educational outcomes.</p>
                 </div>
             </div>
@@ -733,7 +698,13 @@
             </div>
         </div>
     </section>
-
+    </main>
+    
+    <!-- Toast notification container -->
+    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 11;">
+        <!-- Toasts will be inserted here dynamically -->
+    </div>
+</body>
     <!-- Footer -->
     <footer class="voyager-footer">
         <div class="container footer-content">
@@ -789,23 +760,71 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Global utilities
+        const Utils = {
+            showToast: function(message, type = 'success') {
+                const toastHtml = `
+                    <div class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                                ${message}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                `;
+                
+                const container = document.getElementById('toast-container');
+                container.insertAdjacentHTML('beforeend', toastHtml);
+                
+                const toast = container.lastElementChild;
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                
+                toast.addEventListener('hidden.bs.toast', () => {
+                    toast.remove();
+                });
+            },
+            
+            addLoadingState: function(element) {
+                element.classList.add('loading');
+                element.style.pointerEvents = 'none';
+            },
+            
+            removeLoadingState: function(element) {
+                element.classList.remove('loading');
+                element.style.pointerEvents = 'auto';
+            }
+        };
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Smooth scrolling for navigation links
+            // Enhanced smooth scrolling with focus management
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        
+                        // Focus management for accessibility
+                        target.focus();
+                        target.setAttribute('tabindex', '-1');
+                    }
                 });
             });
             
-            // Add active class to navbar items on scroll
-            window.addEventListener('scroll', function() {
-                let scrollPosition = window.scrollY;
+            // Enhanced navbar scroll behavior with performance optimization
+            let ticking = false;
+            
+            function updateActiveNav() {
+                const scrollPosition = window.scrollY;
                 
-                document.querySelectorAll('section').forEach(section => {
+                document.querySelectorAll('section[id]').forEach(section => {
                     const sectionTop = section.offsetTop - 100;
                     const sectionHeight = section.offsetHeight;
                     const sectionId = section.getAttribute('id');
@@ -819,6 +838,64 @@
                         });
                     }
                 });
+                ticking = false;
+            }
+            
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    requestAnimationFrame(updateActiveNav);
+                    ticking = true;
+                }
+            });
+            
+            // Enhanced button interactions
+            document.querySelectorAll('.btn-voyager, .btn-voyager-outline').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.href && this.href.includes('login')) {
+                        Utils.addLoadingState(this);
+                        
+                        // Remove loading state after 5 seconds as fallback
+                        setTimeout(() => {
+                            Utils.removeLoadingState(this);
+                        }, 5000);
+                    }
+                });
+            });
+            
+            // Keyboard navigation for cards
+            document.querySelectorAll('.card-voyager').forEach(card => {
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        const link = this.querySelector('a');
+                        if (link) {
+                            link.click();
+                        }
+                    }
+                });
+            });
+            
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for fade-in animation
+            document.querySelectorAll('.card-voyager, .stats-card, .module-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
             });
         });
     </script>

@@ -286,7 +286,7 @@ class TestUsersSeeder extends Seeder
                             'first_name' => 'Test',
                             'last_name' => 'Student',
                             'email' => $email,
-                            'gender' => 'Male',
+                            'gender' => 'male',
                             'date_of_birth' => Carbon::now()->subYears(15),
                             'class_id' => 1, // Default values, create these if needed
                             'section_id' => 1,
@@ -317,7 +317,7 @@ class TestUsersSeeder extends Seeder
                             'first_name' => 'Test',
                             'last_name' => 'Parent',
                             'email' => $email,
-                            'gender' => 'Male',
+                            'gender' => 'male',
                             'occupation' => 'Engineer',
                             'address' => '789 Parent Road',
                             'phone' => '555-9012',

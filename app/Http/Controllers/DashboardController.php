@@ -26,8 +26,13 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
+        // Record user login
+        $user->recordLogin();
+        
         if ($user->isAdmin()) {
             return $this->adminDashboard();
+        } elseif ($user->isStaff()) {
+            return $this->staffDashboard();
         } elseif ($user->isTeacher()) {
             return $this->teacherDashboard();
         } elseif ($user->isStudent()) {
@@ -49,13 +54,42 @@ class DashboardController extends Controller
             'total_students' => Student::count(),
             'total_teachers' => Teacher::count(),
             'total_parents' => ParentModel::count(),
+            'total_users' => User::count(),
             'total_classes' => SchoolClass::count(),
             'total_subjects' => Subject::count(),
+            'active_users' => User::active()->count(),
+            'inactive_users' => User::inactive()->count(),
+            'users_by_role' => [
+                'admin' => User::byRole(User::ROLE_ADMIN)->count(),
+                'staff' => User::byRole(User::ROLE_STAFF)->count(),
+                'teacher' => User::byRole(User::ROLE_TEACHER)->count(),
+                'student' => User::byRole(User::ROLE_STUDENT)->count(),
+                'parent' => User::byRole(User::ROLE_PARENT)->count(),
+            ],
             'recent_notices' => Notice::orderBy('created_at', 'desc')->take(5)->get(),
             'recent_users' => User::orderBy('created_at', 'desc')->take(5)->get(),
         ];
         
         return view('dashboard.admin', $data);
+    }
+    
+    /**
+     * Show staff dashboard
+     */
+    protected function staffDashboard()
+    {
+        $data = [
+            'total_students' => Student::count(),
+            'total_teachers' => Teacher::count(),
+            'total_parents' => ParentModel::count(),
+            'total_classes' => SchoolClass::count(),
+            'total_subjects' => Subject::count(),
+            'active_users' => User::active()->count(),
+            'recent_notices' => Notice::orderBy('created_at', 'desc')->take(5)->get(),
+            'recent_users' => User::orderBy('created_at', 'desc')->take(10)->get(),
+        ];
+        
+        return view('dashboard.staff', $data);
     }
     
     /**
