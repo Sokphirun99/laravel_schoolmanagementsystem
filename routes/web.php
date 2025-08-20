@@ -1,14 +1,57 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GradesController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use TCG\Voyager\Facades\Voyager;
 
+// Controllers
+use App\Http\Controllers\GradesController;
+use App\Http\Controllers\Auth\PortalLoginController;
+use App\Http\Controllers\Portal\{
+    DashboardController,
+    GradeController,
+    AttendanceController,
+    FeeController,
+    AnnouncementController,
+    CommunicationController
+};
+
+// Welcome page
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Lightweight health check (useful for uptime monitors and local smoke tests)
+Route::get('/health', function () {
+    $status = [
+        'app' => 'ok',
+        'php' => PHP_VERSION,
+        'laravel' => app()->version(),
+    ];
 
+    // Optional DB check
+    try {
+        DB::select('select 1');
+        $status['db'] = 'ok';
+    } catch (\Throwable $e) {
+        $status['db'] = 'error';
+        $status['db_error'] = $e->getMessage();
+    }
+
+    // Optional cache check
+    try {
+        Cache::put('health_check', 'ok', 5);
+        $status['cache'] = Cache::get('health_check') === 'ok' ? 'ok' : 'error';
+    } catch (\Throwable $e) {
+        $status['cache'] = 'error';
+        $status['cache_error'] = $e->getMessage();
+    }
+
+    return response()->json($status);
+})->name('health');
+
+// Admin Routes
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     
@@ -29,14 +72,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/grades/student/{student}/report', [GradesController::class, 'studentOverallReport'])->name('grades.student.overall.report');
     });
 });
-
-use App\Http\Controllers\Auth\PortalLoginController;
-use App\Http\Controllers\Portal\DashboardController;
-use App\Http\Controllers\Portal\GradeController;
-use App\Http\Controllers\Portal\CommunicationController;
-use App\Http\Controllers\Portal\AttendanceController;
-use App\Http\Controllers\Portal\AnnouncementController;
-use App\Http\Controllers\Portal\FeeController;
 
 // Portal Routes
 Route::prefix('portal')->name('portal.')->group(function () {
@@ -74,7 +109,7 @@ Route::prefix('portal')->name('portal.')->group(function () {
         Route::get('fees/{fee}/pay', [FeeController::class, 'showPaymentForm'])->name('fees.pay');
         Route::post('fees/{fee}/process', [FeeController::class, 'processPayment'])->name('fees.process');
         
-        // Profile routes (placeholders for future implementation)
+        // Profile routes
         Route::get('profile', function() {
             return view('portal.profile');
         })->name('profile');
@@ -93,7 +128,6 @@ Route::prefix('portal')->name('portal.')->group(function () {
         })->name('events');
     });
 });
-
 
 // Role-based example routes for documentation
 Route::prefix('role-demo')->name('role-demo.')->middleware(['auth'])->group(function() {

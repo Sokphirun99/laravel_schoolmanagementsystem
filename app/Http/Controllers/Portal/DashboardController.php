@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Collection;
-use App\Models\Student;
+use App\Models\Announcement;
 use App\Models\Assignment;
 use App\Models\Event;
-use App\Models\Announcement;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -20,58 +18,13 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $user = Auth::guard('portal')->user();
-        $title = ucfirst($user->user_type) . ' Dashboard';
-        $icon = 'voyager-dashboard';
+        $dashboardData = $this->prepareDashboardData($user);
         
-        if ($user->user_type === 'parent') {
-            $students = $user->parent ? $user->parent->students()->with('schoolClass')->get() : collect();
-            $recentAnnouncements = Announcement::latest()->take(3)->get();
-            return view('portal.parent.dashboard', compact('students', 'recentAnnouncements', 'title', 'icon'));
-        }
+        $viewPath = $user->user_type === 'parent' ? 'portal.parent.dashboard' : 'portal.student.dashboard';
         
-        // Student dashboard
-        $student = $user->student;
-        
-        // Handle case where student relationship doesn't exist
-        if (!$student) {
-            $student = (object) [
-                'first_name' => $user->name,
-                'last_name' => '',
-                'photo' => null,
-                'schoolClass' => null
-            ];
-            $recentGrades = collect();
-            $upcomingAssignments = collect();
-            $events = collect();
-            $recentAnnouncements = collect();
-        } else {
-            // Get student data
-            $recentGrades = collect(); // Initialize as empty collection for now
-            if (method_exists($student, 'grades')) {
-                $recentGrades = $student->grades()
-                    ->with('assignment')
-                    ->orderBy('created_at', 'desc')
-                    ->take(5)
-                    ->get();
-            }
-                
-            // For now, get all upcoming assignments (we can filter by student's enrolled courses later)
-            $upcomingAssignments = Assignment::where('due_date', '>', now())
-                ->orderBy('due_date')
-                ->take(5)
-                ->get();
-                
-            $events = Event::where('date', '>=', now()->format('Y-m-d'))
-                ->orderBy('date')
-                ->take(5)
-                ->get();
-                
-            $recentAnnouncements = Announcement::latest()->take(3)->get();
-        }
-        
-        return view('portal.student.dashboard', compact('student', 'recentGrades', 'upcomingAssignments', 'events', 'recentAnnouncements', 'title', 'icon'));
+        return view($viewPath, $dashboardData);
     }
-    
+
     public function students()
     {
         $user = Auth::guard('portal')->user();
@@ -82,5 +35,89 @@ class DashboardController extends Controller
         
         $students = $user->parent->students()->with(['schoolClass', 'section'])->get();
         return view('portal.parent.students', compact('students'));
+    }
+
+    private function prepareDashboardData($user): array
+    {
+        $baseData = [
+            'title' => ucfirst($user->user_type) . ' Dashboard',
+            'icon' => 'voyager-dashboard'
+        ];
+
+        if ($user->user_type === 'parent') {
+            return array_merge($baseData, $this->getParentDashboardData($user));
+        }
+
+        return array_merge($baseData, $this->getStudentDashboardData($user));
+    }
+
+    private function getParentDashboardData($user): array
+    {
+        return [
+            'students' => $user->parent?->students()->with('schoolClass')->get() ?? collect(),
+            'recentAnnouncements' => Announcement::latest()->take(3)->get()
+        ];
+    }
+
+    private function getStudentDashboardData($user): array
+    {
+        $student = $user->student ?? $this->createFallbackStudent($user);
+        
+        if (!$user->student) {
+            return [
+                'student' => $student,
+                'recentGrades' => collect(),
+                'upcomingAssignments' => collect(),
+                'events' => collect(),
+                'recentAnnouncements' => collect()
+            ];
+        }
+
+        return [
+            'student' => $student,
+            'recentGrades' => $this->getRecentGrades($student),
+            'upcomingAssignments' => $this->getUpcomingAssignments(),
+            'events' => $this->getUpcomingEvents(),
+            'recentAnnouncements' => Announcement::latest()->take(3)->get()
+        ];
+    }
+
+    private function createFallbackStudent($user): object
+    {
+        return (object) [
+            'first_name' => $user->name,
+            'last_name' => '',
+            'photo' => null,
+            'schoolClass' => null
+        ];
+    }
+
+    private function getRecentGrades($student)
+    {
+        if (!method_exists($student, 'grades')) {
+            return collect();
+        }
+
+        return $student->grades()
+            ->with('assignment')
+            ->latest()
+            ->take(5)
+            ->get();
+    }
+
+    private function getUpcomingAssignments()
+    {
+        return Assignment::where('due_date', '>', now())
+            ->orderBy('due_date')
+            ->take(5)
+            ->get();
+    }
+
+    private function getUpcomingEvents()
+    {
+        return Event::whereDate('date', '>=', now())
+            ->orderBy('date')
+            ->take(5)
+            ->get();
     }
 }

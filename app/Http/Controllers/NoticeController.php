@@ -20,12 +20,45 @@ class NoticeController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $query = $this->buildNoticeQuery($user, $request);
+        
+        $notices = $query->orderBy('created_at', 'desc')->paginate(10);
+        $classes = SchoolClass::all();
+        
+        return view('notices.index', compact('notices', 'classes'));
+    }
+
+    /**
+     * Build notice query based on user role and filters
+     */
+    private function buildNoticeQuery($user, Request $request)
+    {
         $query = Notice::query();
         
-        // Filter by audience based on user role
+        // Apply role-based filters
+        $this->applyRoleBasedFilters($query, $user);
+        
+        // Apply admin/teacher specific filters
+        if ($user->isAdmin() || $user->isTeacher()) {
+            $this->applyAdminTeacherFilters($query, $request);
+        }
+        
+        // Show only active notices unless admin specifically requests all
+        if (!$request->has('show_all') || !$user->isAdmin()) {
+            $query->active();
+        }
+        
+        return $query;
+    }
+
+    /**
+     * Apply role-based filters to query
+     */
+    private function applyRoleBasedFilters($query, $user): void
+    {
         if ($user->isStudent()) {
             $query->forAudience('student');
-            if ($user->student && $user->student->class_id) {
+            if ($user->student?->class_id) {
                 $query->byClass($user->student->class_id);
             }
         } elseif ($user->isTeacher()) {
@@ -33,27 +66,20 @@ class NoticeController extends Controller
         } elseif ($user->isParent()) {
             $query->forAudience('parent');
         }
-        
-        // Allow admins and teachers to filter notices
-        if ($user->isAdmin() || $user->isTeacher()) {
-            if ($request->has('audience')) {
-                $query->where('target_audience', $request->audience);
-            }
-            
-            if ($request->has('class_id') && $request->class_id > 0) {
-                $query->where('class_id', $request->class_id);
-            }
+    }
+
+    /**
+     * Apply admin/teacher specific filters
+     */
+    private function applyAdminTeacherFilters($query, Request $request): void
+    {
+        if ($request->has('audience')) {
+            $query->where('target_audience', $request->audience);
         }
         
-        // Always filter for active notices unless explicitly showing all
-        if (!$request->has('show_all') || !$user->isAdmin()) {
-            $query->active();
+        if ($request->has('class_id') && $request->class_id > 0) {
+            $query->where('class_id', $request->class_id);
         }
-        
-        $notices = $query->orderBy('created_at', 'desc')->paginate(10);
-        $classes = SchoolClass::all();
-        
-        return view('notices.index', compact('notices', 'classes'));
     }
     
     /**
@@ -61,13 +87,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        // Only admins and teachers can create notices
-        $user = Auth::user();
-        
-        if (!$user->isAdmin() && !$user->isTeacher()) {
-            return redirect()->route('notices.index')
-                ->with('error', 'You do not have permission to create notices.');
-        }
+        $this->ensureCanCreateNotice();
         
         $classes = SchoolClass::all();
         return view('notices.create', compact('classes'));
@@ -78,15 +98,38 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        // Only admins and teachers can create notices
+        $user = Auth::user();
+        $this->ensureCanCreateNotice();
+        
+        $validated = $this->validateNoticeData($request);
+        $validated['created_by'] = $user->id;
+        
+        $this->validateTeacherClassAccess($user, $validated);
+        
+        $notice = Notice::create($validated);
+        
+        return redirect()->route('notices.show', $notice)
+            ->with('success', 'Notice created successfully.');
+    }
+
+    /**
+     * Ensure user can create notices
+     */
+    private function ensureCanCreateNotice(): void
+    {
         $user = Auth::user();
         
         if (!$user->isAdmin() && !$user->isTeacher()) {
-            return redirect()->route('notices.index')
-                ->with('error', 'You do not have permission to create notices.');
+            abort(403, 'You do not have permission to create notices.');
         }
-        
-        $validated = $request->validate([
+    }
+
+    /**
+     * Validate notice data
+     */
+    private function validateNoticeData(Request $request): array
+    {
+        return $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'required|string',
             'notice_type' => 'required|string|in:general,exam,event,holiday,other',
@@ -96,28 +139,22 @@ class NoticeController extends Controller
             'class_id' => 'nullable|integer|exists:school_classes,id',
             'status' => 'boolean',
         ]);
-        
-        // Set the creator of the notice
-        $validated['created_by'] = $user->id;
-        
-        // If teacher and not admin, validate class access
+    }
+
+    /**
+     * Validate teacher access to class
+     */
+    private function validateTeacherClassAccess($user, array $validated): void
+    {
         if ($user->isTeacher() && !$user->isAdmin() && isset($validated['class_id'])) {
-            // Check if teacher teaches this class
             $hasAccess = $user->teacher->subjects()
                 ->where('class_id', $validated['class_id'])
                 ->exists();
                 
             if (!$hasAccess) {
-                return redirect()->route('notices.create')
-                    ->withInput()
-                    ->with('error', 'You do not have permission to create notices for this class.');
+                abort(403, 'You do not have permission to create notices for this class.');
             }
         }
-        
-        $notice = Notice::create($validated);
-        
-        return redirect()->route('notices.show', $notice)
-            ->with('success', 'Notice created successfully.');
     }
     
     /**
@@ -127,10 +164,7 @@ class NoticeController extends Controller
     {
         $user = Auth::user();
         
-        // Check if user has access to this notice
-        $hasAccess = $this->userCanAccessNotice($user, $notice);
-        
-        if (!$hasAccess) {
+        if (!$this->userCanAccessNotice($user, $notice)) {
             return redirect()->route('notices.index')
                 ->with('error', 'You do not have permission to view this notice.');
         }
@@ -143,13 +177,7 @@ class NoticeController extends Controller
      */
     public function edit(Notice $notice)
     {
-        $user = Auth::user();
-        
-        // Only creator or admins can edit notices
-        if ($notice->created_by !== $user->id && !$user->isAdmin()) {
-            return redirect()->route('notices.index')
-                ->with('error', 'You do not have permission to edit this notice.');
-        }
+        $this->ensureCanEditNotice($notice);
         
         $classes = SchoolClass::all();
         return view('notices.edit', compact('notice', 'classes'));
@@ -160,24 +188,9 @@ class NoticeController extends Controller
      */
     public function update(Request $request, Notice $notice)
     {
-        $user = Auth::user();
+        $this->ensureCanEditNotice($notice);
         
-        // Only creator or admins can update notices
-        if ($notice->created_by !== $user->id && !$user->isAdmin()) {
-            return redirect()->route('notices.index')
-                ->with('error', 'You do not have permission to update this notice.');
-        }
-        
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'message' => 'required|string',
-            'notice_type' => 'required|string|in:general,exam,event,holiday,other',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'target_audience' => 'required|string|in:all,students,teachers,parents',
-            'class_id' => 'nullable|integer|exists:school_classes,id',
-            'status' => 'boolean',
-        ]);
+        $validated = $this->validateNoticeData($request);
         
         $notice->update($validated);
         
@@ -190,18 +203,24 @@ class NoticeController extends Controller
      */
     public function destroy(Notice $notice)
     {
-        $user = Auth::user();
-        
-        // Only creator or admins can delete notices
-        if ($notice->created_by !== $user->id && !$user->isAdmin()) {
-            return redirect()->route('notices.index')
-                ->with('error', 'You do not have permission to delete this notice.');
-        }
+        $this->ensureCanEditNotice($notice);
         
         $notice->delete();
         
         return redirect()->route('notices.index')
             ->with('success', 'Notice deleted successfully.');
+    }
+
+    /**
+     * Ensure user can edit the notice
+     */
+    private function ensureCanEditNotice(Notice $notice): void
+    {
+        $user = Auth::user();
+        
+        if ($notice->created_by !== $user->id && !$user->isAdmin()) {
+            abort(403, 'You do not have permission to modify this notice.');
+        }
     }
     
     /**

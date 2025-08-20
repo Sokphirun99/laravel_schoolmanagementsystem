@@ -10,7 +10,7 @@
             <span class="badge badge-primary">{{ now()->format('F d, Y') }}</span>
         </div>
     </div>
-@stop
+@endsection
 
 @section('content')
 <div class="page-content browse container-fluid">

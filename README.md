@@ -80,6 +80,64 @@ docker compose exec app chmod -R 775 storage bootstrap/cache
 For detailed documentation, see:
 - [Migration Fix](MIGRATION-FIX.md)
 - [Role System](README-ROLE-SYSTEM.md)
+
+## 🖥️ Run with MAMP (no Docker)
+
+If you prefer MAMP on macOS, use these steps (adjust the PHP path to your MAMP version, e.g. php8.1.12):
+
+```bash
+# 1) Choose MAMP PHP (pick the version you have installed)
+MAMP_PHP=/Applications/MAMP/bin/php/php8.1.12/bin/php
+
+# 2) Configure environment
+cp .env.example .env
+# Then edit .env with these settings (default MAMP MySQL):
+# DB_CONNECTION=mysql
+# DB_HOST=127.0.0.1
+# DB_PORT=8889
+# DB_DATABASE=laravel_school
+# DB_USERNAME=root
+# DB_PASSWORD=root
+
+# 3) Create database (or use phpMyAdmin at http://localhost:8888/phpMyAdmin)
+/Applications/MAMP/Library/bin/mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS laravel_school CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# 4) Install dependencies & app key
+composer install
+$MAMP_PHP artisan key:generate
+
+# 5) Migrate & seed
+$MAMP_PHP artisan migrate
+# Optional demo seeders (uncomment if present)
+# $MAMP_PHP artisan db:seed --class=SchoolRolesSeeder
+# $MAMP_PHP artisan db:seed --class=StudentsSeeder
+# $MAMP_PHP artisan db:seed --class=TeachersSeeder
+# $MAMP_PHP artisan db:seed --class=ClassesSeeder
+
+# 6) Storage link & permissions
+$MAMP_PHP artisan storage:link
+chmod -R 775 storage bootstrap/cache
+
+# 7) Frontend assets
+npm install
+npm run build   # or: npm run dev
+
+# 8A) Serve via MAMP (recommended)
+# In MAMP app → Preferences → Web Server → set Document Root to: <project>/public, then restart
+# Visit http://localhost:8888
+
+# 8B) Or quick local server
+$MAMP_PHP artisan serve --host=127.0.0.1 --port=8000
+# Visit http://127.0.0.1:8000
+
+# Health check (JSON)
+curl http://127.0.0.1:8000/health
+```
+
+Troubleshooting (MAMP):
+- If DB fails to connect, confirm MySQL is running in MAMP and DB_PORT=8889.
+- If caches cause odd behavior: `$MAMP_PHP artisan config:clear && $MAMP_PHP artisan cache:clear && $MAMP_PHP artisan view:clear`.
+- Logs: `tail -f storage/logs/laravel.log`.
 - [Voyager UI](README-VOYAGER-UI.md)
 
 ---

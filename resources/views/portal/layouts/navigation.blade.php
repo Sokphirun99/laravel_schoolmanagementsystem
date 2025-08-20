@@ -164,7 +164,7 @@
         Messages
     </a>
     
-    <a href="{{ route('portal.events.index') }}" 
+    <a href="{{ route('portal.events') }}" 
        class="portal-nav-item {{ str_contains($currentRoute, 'events') ? 'active' : '' }}">
         <i class="voyager-calendar"></i>
         Events

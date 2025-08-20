@@ -22,23 +22,29 @@ class RoleManagementController extends Controller
      */
     public function index(Request $request)
     {
+        $users = $this->buildUserQuery($request)->paginate(15);
+        $roles = User::availableRoles();
+        
+        return view('admin.role-management.index', compact('users', 'roles'));
+    }
+
+    /**
+     * Build user query with filters
+     */
+    private function buildUserQuery(Request $request)
+    {
         $query = User::with('roles');
         
-        // Filter by role if specified
         if ($request->filled('role')) {
             $query->byRole($request->role);
         }
         
-        // Filter by status if specified
         if ($request->filled('status')) {
-            if ($request->status === 'active') {
-                $query->active();
-            } elseif ($request->status === 'inactive') {
-                $query->inactive();
-            }
+            $query = $request->status === 'active' 
+                ? $query->active() 
+                : $query->inactive();
         }
         
-        // Search by name or email
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -47,10 +53,7 @@ class RoleManagementController extends Controller
             });
         }
         
-        $users = $query->paginate(15);
-        $roles = User::availableRoles();
-        
-        return view('admin.role-management.index', compact('users', 'roles'));
+        return $query;
     }
 
     /**
@@ -67,26 +70,42 @@ class RoleManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => ['required', Rule::in(array_keys(User::availableRoles()))],
-            'phone' => 'nullable|string|max:20',
-            'status' => 'boolean',
-        ]);
-
+        $validated = $this->validateUserData($request);
+        
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'phone' => $request->phone,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
+            'phone' => $validated['phone'] ?? null,
             'status' => $request->filled('status'),
         ]);
 
         return redirect()->route('admin.role-management.index')
             ->with('success', 'User created successfully!');
+    }
+
+    /**
+     * Validate user data for create/update
+     */
+    private function validateUserData(Request $request, ?User $user = null): array
+    {
+        $rules = [
+            'name' => 'required|string|max:255',
+            'role' => ['required', Rule::in(array_keys(User::availableRoles()))],
+            'phone' => 'nullable|string|max:20',
+            'status' => 'boolean',
+        ];
+
+        if ($user) {
+            $rules['email'] = "required|string|email|max:255|unique:users,email,{$user->id}";
+            $rules['password'] = 'nullable|string|min:8|confirmed';
+        } else {
+            $rules['email'] = 'required|string|email|max:255|unique:users';
+            $rules['password'] = 'required|string|min:8|confirmed';
+        }
+
+        return $request->validate($rules);
     }
 
     /**
@@ -117,32 +136,12 @@ class RoleManagementController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // Ensure only higher-level users can edit lower-level users
-        if (!Auth::user()->canManage($user)) {
-            abort(403, 'You cannot manage this user.');
-        }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role' => ['required', Rule::in(array_keys(User::availableRoles()))],
-            'phone' => 'nullable|string|max:20',
-            'status' => 'boolean',
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
-
-        $updateData = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-            'phone' => $request->phone,
-            'status' => $request->filled('status'),
-        ];
-
-        if ($request->filled('password')) {
-            $updateData['password'] = Hash::make($request->password);
-        }
-
+        $this->ensureCanManage($user);
+        
+        $validated = $this->validateUserData($request, $user);
+        
+        $updateData = $this->prepareUpdateData($validated, $request);
+        
         $user->update($updateData);
 
         return redirect()->route('admin.role-management.index')
@@ -150,19 +149,45 @@ class RoleManagementController extends Controller
     }
 
     /**
+     * Ensure current user can manage the target user
+     */
+    private function ensureCanManage(User $user): void
+    {
+        if (!Auth::user()->canManage($user)) {
+            abort(403, 'You cannot manage this user.');
+        }
+    }
+
+    /**
+     * Prepare update data array
+     */
+    private function prepareUpdateData(array $validated, Request $request): array
+    {
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
+            'phone' => $validated['phone'] ?? null,
+            'status' => $request->filled('status'),
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        return $updateData;
+    }
+
+    /**
      * Remove the specified user from storage
      */
     public function destroy(User $user)
     {
-        // Prevent deletion of own account
         if ($user->id === Auth::id()) {
             return redirect()->back()->with('error', 'You cannot delete your own account.');
         }
 
-        // Ensure only higher-level users can delete lower-level users
-        if (!Auth::user()->canManage($user)) {
-            abort(403, 'You cannot delete this user.');
-        }
+        $this->ensureCanManage($user);
 
         $user->delete();
 
@@ -175,10 +200,7 @@ class RoleManagementController extends Controller
      */
     public function toggleStatus(User $user)
     {
-        // Ensure only higher-level users can modify lower-level users
-        if (!Auth::user()->canManage($user)) {
-            abort(403, 'You cannot modify this user.');
-        }
+        $this->ensureCanManage($user);
 
         $user->update(['status' => !$user->status]);
 
@@ -191,42 +213,55 @@ class RoleManagementController extends Controller
      */
     public function bulkAction(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'action' => 'required|in:activate,deactivate,delete',
             'user_ids' => 'required|array',
             'user_ids.*' => 'exists:users,id'
         ]);
 
-        $userIds = $request->user_ids;
-        $users = User::whereIn('id', $userIds)->get();
+        $users = User::whereIn('id', $validated['user_ids'])->get();
+        
+        $this->validateBulkPermissions($users, $validated);
+        
+        $message = $this->executeBulkAction($validated['action'], $validated['user_ids']);
 
-        // Check permissions for all users
+        return redirect()->back()->with('success', $message);
+    }
+
+    /**
+     * Validate permissions for bulk actions
+     */
+    private function validateBulkPermissions($users, array $validated): void
+    {
         foreach ($users as $user) {
             if (!Auth::user()->canManage($user)) {
-                return redirect()->back()->with('error', 'You do not have permission to manage some of the selected users.');
+                throw new \Exception('You do not have permission to manage some of the selected users.');
             }
         }
 
-        switch ($request->action) {
+        if ($validated['action'] === 'delete' && in_array(Auth::id(), $validated['user_ids'])) {
+            throw new \Exception('You cannot delete your own account.');
+        }
+    }
+
+    /**
+     * Execute bulk action and return success message
+     */
+    private function executeBulkAction(string $action, array $userIds): string
+    {
+        switch ($action) {
             case 'activate':
                 User::whereIn('id', $userIds)->update(['status' => true]);
-                $message = 'Selected users activated successfully!';
-                break;
+                return 'Selected users activated successfully!';
             case 'deactivate':
                 User::whereIn('id', $userIds)->update(['status' => false]);
-                $message = 'Selected users deactivated successfully!';
-                break;
+                return 'Selected users deactivated successfully!';
             case 'delete':
-                // Prevent deletion of own account
-                if (in_array(Auth::id(), $userIds)) {
-                    return redirect()->back()->with('error', 'You cannot delete your own account.');
-                }
                 User::whereIn('id', $userIds)->delete();
-                $message = 'Selected users deleted successfully!';
-                break;
+                return 'Selected users deleted successfully!';
+            default:
+                throw new \Exception('Invalid action');
         }
-
-        return redirect()->back()->with('success', $message);
     }
 
     /**
@@ -234,21 +269,7 @@ class RoleManagementController extends Controller
      */
     public function export(Request $request)
     {
-        $query = User::query();
-        
-        if ($request->filled('role')) {
-            $query->byRole($request->role);
-        }
-        
-        if ($request->filled('status')) {
-            if ($request->status === 'active') {
-                $query->active();
-            } elseif ($request->status === 'inactive') {
-                $query->inactive();
-            }
-        }
-        
-        $users = $query->get();
+        $users = $this->buildUserQuery($request)->get();
         
         $filename = 'users_export_' . date('Y-m-d_H-i-s') . '.csv';
         
@@ -257,26 +278,40 @@ class RoleManagementController extends Controller
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
         
-        $callback = function() use ($users) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID', 'Name', 'Email', 'Role', 'Status', 'Phone', 'Created At', 'Last Login']);
-            
-            foreach ($users as $user) {
-                fputcsv($file, [
-                    $user->id,
-                    $user->name,
-                    $user->email,
-                    $user->roleText(),
-                    $user->status ? 'Active' : 'Inactive',
-                    $user->phone ?? 'N/A',
-                    $user->created_at->format('Y-m-d H:i:s'),
-                    $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i:s') : 'Never',
-                ]);
-            }
-            
-            fclose($file);
-        };
+        return response()->stream(
+            fn() => $this->generateCsvOutput($users), 
+            200, 
+            $headers
+        );
+    }
+
+    /**
+     * Generate CSV output for export
+     */
+    private function generateCsvOutput($users): void
+    {
+        $file = fopen('php://output', 'w');
         
-        return response()->stream($callback, 200, $headers);
+        // Add CSV headers
+        fputcsv($file, [
+            'ID', 'Name', 'Email', 'Role', 'Status', 
+            'Phone', 'Created At', 'Last Login'
+        ]);
+        
+        // Add user data
+        foreach ($users as $user) {
+            fputcsv($file, [
+                $user->id,
+                $user->name,
+                $user->email,
+                $user->roleText(),
+                $user->status ? 'Active' : 'Inactive',
+                $user->phone ?? 'N/A',
+                $user->created_at->format('Y-m-d H:i:s'),
+                $user->last_login_at?->format('Y-m-d H:i:s') ?? 'Never',
+            ]);
+        }
+        
+        fclose($file);
     }
 }
