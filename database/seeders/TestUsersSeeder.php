@@ -47,7 +47,53 @@ class TestUsersSeeder extends Seeder
         $this->command->info('Admin user created: admin@test.com / password');
     }
 
-    // Removed createTeacherUser() to avoid dependency on a missing teachers table.
+    /**
+     * Create a teacher test user
+     */
+    protected function createTeacherUser()
+    {
+        $teacher = User::firstOrCreate(
+            ['email' => 'teacher@test.com'],
+            [
+                'name' => 'Test Teacher',
+                'password' => Hash::make('password'),
+                'role' => 'teacher',
+                'avatar' => 'users/default.png',
+                'status' => true
+            ]
+        );
+
+        // Create related teacher profile if it doesn't exist
+        if (!$teacher->teacher) {
+            $teacherProfile = Teacher::create([
+                'user_id' => $teacher->id,
+                'first_name' => 'Test',
+                'last_name' => 'Teacher',
+                'gender' => 'Male',
+                'date_of_birth' => now()->subYears(35),
+                'address' => '123 School Street',
+                'phone' => '555-1234',
+                'qualification' => 'Master of Education',
+                'subjects' => 'Mathematics,Science',
+                'joining_date' => now()->subYears(5),
+                'photo' => 'teachers/default.png',
+            ]);
+        }
+
+        // Create portal user for teacher if it doesn't exist
+        PortalUser::firstOrCreate(
+            ['email' => 'teacher@test.com'],
+            [
+                'name' => 'Test Teacher',
+                'password' => Hash::make('password'),
+                'user_type' => 'teacher',
+                'related_id' => $teacher->teacher->id ?? null,
+                'status' => true
+            ]
+        );
+
+        $this->command->info('Teacher user created: teacher@test.com / password');
+    }
 
     /**
      * Create a student test user
@@ -73,7 +119,7 @@ class TestUsersSeeder extends Seeder
                 'roll_number' => 'R' . rand(100, 999),
                 'first_name' => 'Test',
                 'last_name' => 'Student',
-                'gender' => 'Male',
+                'gender' => 'male',
                 'date_of_birth' => now()->subYears(15),
                 'class_id' => 1, // Assuming you have at least one class
                 'section_id' => 1, // Assuming you have at least one section
@@ -122,7 +168,7 @@ class TestUsersSeeder extends Seeder
                 'user_id' => $parent->id,
                 'first_name' => 'Test',
                 'last_name' => 'Parent',
-                'gender' => 'Male',
+                'gender' => 'male',
                 'occupation' => 'Engineer',
                 'address' => '789 Parent Road',
                 'phone' => '555-9012',

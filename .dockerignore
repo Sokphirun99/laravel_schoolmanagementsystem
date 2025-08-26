@@ -1,0 +1,91 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+CHANGELOG.md
+LICENSE
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules and build artifacts
+node_modules/
+npm-debug.log
+yarn-error.log
+.npm
+.yarn
+
+# Laravel specific
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/framework/cache/*
+!/storage/framework/cache/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.example
+
+# Testing
+/coverage/
+.phpunit.result.cache
+phpunit.xml
+
+# Composer
+composer.lock
+
+# Docker files (avoid recursive copying)
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+docker-manage.sh
+
+# Development tools
+.editorconfig
+.php_cs
+.php_cs.cache
+.phpcs.xml
+.phpmd.xml
+phpstan.neon
+pint.json
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini

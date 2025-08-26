@@ -1,0 +1,462 @@
+{
+    "info": {
+        "name": "School Management System API",
+        "description": "Complete API collection for School Management System",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{auth_token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        },
+        {
+            "key": "auth_token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "login"]
+                        }
+                    }
+                },
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "register"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/auth/user",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "user"]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{base_url}}/auth/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "logout"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Students",
+            "item": [
+                {
+                    "name": "Get All Students",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/students",
+                            "host": ["{{base_url}}"],
+                            "path": ["students"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Student",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"user_id\": 1,\n    \"school_class_id\": 1,\n    \"section_id\": 1,\n    \"roll_number\": \"STU001\",\n    \"admission_date\": \"2024-01-15\",\n    \"date_of_birth\": \"2010-05-20\",\n    \"gender\": \"male\",\n    \"phone\": \"+1234567890\",\n    \"address\": \"123 Main St\",\n    \"emergency_contact\": \"+0987654321\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/students",
+                            "host": ["{{base_url}}"],
+                            "path": ["students"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Student",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/students/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["students", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Student Grades",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/students/1/grades",
+                            "host": ["{{base_url}}"],
+                            "path": ["students", "1", "grades"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Teachers",
+            "item": [
+                {
+                    "name": "Get All Teachers",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/teachers",
+                            "host": ["{{base_url}}"],
+                            "path": ["teachers"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Teacher",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"user_id\": 2,\n    \"employee_id\": \"TEACH001\",\n    \"hire_date\": \"2024-01-01\",\n    \"qualification\": \"M.Ed Mathematics\",\n    \"experience_years\": 5,\n    \"phone\": \"+1234567890\",\n    \"address\": \"456 Oak St\",\n    \"emergency_contact\": \"+0987654321\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/teachers",
+                            "host": ["{{base_url}}"],
+                            "path": ["teachers"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Courses",
+            "item": [
+                {
+                    "name": "Get All Courses",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/courses",
+                            "host": ["{{base_url}}"],
+                            "path": ["courses"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Course",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Mathematics 101\",\n    \"code\": \"MATH101\",\n    \"description\": \"Basic mathematics course\",\n    \"subject_id\": 1,\n    \"teacher_id\": 1,\n    \"school_class_id\": 1,\n    \"section_id\": 1,\n    \"credit_hours\": 3,\n    \"semester\": \"Fall\",\n    \"academic_year\": \"2024-2025\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/courses",
+                            "host": ["{{base_url}}"],
+                            "path": ["courses"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Assignments",
+            "item": [
+                {
+                    "name": "Get All Assignments",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/assignments",
+                            "host": ["{{base_url}}"],
+                            "path": ["assignments"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Assignment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Algebra Quiz 1\",\n    \"description\": \"Basic algebra problems\",\n    \"course_id\": 1,\n    \"subject_id\": 1,\n    \"due_date\": \"2024-02-15\",\n    \"max_points\": 100,\n    \"assignment_type\": \"quiz\",\n    \"instructions\": \"Complete all problems showing work\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/assignments",
+                            "host": ["{{base_url}}"],
+                            "path": ["assignments"]
+                        }
+                    }
+                },
+                {
+                    "name": "Submit Grade",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"student_id\": 1,\n    \"points_earned\": 85,\n    \"feedback\": \"Good work, minor calculation error on problem 3\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/assignments/1/grade",
+                            "host": ["{{base_url}}"],
+                            "path": ["assignments", "1", "grade"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Attendance",
+            "item": [
+                {
+                    "name": "Get All Attendance",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/attendance",
+                            "host": ["{{base_url}}"],
+                            "path": ["attendance"]
+                        }
+                    }
+                },
+                {
+                    "name": "Record Attendance",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"student_id\": 1,\n    \"course_id\": 1,\n    \"subject_id\": 1,\n    \"date\": \"2024-01-15\",\n    \"status\": \"present\",\n    \"notes\": \"On time\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/attendance",
+                            "host": ["{{base_url}}"],
+                            "path": ["attendance"]
+                        }
+                    }
+                },
+                {
+                    "name": "Bulk Attendance",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"course_id\": 1,\n    \"subject_id\": 1,\n    \"date\": \"2024-01-15\",\n    \"attendance\": [\n        {\n            \"student_id\": 1,\n            \"status\": \"present\",\n            \"notes\": \"On time\"\n        },\n        {\n            \"student_id\": 2,\n            \"status\": \"absent\",\n            \"notes\": \"Sick\"\n        }\n    ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/attendance/bulk",
+                            "host": ["{{base_url}}"],
+                            "path": ["attendance", "bulk"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Announcements",
+            "item": [
+                {
+                    "name": "Get All Announcements",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/announcements",
+                            "host": ["{{base_url}}"],
+                            "path": ["announcements"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Active Announcements",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/announcements-active?audience=all",
+                            "host": ["{{base_url}}"],
+                            "path": ["announcements-active"],
+                            "query": [
+                                {
+                                    "key": "audience",
+                                    "value": "all"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Fees",
+            "item": [
+                {
+                    "name": "Get All Fees",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/fees",
+                            "host": ["{{base_url}}"],
+                            "path": ["fees"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Fee",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"student_id\": 1,\n    \"fee_type\": \"Tuition\",\n    \"amount\": 500.00,\n    \"due_date\": \"2024-02-01\",\n    \"description\": \"Monthly tuition fee\",\n    \"academic_year\": \"2024-2025\",\n    \"semester\": \"Spring\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/fees",
+                            "host": ["{{base_url}}"],
+                            "path": ["fees"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Timetables",
+            "item": [
+                {
+                    "name": "Get All Timetables",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/timetables",
+                            "host": ["{{base_url}}"],
+                            "path": ["timetables"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Teacher Timetable",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/timetables/teacher/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["timetables", "teacher", "1"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Dashboard",
+            "item": [
+                {
+                    "name": "Get Dashboard Stats",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/stats",
+                            "host": ["{{base_url}}"],
+                            "path": ["dashboard", "stats"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

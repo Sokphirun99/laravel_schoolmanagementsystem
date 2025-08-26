@@ -1,111 +1,42 @@
 @extends('portal.layouts.app')
 
-@section('page_title', 'Parent Dashboard')
-@section('page_header')
-    <div class="container-fluid">
-        <h1 class="page-title">
-            <i class="voyager-dashboard"></i> Parent Dashboard
-        </h1>
-        <div class="page-actions">
-            <span class="badge badge-primary">{{ now()->format('F d, Y') }}</span>
-        </div>
-    </div>
-@endsection
-
 @section('content')
-<div class="page-content browse container-fluid">
-    @include('voyager::alerts')
+<div class="page-content">
+    <div class="analytics-sparkle"></div>
+    <div class="analytics-sparkle-2"></div>
     
-    <!-- Welcome Banner -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="panel panel-bordered">
-                <div class="panel-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h2 class="mb-2">Welcome to the School Portal!</h2>
-                            <p class="text-muted mb-0">
-                                Monitor your children's academic progress, attendance, and communicate with teachers.
-                            </p>
+    <div class="container-fluid">
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="voyager-card">
+                    <div class="voyager-card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h4 class="voyager-card-title mb-0">
+                            <i class="voyager-dashboard"></i> Parent Dashboard
+                        </h4>
+                        <div>
+                            <span class="badge badge-primary">{{ now()->format('F d, Y') }}</span>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <div class="welcome-stats">
-                                <span class="badge badge-success">{{ $students->count() }} {{ Str::plural('Child', $students->count()) }}</span>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="voyager-card-body">
+                        <h2>Welcome to the School Portal!</h2>
+                        <p class="text-muted">Here you can monitor your children's academic progress, attendance, and communicate with teachers.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Quick Stats -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <x-portal.stats-card 
-                title="Children" 
-                :value="$students->count()" 
-                icon="voyager-group" 
-                color="primary" 
-                url="#children-section" />
-        </div>
-        <div class="col-md-3">
-            @php
-                $totalPendingFees = 0;
-                try {
-                    $studentIds = $students->pluck('id')->toArray();
-                    $totalPendingFees = App\Models\Fee::whereIn('student_id', $studentIds)
-                        ->where('status', '=', 'pending')
-                        ->count();
-                } catch (\Exception $e) {
-                    $totalPendingFees = 0;
-                }
-            @endphp
-            <x-portal.stats-card 
-                title="Pending Fees" 
-                :value="$totalPendingFees" 
-                icon="voyager-dollar" 
-                color="warning" 
-                url="#fees-section" />
-        </div>
-        <div class="col-md-3">
-            @php
-                $upcomingEvents = 0;
-                try {
-                    $upcomingEvents = App\Models\Event::where('date', '>=', now()->format('Y-m-d'))
-                        ->count();
-                } catch (\Exception $e) {
-                    $upcomingEvents = 0;
-                }
-            @endphp
-            <x-portal.stats-card 
-                title="Upcoming Events" 
-                :value="$upcomingEvents" 
-                icon="voyager-calendar" 
-                color="info" 
-                url="#events-section" />
-        </div>
-        <div class="col-md-3">
-            <x-portal.stats-card 
-                title="Announcements" 
-                :value="$recentAnnouncements->count()" 
-                icon="voyager-megaphone" 
-                color="success" 
-                url="#announcements-section" />
-        </div>
-    </div>
-    <!-- Your Children Section -->
-    <div class="row mb-4" id="children-section">
-        <div class="col-12">
-            <div class="panel panel-bordered">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="voyager-group"></i> Your Children
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    @forelse($students as $student)
-                        <div class="row mb-4">
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="voyager-card">
+                    <div class="voyager-card-header border-bottom">
+                        <h4 class="voyager-card-title mb-0">
+                            <i class="voyager-group"></i> Your Children
+                        </h4>
+                    </div>
+                    <div class="voyager-card-body">
+                        <div class="row">
+                            @forelse($students as $student)
                             <div class="col-md-4 col-sm-6 mb-4">
                                 <div class="panel panel-bordered student-card h-100">
                                     <div class="panel-body text-center">

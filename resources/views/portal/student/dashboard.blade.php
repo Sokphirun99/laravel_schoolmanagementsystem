@@ -1,115 +1,99 @@
-@extends('portal.layouts.modern')
+@extends('portal.layouts.app')
 
 @section('content')
-<!-- Welcome Section -->
-<div class="portal-card mb-8">
-    <div class="flex items-center justify-between">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Welcome back, {{ $student->first_name }}! 👋
-            </h2>
-            <p class="text-gray-600 dark:text-gray-300">
-                Here's what's happening in your academic journey today.
-            </p>
-        </div>
-        <div class="flex items-center space-x-4">
-            @if($student->photo)
-                <img src="{{ asset('storage/' . $student->photo) }}" 
-                     class="w-16 h-16 rounded-full border-4 border-white shadow-lg" 
-                     alt="Student Photo">
-            @else
-                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-content-center border-4 border-white shadow-lg">
-                    <span class="text-white text-xl font-bold">{{ substr($student->first_name, 0, 1) }}</span>
-                </div>
-            @endif
-            <div class="text-right">
-                <div class="font-semibold text-gray-900 dark:text-white">{{ $student->first_name }} {{ $student->last_name }}</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">{{ $student->schoolClass->name ?? 'No Class Assigned' }}</div>
-                <div class="text-xs text-gray-400 dark:text-gray-500">{{ now()->format('F d, Y') }}</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Stats Grid -->
-<div class="portal-stats-grid mb-8">
-    <x-portal.stats-card 
-        title="Total Assignments" 
-        value="{{ $upcomingAssignments->count() }}" 
-        icon="voyager-file-text" 
-        color="blue"
-        subtitle="Due this week"
-    />
+<div class="page-content">
+    <div class="analytics-sparkle"></div>
+    <div class="analytics-sparkle-2"></div>
     
-    <x-portal.stats-card 
-        title="Recent Grades" 
-        value="{{ $recentGrades->count() }}" 
-        icon="voyager-certificate" 
-        color="green"
-        subtitle="Latest results"
-    />
-    
-    <x-portal.stats-card 
-        title="Upcoming Events" 
-        value="{{ $events->count() }}" 
-        icon="voyager-calendar" 
-        color="purple"
-        subtitle="This month"
-        href="{{ route('portal.events') }}"
-    />
-    
-    <x-portal.stats-card 
-        title="Announcements" 
-        value="{{ $recentAnnouncements->count() }}" 
-        icon="voyager-sound" 
-        color="indigo"
-        subtitle="New updates"
-        href="{{ route('portal.announcements.index') }}"
-    />
-</div>
-
-<!-- Main Content Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Upcoming Assignments -->
-    <div class="portal-card">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                <i class="voyager-file-text mr-3 text-blue-500"></i>
-                Upcoming Assignments
-            </h3>
-            <a href="{{ route('portal.announcements.index') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
-                View All →
-            </a>
-        </div>
-        
-        @if($upcomingAssignments->count() > 0)
-            <div class="space-y-4">
-                @foreach($upcomingAssignments->take(5) as $assignment)
-                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <div class="flex-1">
-                            <h4 class="font-medium text-gray-900 dark:text-white">{{ $assignment->title }}</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">{{ Str::limit($assignment->description, 60) }}</p>
-                            <div class="flex items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                <i class="voyager-calendar mr-1"></i>
-                                Due: {{ $assignment->due_date ? $assignment->due_date->format('M d, Y') : 'No due date' }}
+    <div class="container-fluid">
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="voyager-card">
+                    <div class="voyager-card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h4 class="voyager-card-title mb-0">
+                            <i class="voyager-dashboard"></i> Student Dashboard
+                        </h4>
+                        <div>
+                            <span class="badge badge-primary">{{ now()->format('F d, Y') }}</span>
+                        </div>
+                    </div>
+                    <div class="voyager-card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="mb-2">Welcome back, {{ $student->first_name }}!</h2>
+                                <p class="text-muted mb-0">Here's what's happening in your academic journey today.</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    @if($student->photo)
+                                        <img src="{{ asset('storage/' . $student->photo) }}" 
+                                             class="rounded-circle me-3" 
+                                             width="60" 
+                                             height="60"
+                                             alt="Student Photo">
+                                    @else
+                                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                            <span class="text-white fs-4">{{ substr($student->first_name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <div class="fw-bold">{{ $student->first_name }} {{ $student->last_name }}</div>
+                                        <small class="text-muted">{{ $student->schoolClass->name ?? 'No Class Assigned' }}</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-center">
-                            @php
-                                $daysLeft = $assignment->due_date ? now()->diffInDays($assignment->due_date, false) : 0;
-                                $urgencyClass = $daysLeft <= 1 ? 'text-red-500' : ($daysLeft <= 3 ? 'text-yellow-500' : 'text-green-500');
-                            @endphp
-                            <span class="px-2 py-1 text-xs font-medium rounded-full {{ $urgencyClass }} bg-current bg-opacity-10">
-                                {{ $daysLeft <= 0 ? 'Overdue' : $daysLeft . ' days left' }}
-                            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-success-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-study"></i>
                         </div>
+                        <div class="voyager-stats-number">{{ $recentGrades->count() }}</div>
+                        <div class="voyager-stats-label">Recent Grades</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-warning-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-book"></i>
+                        </div>
+                        <div class="voyager-stats-number">{{ $upcomingAssignments->count() }}</div>
+                        <div class="voyager-stats-label">Assignments Due</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-info-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-calendar"></i>
+                        </div>
+                        <div class="voyager-stats-number">{{ $events->count() }}</div>
+                        <div class="voyager-stats-label">Upcoming Events</div>
                     </div>
                 @endforeach
             </div>
-        @else
-            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-                <i class="voyager-file-text text-4xl mb-3 opacity-30"></i>
-                <p>No upcoming assignments</p>
+            <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                <div class="voyager-card voyager-stats-card bg-purple-gradient h-100">
+                    <div class="voyager-card-body p-3 text-center text-white">
+                        <div class="voyager-stats-icon mb-2">
+                            <i class="voyager-megaphone"></i>
+                        </div>
+                        <div class="voyager-stats-number">{{ $recentAnnouncements->count() }}</div>
+                        <div class="voyager-stats-label">Announcements</div>
+                    </div>
+                </div>
             </div>
         @endif
     </div>
