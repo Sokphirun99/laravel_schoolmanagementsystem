@@ -198,4 +198,17 @@ return [
 
     'same_site' => env('SESSION_SAME_SITE', 'lax'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Partitioned Cookies
+    |--------------------------------------------------------------------------
+    |
+    | Setting this value to true will add the `Partitioned` attribute to
+    | session cookies. This attribute is required when Same-Site is set
+    | to "none" to prevent cookies from being rejected by the browser.
+    |
+    */
+
+    'partitioned' => false,
+
 ];

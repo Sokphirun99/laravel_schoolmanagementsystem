@@ -10,10 +10,8 @@ export default defineConfig({
                 'resources/js/app.js',
                 // Portal-specific assets
                 'resources/css/portal.css',
-                'resources/js/portal.js',
                 // Auth assets
                 'resources/css/auth.css',
-                'resources/js/auth.js',
             ],
             refresh: true,
         }),
@@ -23,8 +21,6 @@ export default defineConfig({
             output: {
                 manualChunks: {
                     vendor: ['lodash', 'axios'],
-                    portal: ['resources/js/portal.js'],
-                    auth: ['resources/js/auth.js'],
                 }
             }
         }

@@ -2,6 +2,7 @@ FROM php:8.2-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    sudo \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -9,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
+    netcat-openbsd \
     libzip-dev \
     libonig-dev \
     libxml2-dev
@@ -29,7 +31,8 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html
 
-# Set initial permissions
+# Set ownership and permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Configure Apache

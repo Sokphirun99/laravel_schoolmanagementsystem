@@ -126,6 +126,71 @@ Route::prefix('portal')->name('portal.')->group(function () {
         Route::get('events', function() { 
             return view('portal.placeholder', ['title' => 'School Events', 'message' => 'Events calendar feature coming soon']);
         })->name('events');
+
+        // Student placeholders (to align with navigation links)
+        Route::prefix('student')->name('student.')->group(function () {
+            Route::get('courses', function () {
+                return view('portal.placeholder', ['title' => 'My Courses', 'message' => 'Courses feature coming soon']);
+            })->name('courses');
+
+            Route::get('assignments', function () {
+                return view('portal.placeholder', ['title' => 'Assignments', 'message' => 'Assignments feature coming soon']);
+            })->name('assignments');
+
+            Route::get('exams', function () {
+                return view('portal.placeholder', ['title' => 'Exams & Grades', 'message' => 'Exams feature coming soon']);
+            })->name('exams');
+
+            Route::get('timetable', function () {
+                return view('portal.placeholder', ['title' => 'Timetable', 'message' => 'Personal timetable coming soon']);
+            })->name('timetable');
+
+            Route::get('attendance', function () {
+                return view('portal.placeholder', ['title' => 'Attendance', 'message' => 'Attendance summary coming soon']);
+            })->name('attendance');
+        });
+
+        // Parent placeholders
+        Route::prefix('parent')->name('parent.')->group(function () {
+            Route::get('students', function () {
+                return view('portal.placeholder', ['title' => 'My Children', 'message' => 'Children list coming soon']);
+            })->name('students');
+
+            Route::get('performance', function () {
+                return view('portal.placeholder', ['title' => 'Academic Performance', 'message' => 'Performance dashboard coming soon']);
+            })->name('performance');
+
+            Route::get('attendance', function () {
+                return view('portal.placeholder', ['title' => 'Attendance Records', 'message' => 'Attendance records coming soon']);
+            })->name('attendance');
+        });
+
+        // Teacher placeholders
+        Route::prefix('teacher')->name('teacher.')->group(function () {
+            Route::get('classes', function () {
+                return view('portal.placeholder', ['title' => 'My Classes', 'message' => 'Classes management coming soon']);
+            })->name('classes');
+
+            Route::get('students', function () {
+                return view('portal.placeholder', ['title' => 'Students', 'message' => 'Students list coming soon']);
+            })->name('students');
+
+            Route::get('assignments', function () {
+                return view('portal.placeholder', ['title' => 'Assignments', 'message' => 'Assignments management coming soon']);
+            })->name('assignments');
+
+            Route::get('grades', function () {
+                return view('portal.placeholder', ['title' => 'Grade Management', 'message' => 'Gradebook coming soon']);
+            })->name('grades');
+
+            Route::get('attendance', function () {
+                return view('portal.placeholder', ['title' => 'Attendance', 'message' => 'Attendance taking coming soon']);
+            })->name('attendance');
+
+            Route::get('timetable', function () {
+                return view('portal.placeholder', ['title' => 'Timetable', 'message' => 'Teaching timetable coming soon']);
+            })->name('timetable');
+        });
     });
 });
 

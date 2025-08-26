@@ -40,119 +40,18 @@
             .btn-outline { background:transparent; color:#93c5fd; border-color:#3b82f6; }
             .btn-outline:hover { background: rgba(59,130,246,.08); }
         }
-
-        .login-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1d4ed8, #2563eb);
-        }
-
-        .login-box {
-            background: #fff;
-            border-radius: 8px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,.1);
-            text-align: center;
-        }
-
-        .login-header h1 {
-            margin: 1rem 0 .5rem;
-            font-size: 1.5rem;
-            color: #1f2937;
-        }
-
-        .login-header p {
-            color: #6b7280;
-            margin-bottom: 1.5rem;
-        }
-
-        .login-logo {
-            width: 64px;
-            height: 64px;
-            border-radius: 12px;
-            object-fit: contain;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-            text-align: left;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: .75rem 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        .btn-login {
-            width: 100%;
-            background: #2563eb;
-            color: #fff;
-            padding: .75rem 1rem;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background .3s ease;
-        }
-
-        .btn-login:hover {
-            background: #1d4ed8;
-        }
-
-        .login-footer {
-            margin-top: 1rem;
-        }
-
-        .login-footer a {
-            color: #2563eb;
-            text-decoration: none;
-        }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <div class="login-header">
-                <img class="login-logo" src="{{ asset('images/school-logo.png') }}" alt="{{ config('app.name', 'School') }} logo" onerror="this.style.display='none'">
-                <h1>{{ config('app.name', 'School Management System') }}</h1>
-                <p>Sign in to continue to your dashboard</p>
-            </div>
-            <form id="loginForm" method="POST" action="{{ route('portal.login') }}">
-                @csrf
-                <div class="form-group">
-                    <label for="role" style="font-weight:600;display:block;margin-bottom:.5rem;">Login as:</label>
-                    <select id="role" name="role" style="width:100%;padding:.5rem 1rem;border-radius:6px;border:1px solid #d1d5db;font-size:1rem;">
-                        <option value="portal">Student/Parent/Teacher</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Email Address" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" name="password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn-login">Login</button>
-            </form>
-            <script>
-                // Switch form action based on role
-                document.getElementById('role').addEventListener('change', function(e) {
-                    var form = document.getElementById('loginForm');
-                    if (e.target.value === 'admin') {
-                        form.action = '{{ url('/admin/login') }}';
-                    } else {
-                        form.action = '{{ route('portal.login') }}';
-                    }
-                });
-            </script>
-        </div>
+    <div class="wrap">
+        <main class="card">
+            <img class="logo" src="{{ asset('images/school-logo.png') }}" alt="{{ config('app.name', 'School') }} logo" onerror="this.style.display='none'">
+            <h1 class="title">{{ config('app.name', 'School Management System') }}</h1>
+            <p class="subtitle">Please choose how you want to sign in</p>
+            <a class="btn btn-primary" href="{{ route('portal.login') }}" aria-label="Open student or parent portal login">Student/Parent Portal Login</a>
+            <a class="btn btn-outline" href="{{ url('/admin/login') }}" aria-label="Open admin login">Admin Login</a>
+            <div class="muted">v{{ app()->version() }}</div>
+        </main>
     </div>
 </body>
 </html>

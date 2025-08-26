@@ -6,7 +6,7 @@
         <p class="portal-heading">{{ __('Sign in to access the Portal') }}</p>
 
         <form action="{{ route('portal.login') }}" method="POST">
-            {{ csrf_field() }}
+            @csrf
             <div class="form-group form-group-default" id="emailGroup">
                 <label>{{ __('Email Address') }}</label>
                 <div class="controls">

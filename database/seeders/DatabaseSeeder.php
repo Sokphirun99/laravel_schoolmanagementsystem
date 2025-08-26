@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             EventsSeeder::class,
             FeesTableSeeder::class,
             TestUsersSeeder::class,
+            TeacherPortalUserSeeder::class,
         ]);
     }
 }

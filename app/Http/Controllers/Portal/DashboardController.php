@@ -7,6 +7,10 @@ use App\Models\Announcement;
 use App\Models\Assignment;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
+use function view;
+use function redirect;
+use function collect;
+use function now;
 
 class DashboardController extends Controller
 {
@@ -18,10 +22,16 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $user = Auth::guard('portal')->user();
+        // If teacher logs into portal, show a simple placeholder for now
+        if ($user->user_type === 'teacher') {
+            return view('portal.placeholder', [
+                'title' => 'Teacher Portal',
+                'message' => 'Teacher portal dashboard is coming soon.'
+            ]);
+        }
+
         $dashboardData = $this->prepareDashboardData($user);
-        
         $viewPath = $user->user_type === 'parent' ? 'portal.parent.dashboard' : 'portal.student.dashboard';
-        
         return view($viewPath, $dashboardData);
     }
 
