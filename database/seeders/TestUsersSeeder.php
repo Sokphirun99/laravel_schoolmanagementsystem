@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Student;
-use App\Models\Teacher;
 use App\Models\ParentModel;
 use App\Models\PortalUser;
 use Illuminate\Support\Facades\Hash;
@@ -70,7 +69,7 @@ class TestUsersSeeder extends Seeder
                 'user_id' => $teacher->id,
                 'first_name' => 'Test',
                 'last_name' => 'Teacher',
-                'gender' => 'male',
+                'gender' => 'Male',
                 'date_of_birth' => now()->subYears(35),
                 'address' => '123 School Street',
                 'phone' => '555-1234',
@@ -232,7 +231,7 @@ class TestUsersSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'teacher',
                 'status' => true,
-                'create_portal_user' => false
+                'create_portal_user' => true
             ],
             [
                 'name' => 'Test Student',
@@ -305,6 +304,18 @@ class TestUsersSeeder extends Seeder
                     $portalUser->password = Hash::make('password'); // Create a new hash directly
                     $portalUser->user_type = 'student';
                     $portalUser->related_id = $student->id; // Use actual student ID
+                    $portalUser->status = true;
+                    $portalUser->save();
+                }
+                
+                // Create teacher portal user (no separate profile required)
+                if (strtolower($userData['role']) === 'teacher') {
+                    $portalUser = PortalUser::firstOrNew(['email' => $email]);
+                    $portalUser->name = $userData['name'];
+                    $portalUser->email = $email;
+                    $portalUser->password = Hash::make('password');
+                    $portalUser->user_type = 'teacher';
+                    $portalUser->related_id = null; // Optional: link to teacher profile if/when it exists
                     $portalUser->status = true;
                     $portalUser->save();
                 }

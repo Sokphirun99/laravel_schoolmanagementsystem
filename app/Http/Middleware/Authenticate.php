@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Route;
+use function url;
 
 class Authenticate extends Middleware
 {
@@ -15,7 +17,12 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return route('login');
+            // Send portal requests to portal login when using the portal guard
+            if ($request->is('portal/*') || ($request->route() && $request->route()->getName() && str_starts_with($request->route()->getName(), 'portal.'))) {
+                return Route::has('portal.login') ? route('portal.login') : url('/');
+            }
+            // Fallback to default login if available, else home
+            return Route::has('login') ? route('login') : url('/');
         }
     }
 }

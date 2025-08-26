@@ -2,10 +2,10 @@
 
 namespace App\VoyagerWidgets;
 
+use App\Services\DashboardService;
 use TCG\Voyager\Widgets\BaseDimmer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Str;
 
 class TeachersWidget extends BaseDimmer
 {
@@ -20,19 +20,9 @@ class TeachersWidget extends BaseDimmer
      * Treat this method as a controller action.
      * Return view() or other content to display.
      */
-    public function run()
+    public function run(DashboardService $dashboardService)
     {
-        $count = \App\Models\Teacher::count();
-        $activeCount = \App\Models\Teacher::where('status', 1)->count();
-        $subjectCount = \App\Models\Teacher::select('subject_id')->distinct()->count();
-        $classTeacherCount = \App\Models\Teacher::where('is_class_teacher', 1)->count();
-
-        // Use the fully qualified function name to avoid namespace issues
-        return \Illuminate\Support\Facades\View::make('vendor.voyager.widgets.teachers', [
-            'totalCount' => $count,
-            'subjectCount' => $subjectCount,
-            'classTeacherCount' => $classTeacherCount
-        ]);
+        return View::make('vendor.voyager.widgets.teachers', $dashboardService->getTeacherWidgetData());
     }
 
     /**

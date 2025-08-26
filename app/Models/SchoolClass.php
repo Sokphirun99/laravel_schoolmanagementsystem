@@ -14,6 +14,7 @@ class SchoolClass extends Model
         'class_code',
         'description',
         'teacher_id',
+        'academic_year',
         'status'
     ];
     

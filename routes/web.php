@@ -1,14 +1,57 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GradesController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use TCG\Voyager\Facades\Voyager;
 
+// Controllers
+use App\Http\Controllers\GradesController;
+use App\Http\Controllers\Auth\PortalLoginController;
+use App\Http\Controllers\Portal\{
+    DashboardController,
+    GradeController,
+    AttendanceController,
+    FeeController,
+    AnnouncementController,
+    CommunicationController
+};
+
+// Welcome page
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Lightweight health check (useful for uptime monitors and local smoke tests)
+Route::get('/health', function () {
+    $status = [
+        'app' => 'ok',
+        'php' => PHP_VERSION,
+        'laravel' => app()->version(),
+    ];
 
+    // Optional DB check
+    try {
+        DB::select('select 1');
+        $status['db'] = 'ok';
+    } catch (\Throwable $e) {
+        $status['db'] = 'error';
+        $status['db_error'] = $e->getMessage();
+    }
+
+    // Optional cache check
+    try {
+        Cache::put('health_check', 'ok', 5);
+        $status['cache'] = Cache::get('health_check') === 'ok' ? 'ok' : 'error';
+    } catch (\Throwable $e) {
+        $status['cache'] = 'error';
+        $status['cache_error'] = $e->getMessage();
+    }
+
+    return response()->json($status);
+})->name('health');
+
+// Admin Routes
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     
@@ -29,14 +72,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/grades/student/{student}/report', [GradesController::class, 'studentOverallReport'])->name('grades.student.overall.report');
     });
 });
-
-use App\Http\Controllers\Auth\PortalLoginController;
-use App\Http\Controllers\Portal\DashboardController;
-use App\Http\Controllers\Portal\GradeController;
-use App\Http\Controllers\Portal\CommunicationController;
-use App\Http\Controllers\Portal\AttendanceController;
-use App\Http\Controllers\Portal\AnnouncementController;
-use App\Http\Controllers\Portal\FeeController;
 
 // Portal Routes
 Route::prefix('portal')->name('portal.')->group(function () {
@@ -74,7 +109,7 @@ Route::prefix('portal')->name('portal.')->group(function () {
         Route::get('fees/{fee}/pay', [FeeController::class, 'showPaymentForm'])->name('fees.pay');
         Route::post('fees/{fee}/process', [FeeController::class, 'processPayment'])->name('fees.process');
         
-        // Profile routes (placeholders for future implementation)
+        // Profile routes
         Route::get('profile', function() {
             return view('portal.profile');
         })->name('profile');
@@ -91,9 +126,73 @@ Route::prefix('portal')->name('portal.')->group(function () {
         Route::get('events', function() { 
             return view('portal.placeholder', ['title' => 'School Events', 'message' => 'Events calendar feature coming soon']);
         })->name('events');
+
+        // Student placeholders (to align with navigation links)
+        Route::prefix('student')->name('student.')->group(function () {
+            Route::get('courses', function () {
+                return view('portal.placeholder', ['title' => 'My Courses', 'message' => 'Courses feature coming soon']);
+            })->name('courses');
+
+            Route::get('assignments', function () {
+                return view('portal.placeholder', ['title' => 'Assignments', 'message' => 'Assignments feature coming soon']);
+            })->name('assignments');
+
+            Route::get('exams', function () {
+                return view('portal.placeholder', ['title' => 'Exams & Grades', 'message' => 'Exams feature coming soon']);
+            })->name('exams');
+
+            Route::get('timetable', function () {
+                return view('portal.placeholder', ['title' => 'Timetable', 'message' => 'Personal timetable coming soon']);
+            })->name('timetable');
+
+            Route::get('attendance', function () {
+                return view('portal.placeholder', ['title' => 'Attendance', 'message' => 'Attendance summary coming soon']);
+            })->name('attendance');
+        });
+
+        // Parent placeholders
+        Route::prefix('parent')->name('parent.')->group(function () {
+            Route::get('students', function () {
+                return view('portal.placeholder', ['title' => 'My Children', 'message' => 'Children list coming soon']);
+            })->name('students');
+
+            Route::get('performance', function () {
+                return view('portal.placeholder', ['title' => 'Academic Performance', 'message' => 'Performance dashboard coming soon']);
+            })->name('performance');
+
+            Route::get('attendance', function () {
+                return view('portal.placeholder', ['title' => 'Attendance Records', 'message' => 'Attendance records coming soon']);
+            })->name('attendance');
+        });
+
+        // Teacher placeholders
+        Route::prefix('teacher')->name('teacher.')->group(function () {
+            Route::get('classes', function () {
+                return view('portal.placeholder', ['title' => 'My Classes', 'message' => 'Classes management coming soon']);
+            })->name('classes');
+
+            Route::get('students', function () {
+                return view('portal.placeholder', ['title' => 'Students', 'message' => 'Students list coming soon']);
+            })->name('students');
+
+            Route::get('assignments', function () {
+                return view('portal.placeholder', ['title' => 'Assignments', 'message' => 'Assignments management coming soon']);
+            })->name('assignments');
+
+            Route::get('grades', function () {
+                return view('portal.placeholder', ['title' => 'Grade Management', 'message' => 'Gradebook coming soon']);
+            })->name('grades');
+
+            Route::get('attendance', function () {
+                return view('portal.placeholder', ['title' => 'Attendance', 'message' => 'Attendance taking coming soon']);
+            })->name('attendance');
+
+            Route::get('timetable', function () {
+                return view('portal.placeholder', ['title' => 'Timetable', 'message' => 'Teaching timetable coming soon']);
+            })->name('timetable');
+        });
     });
 });
-
 
 // Role-based example routes for documentation
 Route::prefix('role-demo')->name('role-demo.')->middleware(['auth'])->group(function() {
