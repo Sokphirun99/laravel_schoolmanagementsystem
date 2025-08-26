@@ -21,7 +21,7 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
     
     <!-- Icons -->
-    <link rel="stylesheet" href="{{ voyager_asset('css/voyager.css') }}">
+    <link rel="stylesheet" href="{{ asset('voyager-assets/css/app.css') }}">
     
     <!-- Custom Portal CSS -->
     <style>
@@ -375,7 +375,7 @@
                     <!-- User dropdown -->
                     <div class="relative">
                         <button class="flex items-center space-x-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors" onclick="toggleDropdown()">
-                            <img src="{{ Auth::guard('portal')->user()->avatar ?? asset('images/default-avatar.png') }}" 
+                            <img src="{{ Auth::guard('portal')->user()->avatar ?? asset('voyager-assets/images/captain-avatar.png') }}" 
                                  class="w-8 h-8 rounded-full border-2 border-white shadow-sm" 
                                  alt="Profile">
                             <span>{{ Auth::guard('portal')->user()->name }}</span>
