@@ -50,7 +50,7 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ voyager_asset('css/voyager.css') }}">
+    <link rel="stylesheet" href="{{ asset('voyager-assets/css/app.css') }}">
 
     <style>
         :root {
@@ -138,7 +138,7 @@
                     <!-- User dropdown -->
                     <div class="dropdown">
                         <button class="flex items-center space-x-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors" onclick="toggleMenu('userMenu')">
-                            <img src="{{ $portalUser->avatar ?? asset('images/default-avatar.png') }}" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Profile">
+                            <img src="{{ $portalUser->avatar ?? asset('voyager-assets/images/captain-avatar.png') }}" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Profile">
                             <span>{{ $portalUser->name ?? 'User' }}</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
